@@ -1,0 +1,81 @@
+Hediye_Eslestirme klasöründe bir web uygulaması geliştir
+
+Uygulama modern tasarıma sahip olsun. Ekranın altlarında da google reklam alanı için bir bağlantı sağla.  
+
+Bir aktivite için ( doğum günü , düğün , ev kurma ) gibi konular olabilir alınacak hediyeleri arkadaşlara veya tanıdıklara bir listeden seçim yapma imkanı tanıyan bir web uygulaması yap. Faaliyetin sahibi ihtiyaçlarını liste olarak belirtsin, davetliler listeden kendilerine uygun hediye veya hediyeleri seçip faaliyet sahibine iletsinler. 
+
+Bu kapsamda ekleme çıkarma yapılabilecek hediye listesi
+ekleme çıkarma yapılabilecek hediye alacak kişiler listesi
+hediye alacaklar grup halinde hediye alacaklarsa bir hediyeyi birden fazla kişinin nakit katılım yaparak ödeme yapacağı bir seçenek sun.
+
+Bir landing page tasarla bu sayfada hediye listesini(hediyenin adı, marka belirtildi ise markasını ), davetli sayısını, hediye sayısını , boşta kalan hediye sayısını göster
+
+Hediyeleri listeye eklerken adını, ( Örn Kahve Makinası ) istiyorsanız markasını ve Modelini ekle. 
+
+
+Hediye alacak kişilere birer davet maili ve içinde bir şifre ilet. 
+
+Tüm hareketleri kimler davetli , kimler grup halinde hediye alıyor, hangi hediyeler seçildi, kalan hediyeler neler görebileceğimiz bir admin paneli olması da gerekiyor. 
+
+Etkinlik sahibi istediği hediyelerin listesini yapabilecek ve davetli listesi belirleyebilecek, admin ekranına erişebilecek. 
+Hediye alacak kişiler grup kurabilecek ve hediye seçebilecek. 
+
+Tüm bunların kaydedildiği bir database olması gerekiyor Supabase olabilir. 
+
+
+Ana sayfada etkinlik başlat düğmesi yeni oluşturulacak event sayfasına gitsin. Event Sayfasında Etkinliğin adı , Etkinlik Sahibi; Etkinlik sahibi email adresi , şifre işlemleri bulunsun buradan yönetim sayfasına link verip davetli ve hediye seçimlerini yaptır
+
+Etkinlik adının veritabanındaki diğer etkinliklerle aynı olup olmadığını kontrol et
+
+Yönetim sayfasında yeni etkinlik oluşturmanın yanında halihazırdaki etkinliklere de etkinlik sahibi erişimi sağlamak lazım
+
+Mevcut Etkinliği Yönet: Daha önce oluşturduğun etkinlikleri listeden seçip şifreni girerek doğrudan yönetim paneline (Dashboard) erişebilirsin.
+Yeni Etkinlik Başlat: Eğer yeni bir organizasyon yapıyorsan sıfırdan etkinlik oluşturabilirsin.Etkinliği oluşturan , emaili , etkinlik adı , etkinlik tarihini listelerine ekle
+
+
+Etkinlik düzenleyici için ayrı bir şifre oluştur. 
+
+Davetli giriş yaptıktan sonra hediyeyi seçtikten sonra grup kur'a basarsa davetli listesinden seçim yapması lazım
+
+Gelişmiş Yönetici Girişi: Artık yönetim paneline girmek için Etkinlik Adı, E-posta Adresiniz ve Şifre bilgilerinin üçünün de eşleşmesi gerekiyor.
+
+
+Hediye tanımlandıktan sonra eğer seçilmedi ise ( reserved değilse ) hediyenin özellikleri değiştirilebilsin.
+
+
+Features bölümünde uygulamanın özelliklerini anlat
+
+Hediye alınacak etkinliği etkinlik sahibi oluşturur.
+Alınmasını istediği hediyelerin listesini yapar. 
+Davetlileri belirler
+Davetliler hediyeleri tek başlarına veya grup oluştutup alır.
+İşte bu kadar
+
+
+
+Hediye ekleme ve Davetli ekleme adımlarında excelle yükleme imkanı sağla. excel dosyasının ilk satırını başlık için kullanma. Davetli ekleme adımında iki sutun kullan ( adı soyadı ve email) hediye ekleme adımında 3 sutun kullan hediyenin adı, marka ve model , bunlardan marka ve model zorunlu olmayacak.
+
+
+Grup Kurma
+Bir hediye çok pahalı ise ödeme grubu oluşturup o hediyenin alımına yardımcı ol, toplanan tutarı bir havuz hesapta tut.
+
+Yeni bir önerilen ürünler sayfası oluştur bu sayfadaki ürünleri veritabanında da featured gifts adıyla bir tabloda tut. Burada da gifts tablosundaki alanlar olsun. Bu tablodaki ürünleri featured gifts sayfasıyla etkinlik düzenleyiciye başta gifts'e aktarılması için öner 
+
+
+
+
+
+
+Nhg2DSYxzPxqa4Q
+
+
+Davet Karekodu oluştur
+
+
+
+
+
+Supabase şifresi 3!U2N.6V&XiqDhk
+Project URL: https://tlomiawiztpifcbmhbyl.supabase.co
+
+sb_publishable_cVfyniBBe9fs2TpC7TgKaQ_cKjj7TBe

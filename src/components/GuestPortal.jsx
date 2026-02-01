@@ -1,0 +1,468 @@
+import React, { useState, useEffect } from 'react';
+import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark } from 'lucide-react';
+import { db } from '../services/supabase';
+
+const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loginData, setLoginData] = useState({ title: '', email: '', password: '' });
+    const [currentGuest, setCurrentGuest] = useState(null);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [loginError, setLoginError] = useState('');
+
+    const [availableEvents, setAvailableEvents] = useState([]);
+    const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+
+    const [selectedGift, setSelectedGift] = useState(null);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentData, setPaymentData] = useState({ amount: '', cardNumber: '', expiry: '', cvv: '', cardHolder: '' });
+    const [isPaying, setIsPaying] = useState(false);
+
+    const [eventGifts, setEventGifts] = useState([]);
+    const [eventGuests, setEventGuests] = useState([]);
+    const [currentEvent, setCurrentEvent] = useState(null);
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const { data, error } = await db.getEvents();
+                if (data) {
+                    // Sort events alphabetically by title
+                    const sorted = [...data].sort((a, b) => a.title.localeCompare(b.title));
+                    setAvailableEvents(sorted);
+                }
+            } catch (err) {
+                console.error('Events fetch error:', err);
+            } finally {
+                setIsLoadingEvents(false);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if (!loginData.title) {
+            setLoginError('Lütfen bir etkinlik seçin.');
+            return;
+        }
+
+        setLoginError('');
+        setIsLoggingIn(true);
+
+        try {
+            const { success, guest, eventId, error } = await db.verifyGuestLogin(loginData.title, loginData.email, loginData.password);
+
+            if (success) {
+                setCurrentEvent({ id: eventId, title: loginData.title });
+                setCurrentGuest(guest);
+                setIsLoggedIn(true);
+                fetchEventData(eventId);
+            } else {
+                setLoginError(error || 'Hatalı giriş bilgileri.');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setLoginError('Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
+        } finally {
+            setIsLoggingIn(false);
+        }
+    };
+
+    const fetchEventData = async (eventId) => {
+        setIsLoadingData(true);
+        try {
+            const [giftsRes, guestsRes] = await Promise.all([
+                db.getGifts(eventId),
+                db.getGuests(eventId)
+            ]);
+
+            if (giftsRes.data) {
+                const sortedGifts = [...giftsRes.data].sort((a, b) => {
+                    // 1. Status: available first
+                    if (a.status === 'available' && b.status !== 'available') return -1;
+                    if (a.status !== 'available' && b.status === 'available') return 1;
+                    // 2. Name: alphabetical
+                    return a.name.localeCompare(b.name);
+                });
+                setEventGifts(sortedGifts);
+            }
+            if (guestsRes.data) setEventGuests(guestsRes.data);
+        } catch (err) {
+            console.error('Data fetch error:', err);
+        } finally {
+            setIsLoadingData(false);
+        }
+    };
+
+    const handleSelectGift = async (giftId) => {
+        const gift = eventGifts.find(g => g.id === giftId);
+        const { error } = await db.reserveGift(
+            giftId,
+            currentGuest.id, // Use actual guest ID
+            currentEvent.id,
+            `${currentGuest.name} adlı davetli ${gift.name} adlı hediyeyi ayırdı.`
+        );
+        if (!error) {
+            setEventGifts(prev => {
+                const updated = prev.map(g => g.id === giftId ? { ...g, status: 'reserved', reserved_by: currentGuest.id } : g);
+                return [...updated].sort((a, b) => {
+                    if (a.status === 'available' && b.status !== 'available') return -1;
+                    if (a.status !== 'available' && b.status === 'available') return 1;
+                    return a.name.localeCompare(b.name);
+                });
+            });
+            alert('Hediye başarıyla ayrıldı!');
+        }
+    };
+
+    const toggleGuest = (guestId) => {
+        setSelectedGuests(prev =>
+            prev.includes(guestId)
+                ? prev.filter(id => id !== guestId)
+                : [...prev, guestId]
+        );
+    };
+
+    const handlePaymentSubmit = async (e) => {
+        e.preventDefault();
+        setIsPaying(true);
+
+        // Simulate payment delay
+        setTimeout(async () => {
+            const { error } = await db.reserveGift(
+                selectedGift.id,
+                currentGuest.id,
+                currentEvent.id,
+                `${currentGuest.name} adlı davetli ${selectedGift.name} için ${paymentData.amount} TL nakit katkıda bulundu.`
+            );
+
+            if (!error) {
+                setEventGifts(prev => {
+                    const updated = prev.map(g => g.id === selectedGift.id ? { ...g, status: 'reserved', reserved_by: currentGuest.id } : g);
+                    return [...updated].sort((a, b) => {
+                        if (a.status === 'available' && b.status !== 'available') return -1;
+                        if (a.status !== 'available' && b.status === 'available') return 1;
+                        return a.name.localeCompare(b.name);
+                    });
+                });
+                setShowPaymentModal(false);
+                setSelectedGift(null);
+                setPaymentData({ amount: '', cardNumber: '', expiry: '', cvv: '', cardHolder: '' });
+                alert('Ödemeniz başarıyla alındı ve hediye sizin adınıza ayrıldı!');
+            }
+            setIsPaying(false);
+        }, 2000);
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <div className="section container animate-fade-in" style={{ maxWidth: '500px' }}>
+                <div className="card">
+                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                        <div style={{
+                            width: '64px',
+                            height: '64px',
+                            background: 'rgba(99, 102, 241, 0.1)',
+                            borderRadius: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto 1.5rem'
+                        }}>
+                            <Lock size={32} style={{ color: 'var(--primary)' }} />
+                        </div>
+                        <h2>Davetli Girişi</h2>
+                        <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve şifrenizi girin.</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Etkinlik Seçin</label>
+                            <div style={{ position: 'relative' }}>
+                                <select
+                                    className="glass"
+                                    style={{
+                                        width: '100%',
+                                        padding: '1rem',
+                                        color: 'white',
+                                        borderRadius: '12px',
+                                        outline: 'none',
+                                        appearance: 'none',
+                                        backgroundColor: 'var(--card-bg)'
+                                    }}
+                                    value={loginData.title}
+                                    onChange={(e) => setLoginData({ ...loginData, title: e.target.value })}
+                                    required
+                                    disabled={isLoadingEvents}
+                                >
+                                    <option value="" style={{ background: '#1e293b' }}>
+                                        {isLoadingEvents ? 'Etkinlikler yükleniyor...' : 'Bir etkinlik seçin'}
+                                    </option>
+                                    {availableEvents.map(event => (
+                                        <option key={event.id} value={event.title} style={{ background: '#1e293b' }}>
+                                            {event.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>E-posta Adresiniz</label>
+                            <input
+                                type="email"
+                                className="glass"
+                                style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
+                                placeholder="ornek@mail.com"
+                                value={loginData.email}
+                                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Şifre</label>
+                            <input
+                                type="password"
+                                className="glass"
+                                style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
+                                placeholder="••••••••"
+                                value={loginData.password}
+                                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                                required
+                            />
+                        </div>
+
+                        {loginError && (
+                            <p style={{ color: '#ef4444', fontSize: '0.875rem', textAlign: 'center' }}>{loginError}</p>
+                        )}
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ justifyContent: 'center', padding: '1rem' }}
+                            disabled={isLoggingIn || isLoadingEvents}
+                        >
+                            {isLoggingIn ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                            {!isLoggingIn && <ShieldCheck size={20} />}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="section container animate-fade-in">
+            <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div>
+                    <h2 style={{ fontSize: '2.5rem' }}>Hoş Geldiniz, <span className="gradient-text">{currentGuest?.name || 'Davetli'}</span></h2>
+                    <p style={{ color: 'var(--text-muted)' }}>Mevcut hediyeleri inceleyebilir veya bir grup kurarak ortak hediye alabilirsiniz.</p>
+                </div>
+                <button
+                    className="btn btn-outline"
+                    onClick={() => setIsLoggedIn(false)}
+                    style={{ fontSize: '0.875rem' }}
+                >
+                    Çıkış Yap
+                </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {eventGifts.map((gift) => (
+                    <div key={gift.id} className="glass" style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: gift.status === 'reserved' ? 0.7 : 1 }}>
+                        <div style={{ width: '250px' }}>
+                            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{gift.name}</h3>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} {gift.brand && gift.model ? '-' : ''} {gift.model}</p>
+                        </div>
+
+                        {/* Shopping Links Area */}
+                        <div style={{ display: 'flex', gap: '1rem', flex: 1, justifyContent: 'center' }}>
+                            {gift.hepsiburada_url && (
+                                <a
+                                    href={gift.hepsiburada_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-outline"
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        padding: '0.4rem 1rem',
+                                        borderColor: '#ff6000',
+                                        color: '#ff6000',
+                                        textDecoration: 'none',
+                                        background: 'rgba(255, 96, 0, 0.05)'
+                                    }}
+                                >
+                                    <ShoppingCart size={14} /> Hepsiburada'da Gör
+                                </a>
+                            )}
+                            {gift.amazon_url && (
+                                <a
+                                    href={gift.amazon_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-outline"
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        padding: '0.4rem 1rem',
+                                        borderColor: '#ff9900',
+                                        color: '#ff9900',
+                                        textDecoration: 'none',
+                                        background: 'rgba(255, 153, 0, 0.05)'
+                                    }}
+                                >
+                                    <ExternalLink size={14} /> Amazon'da Gör
+                                </a>
+                            )}
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '300px', justifyContent: 'flex-end' }}>
+                            {gift.status === 'reserved' ? (
+                                <span style={{ color: '#4ade80', fontSize: '0.875rem', fontWeight: '500', background: 'rgba(34, 197, 94, 0.1)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
+                                    Alındı
+                                </span>
+                            ) : (
+                                <>
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
+                                        onClick={() => handleSelectGift(gift.id)}
+                                    >
+                                        Hediyeyi Al
+                                    </button>
+                                    <button
+                                        className="btn btn-outline"
+                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
+                                        onClick={() => {
+                                            setSelectedGift(gift);
+                                            setShowPaymentModal(true);
+                                        }}
+                                    >
+                                        Nakit Katıl
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Payment Modal */}
+            {showPaymentModal && selectedGift && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.85)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    padding: '1rem'
+                }}>
+                    <div className="card animate-fade-in" style={{ maxWidth: '500px', width: '100%', position: 'relative', border: '1px solid var(--primary)' }}>
+                        <button
+                            onClick={() => setShowPaymentModal(false)}
+                            style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+                        >
+                            <X size={24} />
+                        </button>
+
+                        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                            <div style={{ width: '48px', height: '48px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                                <CreditCard size={24} style={{ color: 'var(--primary)' }} />
+                            </div>
+                            <h2 style={{ marginBottom: '0.5rem' }}>Nakit Katıl</h2>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{selectedGift.name} için ödeme yapın</p>
+                        </div>
+
+                        <form onSubmit={handlePaymentSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Katkı Tutarı (TL)</label>
+                                <input
+                                    type="number"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', color: 'white' }}
+                                    placeholder="Örn: 1000"
+                                    value={paymentData.amount}
+                                    onChange={(e) => setPaymentData({ ...paymentData, amount: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="glass" style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%)' }}>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Kart Üzerindeki İsim</label>
+                                    <input
+                                        className="glass"
+                                        style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
+                                        placeholder="AD SOYAD"
+                                        value={paymentData.cardHolder}
+                                        onChange={(e) => setPaymentData({ ...paymentData, cardHolder: e.target.value.toUpperCase() })}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ marginBottom: '1.25rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Kart Numarası</label>
+                                    <input
+                                        className="glass"
+                                        style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white', letterSpacing: '2px' }}
+                                        placeholder="0000 0000 0000 0000"
+                                        maxLength="19"
+                                        value={paymentData.cardNumber}
+                                        onChange={(e) => setPaymentData({ ...paymentData, cardNumber: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Sön Kullanma</label>
+                                        <input
+                                            className="glass"
+                                            style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
+                                            placeholder="AA/YY"
+                                            maxLength="5"
+                                            value={paymentData.expiry}
+                                            onChange={(e) => setPaymentData({ ...paymentData, expiry: e.target.value })}
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>CVV</label>
+                                        <input
+                                            className="glass"
+                                            style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
+                                            placeholder="000"
+                                            maxLength="3"
+                                            value={paymentData.cvv}
+                                            onChange={(e) => setPaymentData({ ...paymentData, cvv: e.target.value })}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ width: '100%', justifyContent: 'center', padding: '1rem', marginTop: '1rem' }}
+                                disabled={isPaying}
+                            >
+                                {isPaying ? 'İşlem Yapılıyor...' : `${paymentData.amount ? paymentData.amount + ' TL' : ''} Ödemeyi Tamamla`}
+                            </button>
+
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                                <ShieldCheck size={14} /> 256-bit SSL Güvenli Ödeme
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default GuestPortal;
