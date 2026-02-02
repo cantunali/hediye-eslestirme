@@ -173,7 +173,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                             <Lock size={32} style={{ color: 'var(--primary)' }} />
                         </div>
                         <h2>Davetli Girişi</h2>
-                        <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve şifrenizi girin.</p>
+                        <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve e-posta adresinizi girin.</p>
                     </div>
 
                     <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -218,18 +218,6 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                 placeholder="ornek@mail.com"
                                 value={loginData.email}
                                 onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Şifre</label>
-                            <input
-                                type="password"
-                                className="glass"
-                                style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                                placeholder="••••••••"
-                                value={loginData.password}
-                                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                                 required
                             />
                         </div>

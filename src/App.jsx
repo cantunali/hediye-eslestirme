@@ -28,12 +28,7 @@ const Navbar = ({ onNavigate, currentPage }) => (
       >
         Özellikler
       </button>
-      <button
-        style={{ background: 'none', border: 'none', color: currentPage === 'featured-gifts' ? 'var(--primary)' : 'var(--text-muted)', cursor: 'pointer', fontSize: '1rem', fontWeight: currentPage === 'featured-gifts' ? '600' : '400' }}
-        onClick={() => onNavigate('featured-gifts')}
-      >
-        Hediye Önerileri
-      </button>
+
       <button
         className={`btn ${currentPage === 'guest' ? 'btn-primary' : 'btn-outline'}`}
         onClick={() => onNavigate('guest')}
@@ -78,9 +73,7 @@ const Footer = ({ onNavigate }) => (
         </div>
       </div>
     </div>
-    <div className="ads-space">
-      <Star size={16} style={{ marginRight: '8px' }} /> Reklam Alanı (Google AdSense)
-    </div>
+
     <div style={{ textAlign: 'center', marginTop: '3rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
       © 2026 HediyeEşle. Tüm Hakları Saklıdır.
     </div>
@@ -100,15 +93,19 @@ const LandingPage = ({ onStart, onNavigate }) => (
           Düğün, doğum günü veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
-          <button className="btn btn-primary" style={{ padding: '1rem 2.5rem' }} onClick={() => onStart('create-event')}>
-            Etkinlik Başlat <ArrowRight size={20} />
+          <button
+            className="btn btn-primary"
+            style={{ padding: '1rem 2.5rem' }}
+            onClick={() => onNavigate('guest')}
+          >
+            Davetli Girişi <Users size={20} style={{ marginLeft: '0.5rem' }} />
           </button>
           <button
             className="btn btn-outline"
             style={{ padding: '1rem 2.5rem' }}
-            onClick={() => onNavigate('features')}
+            onClick={() => onStart('create-event')}
           >
-            Daha Fazla Bilgi
+            Etkinlik Başlat <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />
           </button>
         </div>
       </div>

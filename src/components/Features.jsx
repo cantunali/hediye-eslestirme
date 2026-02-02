@@ -24,7 +24,7 @@ const FeaturesPage = ({ onStart }) => {
         {
             icon: <Gift size={32} />,
             title: "Eşleşme ve Gruplar",
-            description: "Davetliler hediyeleri ister tek başlarına, ister kendi aralarında gruplar oluşturarak alabilirler.",
+            description: "Davetliler hediyeleri ister tek başlarına isterseler büyük bir hediyeye nakit katılım sağlayarak alabilirler.",
             color: "#4ade80"
         }
     ];
