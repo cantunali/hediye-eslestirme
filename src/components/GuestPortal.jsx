@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
@@ -157,87 +159,90 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
 
     if (!isLoggedIn) {
         return (
-            <div className="section container animate-fade-in" style={{ maxWidth: '500px' }}>
-                <div className="card">
-                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                        <div style={{
-                            width: '64px',
-                            height: '64px',
-                            background: 'rgba(99, 102, 241, 0.1)',
-                            borderRadius: '16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            margin: '0 auto 1.5rem'
-                        }}>
-                            <Lock size={32} style={{ color: 'var(--primary)' }} />
+            <div className="section container animate-fade-in" style={{ padding: '4rem 2rem', maxWidth: '600px', margin: '0 auto' }}>
+                <Helmet>
+                    <title>HediyeEşle - Davetli Girişi</title>
+                    <meta name="description" content="HediyeEşle davetli paneline giriş yapın ve sevdiklerinizin hediye listesine ulaşın." />
+                </Helmet>
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                    <div style={{
+                        width: '64px',
+                        height: '64px',
+                        background: 'rgba(99, 102, 241, 0.1)',
+                        borderRadius: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 1.5rem'
+                    }}>
+                        <Lock size={32} style={{ color: 'var(--primary)' }} />
+                    </div>
+                    <h2>Davetli Girişi</h2>
+                    <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve e-posta adresinizi girin.</p>
+                </div>
+
+                <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Etkinlik Seçin</label>
+                        <div style={{ position: 'relative' }}>
+                            <select
+                                className="glass"
+                                style={{
+                                    width: '100%',
+                                    padding: '1rem',
+                                    color: 'white',
+                                    borderRadius: '12px',
+                                    outline: 'none',
+                                    appearance: 'none',
+                                    backgroundColor: 'var(--card-bg)'
+                                }}
+                                value={loginData.title}
+                                onChange={(e) => setLoginData({ ...loginData, title: e.target.value })}
+                                required
+                                disabled={isLoadingEvents}
+                            >
+                                <option value="" style={{ background: '#1e293b' }}>
+                                    {isLoadingEvents ? 'Etkinlikler yükleniyor...' : 'Bir etkinlik seçin'}
+                                </option>
+                                {availableEvents.map(event => (
+                                    <option key={event.id} value={event.title} style={{ background: '#1e293b' }}>
+                                        {event.title}
+                                    </option>
+                                ))}
+                            </select>
+                            <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
                         </div>
-                        <h2>Davetli Girişi</h2>
-                        <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve e-posta adresinizi girin.</p>
                     </div>
 
-                    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Etkinlik Seçin</label>
-                            <div style={{ position: 'relative' }}>
-                                <select
-                                    className="glass"
-                                    style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        color: 'white',
-                                        borderRadius: '12px',
-                                        outline: 'none',
-                                        appearance: 'none',
-                                        backgroundColor: 'var(--card-bg)'
-                                    }}
-                                    value={loginData.title}
-                                    onChange={(e) => setLoginData({ ...loginData, title: e.target.value })}
-                                    required
-                                    disabled={isLoadingEvents}
-                                >
-                                    <option value="" style={{ background: '#1e293b' }}>
-                                        {isLoadingEvents ? 'Etkinlikler yükleniyor...' : 'Bir etkinlik seçin'}
-                                    </option>
-                                    {availableEvents.map(event => (
-                                        <option key={event.id} value={event.title} style={{ background: '#1e293b' }}>
-                                            {event.title}
-                                        </option>
-                                    ))}
-                                </select>
-                                <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
-                            </div>
-                        </div>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>E-posta Adresiniz</label>
+                        <input
+                            type="email"
+                            className="glass"
+                            style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
+                            placeholder="ornek@mail.com"
+                            value={loginData.email}
+                            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                            required
+                        />
+                    </div>
 
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>E-posta Adresiniz</label>
-                            <input
-                                type="email"
-                                className="glass"
-                                style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                                placeholder="ornek@mail.com"
-                                value={loginData.email}
-                                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                                required
-                            />
-                        </div>
+                    {loginError && (
+                        <p style={{ color: '#ef4444', fontSize: '0.875rem', textAlign: 'center' }}>{loginError}</p>
+                    )}
 
-                        {loginError && (
-                            <p style={{ color: '#ef4444', fontSize: '0.875rem', textAlign: 'center' }}>{loginError}</p>
-                        )}
-
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                            style={{ justifyContent: 'center', padding: '1rem' }}
-                            disabled={isLoggingIn || isLoadingEvents}
-                        >
-                            {isLoggingIn ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
-                            {!isLoggingIn && <ShieldCheck size={20} />}
-                        </button>
-                    </form>
-                </div>
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ justifyContent: 'center', padding: '1rem' }}
+                        disabled={isLoggingIn || isLoadingEvents}
+                    >
+                        {isLoggingIn ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                        {!isLoggingIn && <ShieldCheck size={20} />}
+                    </button>
+                </form>
             </div>
+
         );
     }
 

@@ -1,9 +1,15 @@
+
 import React from 'react';
 import { ShieldCheck, Eye, Lock, FileText } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const PrivacyPolicy = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
+            <Helmet>
+                <title>HediyeEşle - Gizlilik Politikası</title>
+                <meta name="description" content="HediyeEşle gizlilik politikası ve veri güvenliği hakkında bilgiler." />
+            </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
                     <ShieldCheck size={64} />

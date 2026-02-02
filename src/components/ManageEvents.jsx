@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
 const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
@@ -58,7 +60,15 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     };
 
     return (
-        <div className="section container animate-fade-in" style={{ maxWidth: '800px' }}>
+        <div className="section container animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '2rem' }}>
+            <Helmet>
+                <title>HediyeEşle - Etkinliklerim</title>
+                <meta name="description" content="Mevcut etkinliklerinizi yönetin veya yeni bir etkinlik oluşturun." />
+            </Helmet>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '1rem' }}>Etkinlik Yönetimi</h1>
+                <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>Mevcut etkinliklerinizi yönetin veya yeni bir etkinlik oluşturun.</p>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
                 {/* Create New Event Card */}
                 <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '3rem 2rem' }}>

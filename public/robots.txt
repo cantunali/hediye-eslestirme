@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hediyeesle.com/sitemap.xml

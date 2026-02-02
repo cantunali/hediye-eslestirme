@@ -1,10 +1,16 @@
+
 import React from 'react';
 import { Heart, Sparkles, Target, Users } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const AboutUs = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+            <Helmet>
+                <title>HediyeEşle - Hakkımızda</title>
+                <meta name="description" content="HediyeEşle, özel günlerinizde hediye seçimini kolaylaştıran, sevdiklerinizle aranızdaki bağı güçlendiren bir platformdur." />
+            </Helmet>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Hakkımızda <span className="gradient-text">HediyeEşle</span>
                 </h1>

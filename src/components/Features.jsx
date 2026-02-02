@@ -1,7 +1,10 @@
 import React from 'react';
 import { Gift, Users, List, Sparkles, ChevronRight, CheckCircle2 } from 'lucide-react';
 
+import { Helmet } from 'react-helmet-async';
+
 const FeaturesPage = ({ onStart }) => {
+    // ... (steps definition remains same) ...
     const steps = [
         {
             icon: <Sparkles size={32} />,
@@ -31,6 +34,10 @@ const FeaturesPage = ({ onStart }) => {
 
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
+            <Helmet>
+                <title>HediyeEşle - Nasıl Çalışır? Özellikler</title>
+                <meta name="description" content="Etkinlik oluşturma, hediye listesi yapma ve davetli yönetimi. HediyeEşle özelliklerini keşfedin." />
+            </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Nasıl <span className="gradient-text">Çalışır?</span>

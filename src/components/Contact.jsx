@@ -1,10 +1,16 @@
+
 import React from 'react';
 import { Mail, Phone, MapPin, Send, Instagram, Twitter, Facebook } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const Contact = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+            <Helmet>
+                <title>HediyeEşle - İletişim</title>
+                <meta name="description" content="Sorularınız, görüşleriniz veya işbirlikleri için bize ulaşın. HediyeEşle ekibi size yardımcı olmaktan mutluluk duyar." />
+            </Helmet>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Bize <span className="gradient-text">Ulaşın</span>
                 </h1>
