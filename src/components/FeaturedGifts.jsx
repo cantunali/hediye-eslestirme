@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../services/supabase';
-import { Gift, Plus, ShoppingCart, ExternalLink, CheckCircle } from 'lucide-react';
+import { Gift, Plus, ShoppingCart, ExternalLink, CheckCircle2, Loader2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const FeaturedGifts = ({ eventId, onGiftsAdded }) => {

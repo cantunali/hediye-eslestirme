@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Calendar, User, Lock, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
+import { Calendar, User, Lock, ArrowRight, Sparkles, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
+import { useAuth } from '../context/AuthContext';
 
 const CreateEvent = ({ onCreated }) => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
-        owner: '',
-        owner_email: '',
-        password: '',
         event_date: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.title && formData.owner && formData.owner_email && formData.password && formData.event_date) {
+        if (formData.title && formData.event_date) {
             setIsChecking(true);
             setError('');
 
@@ -29,8 +29,16 @@ const CreateEvent = ({ onCreated }) => {
                     return;
                 }
 
-                // Create the event in Supabase
-                const { data, error: createError } = await db.createEvent(formData);
+                // Create the event in Supabase with user_id and owner details
+                const eventPayload = {
+                    ...formData,
+                    owner_name: user.fullname || user.email.split('@')[0],
+                    owner_email: user.email,
+                    password: '123', // Default guest password if not asked
+                    user_id: user.id
+                };
+
+                const { data, error: createError } = await db.createEvent(eventPayload);
 
                 if (createError) {
                     console.error('Create Error:', createError);
@@ -39,10 +47,14 @@ const CreateEvent = ({ onCreated }) => {
                     return;
                 }
 
-                onCreated(formData);
+                if (data) {
+                    onCreated({ ...eventPayload, id: data.id });
+                } else {
+                    throw new Error('Veri dönerken bir hata oluştu.');
+                }
             } catch (err) {
                 console.error('Submit Error:', err);
-                setError('Bir hata oluştu. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.');
+                setError('Bir hata oluştu: ' + (err.message || 'Lütfen bağlantınızı kontrol edin.'));
             } finally {
                 setIsChecking(false);
             }
@@ -54,6 +66,7 @@ const CreateEvent = ({ onCreated }) => {
             <Helmet>
                 <title>HediyeEşle - Etkinlik Oluştur</title>
                 <meta name="description" content="Yeni bir hediye eşleşme etkinliği oluşturun. Düğün, doğum günü veya özel günleriniz için hediye listesi hazırlayın." />
+                <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <div style={{
@@ -115,57 +128,6 @@ const CreateEvent = ({ onCreated }) => {
                             style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', color: 'white', borderRadius: '12px', outline: 'none' }}
                             value={formData.event_date}
                             onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
-                            required
-                            disabled={isChecking}
-                        />
-                    </div>
-                </div>
-
-                <div style={{ position: 'relative' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', fontWeight: '500' }}>Etkinlik Sahibi</label>
-                    <div style={{ position: 'relative' }}>
-                        <User size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                        <input
-                            type="text"
-                            className="glass"
-                            style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                            placeholder="Adınız Soyadınız"
-                            value={formData.owner}
-                            onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
-                            required
-                            disabled={isChecking}
-                        />
-                    </div>
-                </div>
-
-                <div style={{ position: 'relative' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', fontWeight: '500' }}>E-posta Adresiniz</label>
-                    <div style={{ position: 'relative' }}>
-                        <User size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                        <input
-                            type="email"
-                            className="glass"
-                            style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                            placeholder="ornek@mail.com"
-                            value={formData.owner_email}
-                            onChange={(e) => setFormData({ ...formData, owner_email: e.target.value })}
-                            required
-                            disabled={isChecking}
-                        />
-                    </div>
-                </div>
-
-                <div style={{ position: 'relative' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', fontWeight: '500' }}>Erişim Şifresi</label>
-                    <div style={{ position: 'relative' }}>
-                        <Lock size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                        <input
-                            type="password"
-                            className="glass"
-                            style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                            placeholder="Davetliler için şifre belirleyin"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
                             disabled={isChecking}
                         />

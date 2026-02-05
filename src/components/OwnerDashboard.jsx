@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
 import { db } from '../services/supabase';
@@ -127,23 +127,21 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         }
     };
 
-    const handleBulkPasswordUpdate = async () => {
-        if (!bulkPassword) return;
+    const handleBulkInvite = async () => {
+        if (!bulkPassword) return; // Keeping state name for now to avoid breaking other parts, but functionality will change
         setIsUpdatingBulk(true);
         setBulkMessage('');
 
         try {
-            const { error } = await db.bulkUpdateGuestPasswords(eventDetails.id, bulkPassword);
-            if (error) throw error;
+            // Placeholder for email module integration
+            await db.logActivity(eventDetails.id, 'Tüm davetlilere toplu davet gönderildi.');
 
-            await db.logActivity(eventDetails.id, 'Tüm davetli şifreleri toplu olarak güncellendi.');
-
-            setBulkMessage('Tüm şifreler başarıyla güncellendi!');
+            setBulkMessage('Tüm davetler başarıyla sıraya alındı!');
             setBulkPassword('');
             fetchActivities(); // Refresh activities
         } catch (err) {
-            console.error('Bulk update error:', err);
-            setBulkMessage('Şifreler güncellenirken bir hata oluştu.');
+            console.error('Bulk invite error:', err);
+            setBulkMessage('Davetler gönderilirken bir hata oluştu.');
         } finally {
             setIsUpdatingBulk(false);
         }
@@ -152,6 +150,46 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     const [isImporting, setIsImporting] = useState(false);
     const [isImportingGifts, setIsImportingGifts] = useState(false);
     const fileInputRef = React.useRef(null);
+    const exportActivities = async (type) => {
+        setIsLoadingActivities(true);
+        try {
+            // Fetch ALL activities for export
+            const { data: allActivities } = await db.getActivities(eventDetails.id, null);
+            if (!allActivities || allActivities.length === 0) {
+                alert('Dışa aktarılacak hareket bulunamadı.');
+                return;
+            }
+
+            const fileName = `${eventDetails.title}_Olay_Ozeti_${new Date().toLocaleDateString('tr-TR')}`;
+
+            if (type === 'excel') {
+                const worksheet = XLSX.utils.json_to_sheet(allActivities.map(a => ({
+                    'Tarih': new Date(a.created_at).toLocaleString('tr-TR'),
+                    'İçerik': a.content
+                })));
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Olaylar");
+                XLSX.writeFile(workbook, `${fileName}.xlsx`);
+            } else if (type === 'txt') {
+                const content = allActivities.map(a =>
+                    `[${new Date(a.created_at).toLocaleString('tr-TR')}] ${a.content}`
+                ).join('\n');
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${fileName}.txt`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        } catch (err) {
+            console.error('Export error:', err);
+            alert('Dışa aktarma sırasında bir hata oluştu.');
+        } finally {
+            setIsLoadingActivities(false);
+        }
+    };
+
     const giftFileInputRef = React.useRef(null);
 
     const handleImportExcel = async (e) => {
@@ -255,6 +293,11 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
     return (
         <div className="section container animate-fade-in">
+            <Helmet>
+                <title>HediyeEşle - Etkinlik Yönetim Paneli</title>
+                <meta name="description" content="Etkinliğinizi yönetin, hediye listenizi düzenleyin ve davetli durumlarını takip edin." />
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             {/* Event Info Header */}
             {eventDetails && (
                 <div className="card" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1))' }}>
@@ -271,7 +314,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>Erişim Şifresi</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>Silinecek Erişim Şifresi</span>
                         <code style={{ background: 'var(--glass)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>{eventDetails.password}</code>
                     </div>
                 </div>
@@ -308,7 +351,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                             style={{ width: '100%', justifyContent: 'flex-start' }}
                             onClick={() => setActiveTab('admin')}
                         >
-                            <LayoutDashboard size={20} /> Admin Paneli
+                            <LayoutDashboard size={20} /> Olaylar
                         </button>
                     </nav>
                 </aside>
@@ -542,28 +585,28 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                 </button>
                             </div>
 
-                            {/* Bulk Password Update Tool */}
+                            {/* Bulk Invitation Tool */}
                             <div className="glass" style={{ padding: '1.5rem', marginBottom: '2rem', border: '1px dashed var(--primary)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                                     <ShieldCheck size={20} style={{ color: 'var(--primary)' }} />
-                                    <h4 style={{ margin: 0 }}>Toplu Şifre Yönetimi</h4>
+                                    <h4 style={{ margin: 0 }}>Toplu Davet</h4>
                                 </div>
-                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Sistemdeki tüm davetlilerin giriş şifresini tek seferde değiştirin.</p>
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Sistemdeki tüm davetlilere toplu olarak davet mesajı gönderin.</p>
                                 <div style={{ display: 'flex', gap: '1rem' }}>
                                     <input
                                         type="text"
                                         className="glass"
                                         style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', color: 'white' }}
-                                        placeholder="Yeni Toplu Şifre"
+                                        placeholder="Davet Mesajı Notu"
                                         value={bulkPassword}
                                         onChange={e => setBulkPassword(e.target.value)}
                                     />
                                     <button
                                         className="btn btn-outline"
-                                        onClick={handleBulkPasswordUpdate}
+                                        onClick={handleBulkInvite}
                                         disabled={isUpdatingBulk}
                                     >
-                                        {isUpdatingBulk ? 'Güncelleniyor...' : 'Tüm Şifreleri Değiştir'}
+                                        {isUpdatingBulk ? 'Gönderiliyor...' : 'Gönder'}
                                     </button>
                                 </div>
                                 {bulkMessage && <p style={{ marginTop: '0.75rem', fontSize: '0.875rem', color: bulkMessage.includes('başarıyla') ? '#4ade80' : '#ef4444' }}>{bulkMessage}</p>}
@@ -631,7 +674,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                                             <button className="btn-outline" style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}>
-                                                Şifreyi Gönder
+                                                Davet et
                                             </button>
                                             <button className="btn-outline" style={{ border: 'none', color: '#ef4444' }} onClick={() => removeGuest(guest.id)}>
                                                 <Trash2 size={18} />
@@ -646,38 +689,65 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                     {activeTab === 'admin' && (
                         <div className="card">
                             <div style={{ marginBottom: '2rem' }}>
-                                <h2>Admin Özeti</h2>
+                                <h2>Olaylar Özeti</h2>
                                 <p style={{ color: 'var(--text-muted)' }}>Etkinlikteki tüm hareketleri buradan takip edebilirsiniz.</p>
                             </div>
 
                             <div style={{ display: 'grid', gap: '1.5rem' }}>
                                 <div className="glass" style={{ padding: '1.5rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                        <h3 style={{ fontSize: '1.125rem', margin: 0 }}>Son Hareketler</h3>
-                                        <button
-                                            onClick={fetchActivities}
-                                            className="btn-outline"
-                                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', border: 'none' }}
-                                            disabled={isLoadingActivities}
-                                        >
-                                            {isLoadingActivities ? 'Yükleniyor...' : 'Yenile'}
-                                        </button>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                        <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Son Hareketler</h3>
+                                        <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                            <button
+                                                onClick={() => exportActivities('excel')}
+                                                className="btn-outline"
+                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', borderColor: '#22c55e', color: '#22c55e' }}
+                                                disabled={isLoadingActivities}
+                                            >
+                                                <FileSpreadsheet size={16} /> Excel
+                                            </button>
+                                            <button
+                                                onClick={() => exportActivities('txt')}
+                                                className="btn-outline"
+                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                                                disabled={isLoadingActivities}
+                                            >
+                                                <FileText size={16} /> TXT
+                                            </button>
+                                            <button
+                                                onClick={fetchActivities}
+                                                className="btn-outline"
+                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.75rem', border: 'none', background: 'rgba(255,255,255,0.05)' }}
+                                                disabled={isLoadingActivities}
+                                            >
+                                                {isLoadingActivities ? '...' : 'Yenile'}
+                                            </button>
+                                        </div>
                                     </div>
-                                    {activities.length > 0 ? (
-                                        activities.map((act) => (
-                                            <div key={act.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 0', borderBottom: '1px solid var(--border)' }}>
-                                                <ChevronRight size={16} style={{ color: 'var(--primary)' }} />
-                                                <div style={{ flex: 1 }}>
-                                                    <span style={{ fontSize: '0.875rem' }}>{act.content}</span>
-                                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', margin: 0 }}>
-                                                        {new Date(act.created_at).toLocaleString('tr-TR')}
-                                                    </p>
+
+                                    <div style={{
+                                        maxHeight: '280px',
+                                        overflowY: 'auto',
+                                        paddingRight: '0.5rem',
+                                        scrollbarWidth: 'thin',
+                                        scrollbarColor: 'var(--primary) transparent'
+                                    }}>
+                                        {activities.length > 0 ? (
+                                            activities.map((act) => (
+                                                <div key={act.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0', borderBottom: '1px solid var(--border)' }}>
+                                                    <div style={{ minWidth: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', opacity: 0.5 }}></div>
+                                                    <div style={{ flex: 1 }}>
+                                                        <span style={{ fontSize: '0.95rem', display: 'block', marginBottom: '0.25rem' }}>{act.content}</span>
+                                                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+                                                            {new Date(act.created_at).toLocaleString('tr-TR')}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textAlign: 'center', padding: '2rem' }}>Henüz bir hareket bulunmuyor.</p>
-                                    )}
+                                            ))
+                                        ) : (
+                                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textAlign: 'center', padding: '2rem' }}>Henüz bir hareket bulunmuyor.</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>

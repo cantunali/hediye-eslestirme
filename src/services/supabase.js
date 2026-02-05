@@ -10,6 +10,71 @@ if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KE
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const db = {
+    // Auth Methods (Manual DB Auth)
+    signUp: async (email, password, fullname) => {
+        const { data, error } = await supabase
+            .from('users')
+            .insert([{ email, password, fullname }])
+            .select()
+            .single();
+        return { data: { user: data }, error };
+    },
+    signIn: async (email, password) => {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .eq('password', password)
+            .single();
+
+        if (error || !data) {
+            return { data: null, error: error || { message: 'Invalid credentials' } };
+        }
+        return { data: { user: data }, error: null };
+    },
+    signOut: async () => {
+        // Handled in AuthContext (localStorage.removeItem)
+        return { error: null };
+    },
+    getSession: async () => {
+        // Handled in AuthContext (localStorage.getItem)
+        return { session: null, error: null };
+    },
+    resetPassword: async (email) => {
+        const { data, error } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', email)
+            .maybeSingle();
+
+        if (error) return { data: null, error };
+        if (!data) return { data: null, error: { message: 'Bu e-posta adresi ile kayıtlı bir kullanıcı bulunamadı.' } };
+
+        return { data: true, error: null };
+    },
+    updatePassword: async (newPassword, userId) => {
+        const { data, error } = await supabase
+            .from('users')
+            .update({ password: newPassword })
+            .eq('id', userId);
+        return { data, error };
+    },
+    updatePasswordByEmail: async (email, newPassword) => {
+        const { data, error } = await supabase
+            .from('users')
+            .update({ password: newPassword })
+            .eq('email', email);
+        return { data, error };
+    },
+
+    getUserEvents: async (userId) => {
+        const { data, error } = await supabase
+            .from('events')
+            .select('*')
+            .eq('user_id', userId);
+        return { data, error };
+    },
+
     getEvents: async () => {
         const { data, error } = await supabase.from('events').select('*');
         return { data, error };
@@ -53,15 +118,16 @@ export const db = {
         }
         return { data, error };
     },
-    createEvent: async ({ title, owner, owner_email, password, event_date }) => {
+    createEvent: async ({ title, owner_name, owner_email, password, event_date, user_id }) => {
         const { data: eventData, error: eventError } = await supabase
             .from('events')
             .insert([{
                 title,
-                owner_name: owner,
-                owner_email: owner_email,
+                owner_name,
+                owner_email,
                 password,
                 event_date,
+                user_id, // Link to the logged-in user
                 type: 'general'
             }])
             .select()
@@ -69,7 +135,7 @@ export const db = {
 
         return { data: eventData, error: eventError };
     },
-    verifyGuestLogin: async (eventTitle, email, password) => {
+    verifyGuestLogin: async (eventTitle, email) => {
         // 1. Find the event
         const { data: event, error: eventError } = await supabase
             .from('events')
@@ -79,16 +145,15 @@ export const db = {
 
         if (eventError || !event) return { success: false, error: 'Etkinlik bulunamadı.' };
 
-        // 2. Check if guest exists for this event with this email and password
+        // 2. Check if guest exists for this event with this email
         const { data: guest, error: guestError } = await supabase
             .from('guests')
             .select('*')
             .eq('event_id', event.id)
             .eq('email', email)
-            .eq('password', password)
-            .single();
+            .maybeSingle();
 
-        if (guestError || !guest) return { success: false, error: 'Hatalı e-posta veya şifre.' };
+        if (guestError || !guest) return { success: false, error: 'Bu e-posta adresi ile kayıtlı davetli bulunamadı.' };
 
         return { success: true, guest, eventId: event.id };
     },
@@ -201,13 +266,18 @@ export const db = {
             .select();
         return { data, error };
     },
-    getActivities: async (eventId) => {
-        const { data, error } = await supabase
+    getActivities: async (eventId, limit = 10) => {
+        let query = supabase
             .from('activities')
             .select('*')
             .eq('event_id', eventId)
-            .order('created_at', { ascending: false })
-            .limit(10);
+            .order('created_at', { ascending: false });
+
+        if (limit) {
+            query = query.limit(limit);
+        }
+
+        const { data, error } = await query;
         return { data, error };
     },
     logActivity: async (eventId, content) => {
@@ -240,6 +310,49 @@ export const db = {
             .insert(giftsToInsert)
             .select();
 
+        return { data, error };
+    },
+
+    sendEmail: async ({ to, subject, html, text, smtpConfig }) => {
+        const { data, error } = await supabase.functions.invoke('send-email', {
+            body: { to, subject, html, text, smtpConfig },
+        });
+        return { data, error };
+    },
+
+    // Global Admin Methods
+    getGlobalStats: async () => {
+        const [users, events, gifts, guests] = await Promise.all([
+            supabase.from('users').select('*', { count: 'exact', head: true }),
+            supabase.from('events').select('*', { count: 'exact', head: true }),
+            supabase.from('gifts').select('*', { count: 'exact', head: true }),
+            supabase.from('guests').select('*', { count: 'exact', head: true })
+        ]);
+
+        return {
+            users: users.count || 0,
+            events: events.count || 0,
+            gifts: gifts.count || 0,
+            guests: guests.count || 0,
+            error: users.error || events.error || gifts.error || guests.error
+        };
+    },
+
+    getAllEvents: async (limit = 50) => {
+        const { data, error } = await supabase
+            .from('events')
+            .select('*, users(fullname, email)')
+            .order('created_at', { ascending: false })
+            .limit(limit);
+        return { data, error };
+    },
+
+    getPlatformActivities: async (limit = 50) => {
+        const { data, error } = await supabase
+            .from('activities')
+            .select('*, events(title)')
+            .order('created_at', { ascending: false })
+            .limit(limit);
         return { data, error };
     }
 };

@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS guests;
 DROP TABLE IF EXISTS gifts;
 DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS users;
+
 
 -- Events Table
 CREATE TABLE events (
@@ -16,6 +18,7 @@ CREATE TABLE events (
   title TEXT NOT NULL UNIQUE,
   type TEXT DEFAULT 'general',
   event_date DATE,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -78,3 +81,12 @@ INSERT INTO featured_gifts (name, brand, model, hepsiburada_url, amazon_url, cat
 ('Airfryer XXL', 'Philips', 'HD9650/90', 'https://www.hepsiburada.com/ara?q=philips+airfryer+xxl', 'https://www.amazon.com.tr/s?k=philips+airfryer+xxl', 'Mutfak'),
 ('Döküm Tencere Seti', 'Lava', 'Vintage', 'https://www.hepsiburada.com/ara?q=lava+dokum+tencere', 'https://www.amazon.com.tr/s?k=lava+dokum+tencere', 'Mutfak'),
 ('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik');
+
+
+CREATE TABLE public.users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  fullname TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

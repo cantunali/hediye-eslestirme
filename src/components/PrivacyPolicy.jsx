@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
                             <h2 style={{ fontSize: '1.75rem' }}>Veri Güvenliği</h2>
                         </div>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                            HediyeEşle olarak, paylaştığınız tüm kişisel verileri endüstri standartlarındaki şifreleme yöntemleri ile koruyoruz. Oluşturduğunuz etkinlik şifreleri ve kullanıcı bilgileriniz, yetkisiz erişime karşı güvenli sunucularımızda saklanmaktadır.
+                            HediyeEşle olarak, paylaştığınız verileri güvenli sunucularda saklıyor ve gizliliğinizi korumak için güncel güvenlik önlemleri alıyoruz. Oluşturduğunuz etkinlikler ve kullanıcı bilgileriniz, yetkisiz erişime karşı korunan veritabanlarımızda barındırılmaktadır.
                         </p>
                     </section>
 

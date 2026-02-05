@@ -26,8 +26,8 @@ const FeaturesPage = ({ onStart }) => {
         },
         {
             icon: <Gift size={32} />,
-            title: "Eşleşme ve Gruplar",
-            description: "Davetliler hediyeleri ister tek başlarına isterseler büyük bir hediyeye nakit katılım sağlayarak alabilirler.",
+            title: "Hediye ve Katkı",
+            description: "Davetliler hediyeleri rezerve edebilir veya pahalı ürünler için nakit katkıda bulunarak bütçeye ortak olabilirler.",
             color: "#4ade80"
         }
     ];

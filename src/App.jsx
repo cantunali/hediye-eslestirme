@@ -13,11 +13,21 @@ import Features from './components/Features';
 import AboutUs from './components/AboutUs';
 import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import FAQ from './components/FAQ';
+import TermsOfService from './components/TermsOfService';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+import SmtpTest from './components/SmtpTest';
+import AdminDashboard from './components/AdminDashboard';
+import { useAuth } from './context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="glass" style={{ position: 'sticky', top: '1rem', margin: '1rem 2rem', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem' }}>
@@ -28,26 +38,40 @@ const Navbar = () => {
         <img src={logo} alt="Logo" style={{ width: '24px', height: '24px', borderRadius: '6px' }} />
         <span className="gradient-text">HediyeEşle</span>
       </div>
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-        <Link
-          to="/ozellikler"
-          style={{ background: 'none', border: 'none', color: currentPath === '/ozellikler' ? 'var(--primary)' : 'var(--text-muted)', cursor: 'pointer', fontSize: '1rem', fontWeight: currentPath === '/ozellikler' ? '600' : '400', textDecoration: 'none' }}
-        >
-          Özellikler
-        </Link>
-
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <button
           className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
           onClick={() => navigate('/davetli-girisi')}
         >
           Davetli Girişi
         </button>
-        <button
-          className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
-          onClick={() => navigate('/yonetim')}
-        >
-          <Settings size={18} /> Yönetim
-        </button>
+
+        {user ? (
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <button
+              className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => navigate('/yonetim')}
+            >
+              <Settings size={18} /> Panelim
+            </button>
+            <button className="btn btn-outline" onClick={signOut}>Çıkış</button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button
+              className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => navigate('/login')}
+            >
+              Giriş Yap
+            </button>
+            <button
+              className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => navigate('/signup')}
+            >
+              Kayıt Ol
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -69,9 +93,11 @@ const Footer = () => {
           <h4 style={{ marginBottom: '1.5rem' }}>Kurumsal</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link to="/hakkimizda" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Hakkımızda</Link>
-            <Link to="/hediye-onerileri" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Hediye Önerileri</Link>
             <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>İletişim</Link>
+            <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Sıkça Sorulan Sorular</Link>
             <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Gizlilik Politikası</Link>
+            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Kullanım Koşulları</Link>
+            <Link to="/admin" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600', marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem', display: 'block' }}>Admin Paneli</Link>
           </div>
         </div>
         <div>
@@ -127,6 +153,38 @@ const LandingPage = () => {
               Etkinlik Başlat <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />
             </button>
           </div>
+
+          <div style={{ marginTop: '2.5rem' }}>
+            <Link
+              to="/ozellikler"
+              className="btn btn-outline"
+              style={{
+                padding: '0.75rem 2rem',
+                fontSize: '1rem',
+                border: '1px solid var(--border)',
+                color: 'var(--text-muted)',
+                borderRadius: '50px',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.3s ease',
+                background: 'rgba(255, 255, 255, 0.05)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--primary)';
+                e.currentTarget.style.borderColor = 'var(--primary)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text-muted)';
+                e.currentTarget.style.borderColor = 'var(--border)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              Uygulama Özelliklerini Keşfet <Star size={18} />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -161,9 +219,16 @@ const LandingPage = () => {
 
 // Management Wrapper to handle selection vs creation
 const ManagementWrapper = () => {
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [eventDetails, setEventDetails] = useState(null);
   const location = useLocation();
+
+  if (loading) return <div className="section container">Yükleniyor...</div>;
+  if (!user) {
+    // Redirect to login if not authenticated
+    return <Login />;
+  }
 
   // Check if we are in create mode or dashboard mode
   const isCreateMode = location.pathname === '/yonetim/olustur';
@@ -199,12 +264,23 @@ function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Helmet>
+        <link rel="canonical" href={`https://hediyeeslestir.netlify.app${location.pathname}`} />
+        <meta property="og:url" content={`https://hediyeeslestir.netlify.app${location.pathname}`} />
+        <meta property="og:site_name" content="HediyeEşle" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
       <Navbar />
       <main style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/ozellikler" element={<div className="section container"><Features onStart={() => window.location.href = '/yonetim/olustur'} /></div>} />
           <Route path="/davetli-girisi" element={<GuestPortal />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/smtp-test" element={<SmtpTest />} />
 
           {/* Management Routes */}
           <Route path="/yonetim" element={<ManagementWrapper />} />
@@ -219,6 +295,9 @@ function App() {
           <Route path="/hakkimizda" element={<AboutUs />} />
           <Route path="/iletisim" element={<Contact />} />
           <Route path="/gizlilik-politikasi" element={<PrivacyPolicy />} />
+          <Route path="/sss" element={<FAQ />} />
+          <Route path="/kullanim-kosullari" element={<TermsOfService />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
       <Footer />

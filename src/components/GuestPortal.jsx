@@ -1,18 +1,20 @@
-
-import React, { useState, useEffect } from 'react';
-import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loginData, setLoginData] = useState({ title: '', email: '', password: '' });
+    const [loginData, setLoginData] = useState({ title: '', email: '' });
     const [currentGuest, setCurrentGuest] = useState(null);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [loginError, setLoginError] = useState('');
 
     const [availableEvents, setAvailableEvents] = useState([]);
     const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     const [selectedGift, setSelectedGift] = useState(null);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -29,7 +31,6 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
             try {
                 const { data, error } = await db.getEvents();
                 if (data) {
-                    // Sort events alphabetically by title
                     const sorted = [...data].sort((a, b) => a.title.localeCompare(b.title));
                     setAvailableEvents(sorted);
                 }
@@ -42,6 +43,27 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         fetchEvents();
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const filteredEvents = availableEvents.filter(ev =>
+        ev.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSelectEvent = (title) => {
+        setLoginData({ ...loginData, title });
+        setSearchTerm(title);
+        setIsDropdownOpen(false);
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
         if (!loginData.title) {
@@ -53,7 +75,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         setIsLoggingIn(true);
 
         try {
-            const { success, guest, eventId, error } = await db.verifyGuestLogin(loginData.title, loginData.email, loginData.password);
+            const { success, guest, eventId, error } = await db.verifyGuestLogin(loginData.title, loginData.email);
 
             if (success) {
                 setCurrentEvent({ id: eventId, title: loginData.title });
@@ -81,10 +103,8 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
 
             if (giftsRes.data) {
                 const sortedGifts = [...giftsRes.data].sort((a, b) => {
-                    // 1. Status: available first
                     if (a.status === 'available' && b.status !== 'available') return -1;
                     if (a.status !== 'available' && b.status === 'available') return 1;
-                    // 2. Name: alphabetical
                     return a.name.localeCompare(b.name);
                 });
                 setEventGifts(sortedGifts);
@@ -101,7 +121,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         const gift = eventGifts.find(g => g.id === giftId);
         const { error } = await db.reserveGift(
             giftId,
-            currentGuest.id, // Use actual guest ID
+            currentGuest.id,
             currentEvent.id,
             `${currentGuest.name} adlı davetli ${gift.name} adlı hediyeyi ayırdı.`
         );
@@ -118,40 +138,21 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         }
     };
 
-    const toggleGuest = (guestId) => {
-        setSelectedGuests(prev =>
-            prev.includes(guestId)
-                ? prev.filter(id => id !== guestId)
-                : [...prev, guestId]
-        );
-    };
-
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
         setIsPaying(true);
 
-        // Simulate payment delay
         setTimeout(async () => {
-            const { error } = await db.reserveGift(
-                selectedGift.id,
-                currentGuest.id,
+            const { error } = await db.logActivity(
                 currentEvent.id,
                 `${currentGuest.name} adlı davetli ${selectedGift.name} için ${paymentData.amount} TL nakit katkıda bulundu.`
             );
 
             if (!error) {
-                setEventGifts(prev => {
-                    const updated = prev.map(g => g.id === selectedGift.id ? { ...g, status: 'reserved', reserved_by: currentGuest.id } : g);
-                    return [...updated].sort((a, b) => {
-                        if (a.status === 'available' && b.status !== 'available') return -1;
-                        if (a.status !== 'available' && b.status === 'available') return 1;
-                        return a.name.localeCompare(b.name);
-                    });
-                });
                 setShowPaymentModal(false);
                 setSelectedGift(null);
                 setPaymentData({ amount: '', cardNumber: '', expiry: '', cvv: '', cardHolder: '' });
-                alert('Ödemeniz başarıyla alındı ve hediye sizin adınıza ayrıldı!');
+                alert('Ödemeniz başarıyla alındı! Katkınız etkinlik sahibine iletildi.');
             }
             setIsPaying(false);
         }, 2000);
@@ -159,90 +160,154 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
 
     if (!isLoggedIn) {
         return (
-            <div className="section container animate-fade-in" style={{ padding: '4rem 2rem', maxWidth: '600px', margin: '0 auto' }}>
+            <div className="section container animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto', padding: '2rem' }}>
                 <Helmet>
                     <title>HediyeEşle - Davetli Girişi</title>
                     <meta name="description" content="HediyeEşle davetli paneline giriş yapın ve sevdiklerinizin hediye listesine ulaşın." />
+                    <meta name="robots" content="noindex, nofollow" />
                 </Helmet>
                 <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                    <div style={{
-                        width: '64px',
-                        height: '64px',
-                        background: 'rgba(99, 102, 241, 0.1)',
-                        borderRadius: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 1.5rem'
-                    }}>
-                        <Lock size={32} style={{ color: 'var(--primary)' }} />
-                    </div>
-                    <h2>Davetli Girişi</h2>
-                    <p style={{ color: 'var(--text-muted)' }}>Etkinlik seçin ve e-posta adresinizi girin.</p>
+                    <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '1rem' }}>Davetli Girişi</h1>
+                    <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>Etkinliğe girmek için seçiminizi yapın ve bilgilerinizi girin.</p>
                 </div>
 
-                <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Etkinlik Seçin</label>
-                        <div style={{ position: 'relative' }}>
-                            <select
-                                className="glass"
-                                style={{
-                                    width: '100%',
-                                    padding: '1rem',
-                                    color: 'white',
-                                    borderRadius: '12px',
-                                    outline: 'none',
-                                    appearance: 'none',
-                                    backgroundColor: 'var(--card-bg)'
-                                }}
-                                value={loginData.title}
-                                onChange={(e) => setLoginData({ ...loginData, title: e.target.value })}
-                                required
-                                disabled={isLoadingEvents}
-                            >
-                                <option value="" style={{ background: '#1e293b' }}>
-                                    {isLoadingEvents ? 'Etkinlikler yükleniyor...' : 'Bir etkinlik seçin'}
-                                </option>
-                                {availableEvents.map(event => (
-                                    <option key={event.id} value={event.title} style={{ background: '#1e293b' }}>
-                                        {event.title}
-                                    </option>
-                                ))}
-                            </select>
-                            <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+                    {/* Login Card */}
+                    <div className="card" style={{ padding: '3rem 2rem' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                            <div style={{ width: '64px', height: '64px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                                <Lock size={32} style={{ color: 'var(--primary)' }} />
+                            </div>
+                            <h3>Giriş Yap</h3>
+                            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Hediye listesine erişmek için bilgilerinizi doğrulayın.</p>
                         </div>
+
+                        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '500px', margin: '0 auto' }}>
+                            {/* Custom Searchable Dropdown */}
+                            <div style={{ position: 'relative' }} ref={dropdownRef}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Etkinlik Ara ve Seç</label>
+                                <div style={{ position: 'relative' }}>
+                                    <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                                    <input
+                                        type="text"
+                                        className="glass"
+                                        style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.75rem', color: 'white', borderRadius: '12px', outline: 'none', fontSize: '1rem' }}
+                                        placeholder={isLoadingEvents ? 'Yükleniyor...' : 'Etkinlik adını yazın...'}
+                                        value={searchTerm}
+                                        onFocus={() => setIsDropdownOpen(true)}
+                                        onChange={(e) => {
+                                            setSearchTerm(e.target.value);
+                                            setLoginData({ ...loginData, title: '' });
+                                            setIsDropdownOpen(true);
+                                        }}
+                                        disabled={isLoadingEvents}
+                                    />
+                                    {searchTerm && (
+                                        <button
+                                            type="button"
+                                            onClick={() => { setSearchTerm(''); setLoginData({ ...loginData, title: '' }); }}
+                                            style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px' }}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {isDropdownOpen && !isLoadingEvents && (
+                                    <div className="glass shadow-lg" style={{
+                                        position: 'absolute',
+                                        top: 'calc(100% + 8px)',
+                                        left: 0,
+                                        right: 0,
+                                        maxHeight: '250px',
+                                        overflowY: 'auto',
+                                        zIndex: 100,
+                                        borderRadius: '12px',
+                                        background: 'rgba(15, 23, 42, 0.95)',
+                                        backdropFilter: 'blur(16px)',
+                                        border: '1px solid var(--border)',
+                                        animation: 'fadeSlideDown 0.2s ease-out'
+                                    }}>
+                                        {filteredEvents.length > 0 ? (
+                                            filteredEvents.map(ev => (
+                                                <div
+                                                    key={ev.id}
+                                                    onClick={() => handleSelectEvent(ev.title)}
+                                                    style={{
+                                                        padding: '0.85rem 1.25rem',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s',
+                                                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                                        color: loginData.title === ev.title ? 'var(--primary)' : 'white',
+                                                        background: loginData.title === ev.title ? 'rgba(99, 102, 241, 0.1)' : 'transparent'
+                                                    }}
+                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+                                                    onMouseLeave={(e) => e.target.style.background = loginData.title === ev.title ? 'rgba(99, 102, 241, 0.1)' : 'transparent'}
+                                                >
+                                                    <div style={{ fontSize: '0.95rem', fontWeight: '500' }}>{ev.title}</div>
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{ev.owner_name}</div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                                                Sonuç bulunamadı...
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>E-posta Adresiniz</label>
+                                <input
+                                    type="email"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '12px', color: 'white', outline: 'none' }}
+                                    placeholder="ornek@mail.com"
+                                    value={loginData.email}
+                                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            {loginError && (
+                                <div style={{
+                                    padding: '0.75rem',
+                                    background: 'rgba(239, 68, 68, 0.1)',
+                                    color: '#ef4444',
+                                    borderRadius: '8px',
+                                    fontSize: '0.875rem',
+                                    textAlign: 'center',
+                                    border: '1px solid rgba(239, 68, 68, 0.2)'
+                                }}>
+                                    {loginError}
+                                </div>
+                            )}
+
+                            <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '1rem', fontSize: '1.1rem' }} disabled={isLoggingIn || isLoadingEvents || !loginData.title}>
+                                {isLoggingIn ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                                {!isLoggingIn && <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />}
+                            </button>
+                        </form>
                     </div>
+                </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>E-posta Adresiniz</label>
-                        <input
-                            type="email"
-                            className="glass"
-                            style={{ width: '100%', padding: '1rem', color: 'white', borderRadius: '12px', outline: 'none' }}
-                            placeholder="ornek@mail.com"
-                            value={loginData.email}
-                            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                            required
-                        />
-                    </div>
-
-                    {loginError && (
-                        <p style={{ color: '#ef4444', fontSize: '0.875rem', textAlign: 'center' }}>{loginError}</p>
-                    )}
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        style={{ justifyContent: 'center', padding: '1rem' }}
-                        disabled={isLoggingIn || isLoadingEvents}
-                    >
-                        {isLoggingIn ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
-                        {!isLoggingIn && <ShieldCheck size={20} />}
-                    </button>
-                </form>
-            </div>
-
+                <style>{`
+                    @keyframes fadeSlideDown {
+                        from { opacity: 0; transform: translateY(-10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @media (max-width: 768px) {
+                        .manage-grid {
+                            grid-template-columns: 1fr !important;
+                        }
+                        aside {
+                            position: static !important;
+                            order: 2;
+                        }
+                    }
+                `}</style>
+            </div >
         );
     }
 
