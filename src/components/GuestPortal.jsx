@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
+
+const STANDARD_CATEGORIES = ['Hepsi', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Züccaciye', 'Tekstil', 'Diğer'];
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,6 +27,25 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [eventGuests, setEventGuests] = useState([]);
     const [currentEvent, setCurrentEvent] = useState(null);
     const [isLoadingData, setIsLoadingData] = useState(false);
+    const [activeCategory, setActiveCategory] = useState('Hepsi');
+
+    const categories = useMemo(() => {
+        const cats = new Set(STANDARD_CATEGORIES);
+        // Also add any custom categories that might exist in the data
+        eventGifts.forEach(gift => {
+            if (gift.category && !STANDARD_CATEGORIES.includes(gift.category)) {
+                cats.add(gift.category);
+            }
+        });
+        return Array.from(cats);
+    }, [eventGifts]);
+
+    const filteredGifts = useMemo(() => {
+        return eventGifts.filter(gift => {
+            if (activeCategory === 'Hepsi') return true;
+            return gift.category === activeCategory;
+        });
+    }, [eventGifts, activeCategory]);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -311,6 +332,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         );
     }
 
+
     return (
         <div className="section container animate-fade-in">
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -327,83 +349,111 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                 </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {eventGifts.map((gift) => (
-                    <div key={gift.id} className="glass" style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: gift.status === 'reserved' ? 0.7 : 1 }}>
-                        <div style={{ width: '250px' }}>
-                            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{gift.name}</h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} {gift.brand && gift.model ? '-' : ''} {gift.model}</p>
-                        </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                {/* Category Filter */}
+                <div style={{
+                    display: 'flex',
+                    gap: '0.75rem',
+                    overflowX: 'auto',
+                    paddingBottom: '0.5rem',
+                    scrollbarWidth: 'none'
+                }} className="no-scrollbar">
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={`btn ${activeCategory === cat ? 'btn-primary' : 'btn-outline'}`}
+                            style={{
+                                padding: '0.5rem 1.25rem',
+                                fontSize: '0.875rem',
+                                borderRadius: '100px',
+                                whiteSpace: 'nowrap',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                            }}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
 
-                        {/* Shopping Links Area */}
-                        <div style={{ display: 'flex', gap: '1rem', flex: 1, justifyContent: 'center' }}>
-                            {gift.hepsiburada_url && (
-                                <a
-                                    href={gift.hepsiburada_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-outline"
-                                    style={{
-                                        fontSize: '0.75rem',
-                                        padding: '0.4rem 1rem',
-                                        borderColor: '#ff6000',
-                                        color: '#ff6000',
-                                        textDecoration: 'none',
-                                        background: 'rgba(255, 96, 0, 0.05)'
-                                    }}
-                                >
-                                    <ShoppingCart size={14} /> Hepsiburada'da Gör
-                                </a>
-                            )}
-                            {gift.amazon_url && (
-                                <a
-                                    href={gift.amazon_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-outline"
-                                    style={{
-                                        fontSize: '0.75rem',
-                                        padding: '0.4rem 1rem',
-                                        borderColor: '#ff9900',
-                                        color: '#ff9900',
-                                        textDecoration: 'none',
-                                        background: 'rgba(255, 153, 0, 0.05)'
-                                    }}
-                                >
-                                    <ExternalLink size={14} /> Amazon'da Gör
-                                </a>
-                            )}
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {filteredGifts.map((gift) => (
+                        <div key={gift.id} className="glass" style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: gift.status === 'reserved' ? 0.7 : 1 }}>
+                            <div style={{ width: '250px' }}>
+                                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{gift.name}</h3>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} {gift.brand && gift.model ? '-' : ''} {gift.model}</p>
+                            </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '300px', justifyContent: 'flex-end' }}>
-                            {gift.status === 'reserved' ? (
-                                <span style={{ color: '#4ade80', fontSize: '0.875rem', fontWeight: '500', background: 'rgba(34, 197, 94, 0.1)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
-                                    Alındı
-                                </span>
-                            ) : (
-                                <>
-                                    <button
-                                        className="btn btn-primary"
-                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
-                                        onClick={() => handleSelectGift(gift.id)}
-                                    >
-                                        Hediyeyi Al
-                                    </button>
-                                    <button
+                            {/* Shopping Links Area */}
+                            <div style={{ display: 'flex', gap: '1rem', flex: 1, justifyContent: 'center' }}>
+                                {gift.hepsiburada_url && (
+                                    <a
+                                        href={gift.hepsiburada_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className="btn btn-outline"
-                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
-                                        onClick={() => {
-                                            setSelectedGift(gift);
-                                            setShowPaymentModal(true);
+                                        style={{
+                                            fontSize: '0.65rem',
+                                            padding: '0.4rem 1rem',
+                                            borderColor: '#ff6000',
+                                            color: '#ff6000',
+                                            textDecoration: 'none',
+                                            background: 'rgba(255, 96, 0, 0.05)'
                                         }}
                                     >
-                                        Nakit Katıl
-                                    </button>
-                                </>
-                            )}
+                                        <ShoppingCart size={14} /> Hepsiburada'da Gör
+                                    </a>
+                                )}
+                                {gift.amazon_url && (
+                                    <a
+                                        href={gift.amazon_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline"
+                                        style={{
+                                            fontSize: '0.65rem',
+                                            padding: '0.4rem 1rem',
+                                            borderColor: '#ff9900',
+                                            color: '#ff9900',
+                                            textDecoration: 'none',
+                                            background: 'rgba(255, 153, 0, 0.05)'
+                                        }}
+                                    >
+                                        <ExternalLink size={14} /> Amazon'da Gör
+                                    </a>
+                                )}
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '300px', justifyContent: 'flex-end' }}>
+                                {gift.status === 'reserved' ? (
+                                    <span style={{ color: '#4ade80', fontSize: '0.875rem', fontWeight: '500', background: 'rgba(34, 197, 94, 0.1)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
+                                        Alındı
+                                    </span>
+                                ) : (
+                                    <>
+                                        <button
+                                            className="btn btn-primary"
+                                            style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
+                                            onClick={() => handleSelectGift(gift.id)}
+                                        >
+                                            Hediyeyi Al
+                                        </button>
+                                        <button
+                                            className="btn btn-outline"
+                                            style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
+                                            onClick={() => {
+                                                setSelectedGift(gift);
+                                                setShowPaymentModal(true);
+                                            }}
+                                        >
+                                            Nakit Katıl
+                                        </button>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
             {/* Payment Modal */}

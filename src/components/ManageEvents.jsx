@@ -36,7 +36,8 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
             title: event.title,
             owner: event.owner_name,
             email: event.owner_email,
-            password: event.password
+            password: event.password,
+            event_date: event.event_date
         });
     };
 

@@ -28,89 +28,232 @@ const Navbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { user, signOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   return (
-    <nav className="glass" style={{ position: 'sticky', top: '1rem', margin: '1rem 2rem', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem' }}>
-      <div
-        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem', fontWeight: 'bold', cursor: 'pointer' }}
-        onClick={() => navigate('/')}
-      >
-        <img src={logo} alt="Logo" style={{ width: '24px', height: '24px', borderRadius: '6px' }} />
-        <span className="gradient-text">HediyeEşle</span>
-      </div>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <button
-          className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
-          onClick={() => navigate('/davetli-girisi')}
-        >
-          Davetli Girişi
-        </button>
+    <>
+      <nav className="glass" style={{
+        position: 'sticky',
+        top: '0.75rem',
+        margin: '0.75rem',
+        zIndex: 100,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0.75rem 1rem'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem', fontWeight: 'bold', cursor: 'pointer' }}
+            onClick={() => navigate('/')}
+          >
+            <img src={logo} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
+            <span className="gradient-text">HediyeEşle</span>
+          </div>
 
-        {user ? (
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          {/* Hamburger Menu Icon */}
+          <button
+            className="mobile-only"
+            onClick={() => setIsOpen(!isOpen)}
+            style={{
+              padding: '0.5rem',
+              border: 'none',
+              background: 'none',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+
+          {/* Desktop Menu */}
+          <div className="desktop-only" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <button
-              className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/yonetim')}
+              className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => navigate('/davetli-girisi')}
+              style={{ padding: '0.6rem 1.25rem' }}
             >
-              <Settings size={18} /> Panelim
+              Davetli Girişi
             </button>
-            <button className="btn btn-outline" onClick={signOut}>Çıkış</button>
+
+            {user ? (
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <button
+                  className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
+                  onClick={() => navigate('/yonetim')}
+                  style={{ padding: '0.6rem 1.25rem' }}
+                >
+                  <Settings size={18} /> Panelim
+                </button>
+                <button className="btn btn-outline" onClick={signOut} style={{ padding: '0.6rem 1.25rem' }}>Çıkış</button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button
+                  className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
+                  onClick={() => navigate('/login')}
+                  style={{ padding: '0.6rem 1.25rem' }}
+                >
+                  Giriş Yap
+                </button>
+                <button
+                  className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
+                  onClick={() => navigate('/signup')}
+                  style={{ padding: '0.6rem 1.25rem' }}
+                >
+                  Kayıt Ol
+                </button>
+              </div>
+            )}
           </div>
-        ) : (
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <button
-              className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/login')}
-            >
-              Giriş Yap
-            </button>
-            <button
-              className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/signup')}
-            >
-              Kayıt Ol
-            </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {isOpen && (
+        <div className="mobile-only animate-fade-in" style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          background: '#0f172a', // Solid color
+          padding: '7rem 1.5rem 2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.25rem',
+          zIndex: 99
+        }}>
+          <button
+            className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => navigate('/davetli-girisi')}
+            style={{ fontSize: '1.1rem', padding: '1rem' }}
+          >
+            <Users size={20} /> Davetli Girişi
+          </button>
+
+          {user ? (
+            <>
+              <button
+                className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => navigate('/yonetim')}
+                style={{ fontSize: '1.1rem', padding: '1rem' }}
+              >
+                <Settings size={20} /> Panelim
+              </button>
+              <button
+                className="btn btn-outline"
+                onClick={signOut}
+                style={{ fontSize: '1.1rem', padding: '1rem' }}
+              >
+                Çıkış Yap
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => navigate('/login')}
+                style={{ fontSize: '1.1rem', padding: '1rem' }}
+              >
+                Giriş Yap
+              </button>
+              <button
+                className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => navigate('/signup')}
+                style={{ fontSize: '1.1rem', padding: '1rem' }}
+              >
+                Kayıt Ol
+              </button>
+            </>
+          )}
+          <div style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+            HediyeEşle &copy; 2026
           </div>
-        )}
-      </div>
-    </nav>
+        </div>
+      )}
+    </>
   );
 };
 
 const Footer = () => {
   const navigate = useNavigate();
   return (
-    <footer className="glass" style={{ marginTop: 'auto', padding: '4rem 2rem', margin: '2rem', borderRadius: '24px 24px 0 0' }}>
-      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem' }}>
+    <footer className="glass" style={{
+      marginTop: 'auto',
+      padding: '3rem 1.5rem',
+      margin: '1.5rem 0.75rem 0.75rem',
+      borderRadius: '24px'
+    }}>
+      <div className="container" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '2.5rem'
+      }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-            <img src={logo} alt="Logo" style={{ width: '24px', height: '24px', borderRadius: '6px' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+            <img src={logo} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
             <h3 className="gradient-text">HediyeEşle</h3>
           </div>
-          <p style={{ color: 'var(--text-muted)', lineHeight: '1.6' }}>En özel günlerinizde hediyelerinizi sevdiklerinizle kolayca eşleştirin. Mutluluğu paylaşın, karmaşayı önleyin.</p>
+          <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.95rem' }}>
+            En özel günlerinizde hediyelerinizi sevdiklerinizle kolayca eşleştirin. Mutluluğu paylaşın, karmaşayı önleyin.
+          </p>
         </div>
         <div>
-          <h4 style={{ marginBottom: '1.5rem' }}>Kurumsal</h4>
+          <h4 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Kurumsal</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <Link to="/hakkimizda" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Hakkımızda</Link>
-            <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>İletişim</Link>
-            <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Sıkça Sorulan Sorular</Link>
-            <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Gizlilik Politikası</Link>
-            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Kullanım Koşulları</Link>
-            <Link to="/admin" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600', marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem', display: 'block' }}>Admin Paneli</Link>
+            <Link to="/hakkimizda" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Hakkımızda</Link>
+            <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>İletişim</Link>
+            <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Sıkça Sorulan Sorular</Link>
+            <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Gizlilik Politikası</Link>
+            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Kullanım Koşulları</Link>
+            <Link to="/admin" style={{
+              color: 'var(--primary)',
+              textDecoration: 'none',
+              fontWeight: '600',
+              marginTop: '0.5rem',
+              paddingTop: '0.75rem',
+              borderTop: '1px solid var(--border)',
+              display: 'inline-block'
+            }}>Admin Paneli</Link>
           </div>
         </div>
         <div>
-          <h4 style={{ marginBottom: '1.5rem' }}>Bizi Takip Edin</h4>
+          <h4 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Bizi Takip Edin</h4>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <Facebook className="btn-outline" style={{ padding: '8px', borderRadius: '50%', width: '40px', height: '40px' }} />
-            <Twitter className="btn-outline" style={{ padding: '8px', borderRadius: '50%', width: '40px', height: '40px' }} />
-            <Instagram className="btn-outline" style={{ padding: '8px', borderRadius: '50%', width: '40px', height: '40px' }} />
+            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Facebook size={20} /></a>
+            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Twitter size={20} /></a>
+            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Instagram size={20} /></a>
           </div>
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '3rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+      <div style={{
+        textAlign: 'center',
+        marginTop: '3rem',
+        color: 'var(--text-muted)',
+        borderTop: '1px solid var(--border)',
+        paddingTop: '2rem',
+        fontSize: '0.875rem'
+      }}>
         © 2026 HediyeEşle. Tüm Hakları Saklıdır.
       </div>
     </footer>
@@ -128,39 +271,47 @@ const LandingPage = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="section" style={{ textAlign: 'center', padding: '6rem 2rem' }}>
+      <section className="section hero-section" style={{ textAlign: 'center' }}>
         <div className="container">
-          <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>
+          <h1 className="hero-title">
             Hayalindeki <span className="gradient-text">Hediyeleri</span> <br />
             Sevdiklerinle Buluştur
           </h1>
-          <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 3rem' }}>
+          <p style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 2.5rem', lineHeight: '1.6' }}>
             Düğün, doğum günü veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla.
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            maxWidth: '650px',
+            margin: '0 auto'
+          }}>
             <button
               className="btn btn-primary"
-              style={{ padding: '1rem 2.5rem' }}
+              style={{ flex: '1 1 200px', minHeight: '3.5rem' }}
               onClick={() => navigate('/davetli-girisi')}
             >
-              Davetli Girişi <Users size={20} style={{ marginLeft: '0.5rem' }} />
+              Davetli Girişi <Users size={22} />
             </button>
             <button
               className="btn btn-outline"
-              style={{ padding: '1rem 2.5rem' }}
+              style={{ flex: '1 1 200px', minHeight: '3.5rem' }}
               onClick={() => navigate('/yonetim/olustur')}
             >
-              Etkinlik Başlat <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />
+              Etkinlik Başlat <ArrowRight size={22} />
             </button>
           </div>
 
-          <div style={{ marginTop: '2.5rem' }}>
+          <div style={{ marginTop: '2rem' }}>
             <Link
               to="/ozellikler"
               className="btn btn-outline"
               style={{
-                padding: '0.75rem 2rem',
-                fontSize: '1rem',
+                width: 'auto',
+                padding: '0.6rem 1.5rem',
+                fontSize: '0.95rem',
                 border: '1px solid var(--border)',
                 color: 'var(--text-muted)',
                 borderRadius: '50px',
@@ -168,48 +319,39 @@ const LandingPage = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'all 0.3s ease',
                 background: 'rgba(255, 255, 255, 0.05)'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--primary)';
-                e.currentTarget.style.borderColor = 'var(--primary)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--text-muted)';
-                e.currentTarget.style.borderColor = 'var(--border)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
             >
-              Uygulama Özelliklerini Keşfet <Star size={18} />
+              Özellikleri Keşfet <Star size={16} />
             </Link>
           </div>
         </div>
       </section>
 
       {/* Features/Stats Section */}
-      <section id="features" className="section" style={{ padding: '4rem 2rem' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <Package size={40} style={{ color: 'var(--primary)', marginBottom: '1rem' }} />
-            <h2 style={{ fontSize: '2.5rem' }}>42</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
-          </div>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <Users size={40} style={{ color: 'var(--secondary)', marginBottom: '1rem' }} />
-            <h2 style={{ fontSize: '2.5rem' }}>85</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
-          </div>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <Gift size={40} style={{ color: 'var(--accent)', marginBottom: '1rem' }} />
-            <h2 style={{ fontSize: '2.5rem' }}>18</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Alınan Hediyeler</p>
-          </div>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <Heart size={40} style={{ color: '#ef4444', marginBottom: '1rem' }} />
-            <h2 style={{ fontSize: '2.5rem' }}>24</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Kalan Hediyeler</p>
+      <section id="features" className="section" style={{ background: 'rgba(0,0,0,0.1)' }}>
+        <div className="container">
+          <div className="grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+            <div className="card" style={{ textAlign: 'center' }}>
+              <Package size={32} style={{ color: 'var(--primary)', marginBottom: '0.75rem' }} />
+              <h2 style={{ marginBottom: '0.5rem' }}>42</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
+            </div>
+            <div className="card" style={{ textAlign: 'center' }}>
+              <Users size={32} style={{ color: 'var(--secondary)', marginBottom: '0.75rem' }} />
+              <h2 style={{ marginBottom: '0.5rem' }}>85</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
+            </div>
+            <div className="card" style={{ textAlign: 'center' }}>
+              <Gift size={32} style={{ color: 'var(--accent)', marginBottom: '0.75rem' }} />
+              <h2 style={{ marginBottom: '0.5rem' }}>18</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Alınan Hediyeler</p>
+            </div>
+            <div className="card" style={{ textAlign: 'center' }}>
+              <Heart size={32} style={{ color: '#ef4444', marginBottom: '0.75rem' }} />
+              <h2 style={{ marginBottom: '0.5rem' }}>24</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Kalan Hediyeler</p>
+            </div>
           </div>
         </div>
       </section>

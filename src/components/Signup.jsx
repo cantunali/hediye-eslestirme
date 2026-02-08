@@ -55,8 +55,8 @@ const Signup = () => {
     }
 
     return (
-        <div className="section container animate-fade-in" style={{ maxWidth: '450px', margin: '4rem auto' }}>
-            <div className="card" style={{ padding: '3rem 2.5rem' }}>
+        <div className="section container animate-fade-in" style={{ maxWidth: '450px', margin: '2rem auto' }}>
+            <div className="card" style={{ padding: '2rem 1.5rem' }}>
                 <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                     <div style={{ width: '64px', height: '64px', background: 'rgba(168, 85, 247, 0.1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                         <UserPlus size={32} style={{ color: 'var(--secondary)' }} />

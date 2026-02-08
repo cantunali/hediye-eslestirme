@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
@@ -7,6 +7,7 @@ import FeaturedGifts from './FeaturedGifts';
 
 const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     const [activeTab, setActiveTab] = useState('inventory');
+    const [currentEvent, setCurrentEvent] = useState(eventDetails);
     const [gifts, setGifts] = useState([]);
     const [guests, setGuests] = useState([]);
     const [isLoadingGifts, setIsLoadingGifts] = useState(true);
@@ -16,11 +17,21 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
     React.useEffect(() => {
         if (eventDetails?.id) {
+            fetchEventDetails();
             fetchGifts();
             fetchGuests();
             fetchActivities();
         }
     }, [eventDetails?.id]);
+
+    const fetchEventDetails = async () => {
+        if (!eventDetails?.id) return;
+        // If we already have the date, we can skip or still refresh
+        const { data, error } = await db.getEventById(eventDetails.id);
+        if (data && !error) {
+            setCurrentEvent(data);
+        }
+    };
 
     const fetchGifts = async () => {
         setIsLoadingGifts(true);
@@ -43,13 +54,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         setIsLoadingActivities(false);
     };
 
-    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', hepsiburada_url: '', amazon_url: '' });
+    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
     const [newGuest, setNewGuest] = useState({ name: '', email: '' });
-    const [bulkPassword, setBulkPassword] = useState('');
     const [isUpdatingBulk, setIsUpdatingBulk] = useState(false);
     const [bulkMessage, setBulkMessage] = useState('');
     const [editingGiftId, setEditingGiftId] = useState(null);
-    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', hepsiburada_url: '', amazon_url: '' });
+    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
     const [sortBy, setSortBy] = useState('name'); // 'name' or 'status'
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
@@ -73,12 +83,16 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         return sortOrder === 'asc' ? comparison : -comparison;
     });
 
+    const sortedGuests = useMemo(() => {
+        return [...guests].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'tr'));
+    }, [guests]);
+
     const addGift = async () => {
         if (newGift.name && eventDetails?.id) {
             const { data, error } = await db.addGift(eventDetails.id, newGift);
             if (data) {
                 setGifts([...gifts, data]);
-                setNewGift({ name: '', brand: '', model: '', hepsiburada_url: '', amazon_url: '' });
+                setNewGift({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
             }
         }
     };
@@ -87,7 +101,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         if (newGuest.name && newGuest.email && eventDetails?.id) {
             const { data, error } = await db.addGuest(eventDetails.id, newGuest);
             if (data) {
-                setGuests([...guests, data]);
+                setGuests(prev => [...prev, data]);
                 setNewGuest({ name: '', email: '' });
             }
         }
@@ -102,7 +116,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     const removeGuest = async (id) => {
         const { error } = await db.removeGuest(id);
         if (!error) {
-            setGuests(guests.filter(g => g.id !== id));
+            setGuests(prev => prev.filter(g => g.id !== id));
         }
     };
 
@@ -112,6 +126,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             name: gift.name,
             brand: gift.brand,
             model: gift.model,
+            category: gift.category || 'Diğer',
             hepsiburada_url: gift.hepsiburada_url || '',
             amazon_url: gift.amazon_url || ''
         });
@@ -128,22 +143,109 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     };
 
     const handleBulkInvite = async () => {
-        if (!bulkPassword) return; // Keeping state name for now to avoid breaking other parts, but functionality will change
         setIsUpdatingBulk(true);
         setBulkMessage('');
 
         try {
-            // Placeholder for email module integration
-            await db.logActivity(eventDetails.id, 'Tüm davetlilere toplu davet gönderildi.');
+            const eventDate = currentEvent.event_date
+                ? new Date(currentEvent.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+                : 'belirlenmiş';
 
-            setBulkMessage('Tüm davetler başarıyla sıraya alındı!');
-            setBulkPassword('');
-            fetchActivities(); // Refresh activities
+            const subject = `${currentEvent.title} - ${eventDate} - hediye listesi`;
+            const portalUrl = 'https://hediyeeslestir.netlify.app/davetli-girisi';
+
+            // Send to all guests
+            const invitePromises = guests.map(guest =>
+                fetch('/.netlify/functions/send-mail', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: guest.email,
+                        subject: subject,
+                        type: 'invite',
+                        message: `Sayın ${guest.name}, ${currentEvent.title}'ın ${eventDate} tarihindeki etkinliğine hediye almak isterseniz hediye listelerinden seçebilirsiniz. Giriş için: ${portalUrl}`,
+                        html: `
+                            <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.6;">
+                                <h2 style="color: #6366f1;">Etkinlik Daveti</h2>
+                                <p>Sayın <strong>${guest.name}</strong>,</p>
+                                <p><strong>${currentEvent.title}</strong>'ın <strong>${eventDate}</strong> tarihindeki etkinliğine hediye almak isterseniz hediye listelerinden seçebilirsiniz.</p>
+                                
+                                <div style="margin: 30px 0;">
+                                    <a href="${portalUrl}" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Hediye Listesine Git</a>
+                                </div>
+
+                                <div style="margin-top: 30px; font-size: 14px; color: #666; border-top: 1px solid #eee; padding-top: 20px;">
+                                    <p>Sitemize buradan da ulaşabilirsiniz: <a href="${portalUrl}" style="color: #6366f1;">${portalUrl}</a></p>
+                                    <p>Mutluluğumuzu paylaşmanız dileğiyle.</p>
+                                </div>
+                            </div>
+                        `
+                    })
+                })
+            );
+
+            await Promise.all(invitePromises);
+            await db.logActivity(currentEvent.id, `Tüm davetlilere (${guests.length} kişi) toplu davet e-postası gönderildi.`);
+
+            setBulkMessage('Tüm davetler başarıyla gönderildi!');
+            fetchActivities();
         } catch (err) {
             console.error('Bulk invite error:', err);
-            setBulkMessage('Davetler gönderilirken bir hata oluştu.');
+            setBulkMessage(`Davetler gönderilirken bir hata oluştu: ${err.message}`);
         } finally {
             setIsUpdatingBulk(false);
+        }
+    };
+
+    const handleSingleInvite = async (guest) => {
+        try {
+            const eventDate = currentEvent.event_date
+                ? new Date(currentEvent.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+                : 'belirlenmiş';
+
+            const subject = `${currentEvent.title} - ${eventDate} - hediye listesi`;
+            const portalUrl = 'https://hediyeeslestir.netlify.app/davetli-girisi';
+            const message = `Sayın ${guest.name}, ${currentEvent.title}'ın ${eventDate} tarihindeki etkinliğine hediye almak isterseniz hediye listelerinden seçebilirsiniz. Giriş için: ${portalUrl}`;
+
+            // Call Netlify function instead of Supabase
+            const response = await fetch('/.netlify/functions/send-mail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: guest.email,
+                    subject: subject,
+                    type: 'invite',
+                    message: message,
+                    html: `
+                        <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.6;">
+                            <h2 style="color: #6366f1;">Etkinlik Daveti</h2>
+                            <p>Sayın <strong>${guest.name}</strong>,</p>
+                            <p><strong>${currentEvent.title}</strong>'ın <strong>${eventDate}</strong> tarihindeki etkinliğine hediye almak isterseniz hediye listelerinden seçebilirsiniz.</p>
+                            
+                            <div style="margin: 30px 0;">
+                                <a href="${portalUrl}" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Hediye Listesine Git</a>
+                            </div>
+
+                            <div style="margin-top: 30px; font-size: 14px; color: #666; border-top: 1px solid #eee; padding-top: 20px;">
+                                <p>Sitemize buradan da ulaşabilirsiniz: <a href="${portalUrl}" style="color: #6366f1;">${portalUrl}</a></p>
+                                <p>Mutluluğumuzu paylaşmanız dileğiyle.</p>
+                            </div>
+                        </div>
+                    `
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'E-posta gönderilemedi.');
+            }
+
+            await db.logActivity(currentEvent.id, `${guest.name} (${guest.email}) adlı davetliye davet e-postası gönderildi. Konu: ${subject}`);
+            alert(`Davet e-postası ${guest.email} adresine başarıyla gönderildi!`);
+            fetchActivities();
+        } catch (err) {
+            console.error('Invite error:', err);
+            alert(`Davet gönderilirken bir hata oluştu: ${err.message || 'Bilinmeyen hata'}`);
         }
     };
 
@@ -192,6 +294,50 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
     const giftFileInputRef = React.useRef(null);
 
+    const [isExportingGifts, setIsExportingGifts] = useState(false);
+    const exportGifts = async (type) => {
+        setIsExportingGifts(true);
+        try {
+            if (!gifts || gifts.length === 0) {
+                alert('Dışa aktarılacak hediye bulunamadı.');
+                return;
+            }
+
+            const fileName = `${eventDetails.title}_Hediye_Envanteri_${new Date().toLocaleDateString('tr-TR')}`;
+
+            if (type === 'excel') {
+                const worksheet = XLSX.utils.json_to_sheet(gifts.map(g => ({
+                    'Hediye Adı': g.name,
+                    'Marka': g.brand || '',
+                    'Model': g.model || '',
+                    'Kategori': g.category || 'Diğer',
+                    'Durum': g.status === 'reserved' ? 'Alındı' : 'Beklemede',
+                    'Hepsiburada': g.hepsiburada_url || '',
+                    'Amazon': g.amazon_url || ''
+                })));
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Envanter");
+                XLSX.writeFile(workbook, `${fileName}.xlsx`);
+            } else if (type === 'txt') {
+                const content = gifts.map(g =>
+                    `Hediye: ${g.name}\nMarka: ${g.brand || '-'}\nModel: ${g.model || '-'}\nKategori: ${g.category || 'Diğer'}\nDurum: ${g.status === 'reserved' ? 'Alındı' : 'Beklemede'}\n${g.hepsiburada_url ? 'HB: ' + g.hepsiburada_url + '\n' : ''}${g.amazon_url ? 'Amazon: ' + g.amazon_url + '\n' : ''}-------------------`
+                ).join('\n');
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${fileName}.txt`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        } catch (err) {
+            console.error('Export error:', err);
+            alert('Dışa aktarma sırasında bir hata oluştu.');
+        } finally {
+            setIsExportingGifts(false);
+        }
+    };
+
     const handleImportExcel = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -218,7 +364,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                 if (guestsToImport.length > 0) {
                     const { data: imported, error } = await db.bulkAddGuests(eventDetails.id, guestsToImport);
                     if (!error && imported) {
-                        setGuests([...guests, ...imported]);
+                        setGuests(prev => [...prev, ...imported]);
                         await db.logActivity(eventDetails.id, `${guestsToImport.length} davetli Excel'den toplu olarak yüklendi.`);
                         fetchActivities();
                         alert(`${guestsToImport.length} davetli başarıyla eklendi!`);
@@ -263,7 +409,8 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         brand: row[1] ? row[1].toString() : '',
                         model: row[2] ? row[2].toString() : '',
                         hepsiburada_url: row[3] ? row[3].toString() : '',
-                        amazon_url: row[4] ? row[4].toString() : ''
+                        amazon_url: row[4] ? row[4].toString() : '',
+                        category: row[5] ? row[5].toString() : 'Diğer'
                     }));
 
                 if (giftsToImport.length > 0) {
@@ -298,66 +445,92 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                 <meta name="description" content="Etkinliğinizi yönetin, hediye listenizi düzenleyin ve davetli durumlarını takip edin." />
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
-            {/* Event Info Header */}
-            {eventDetails && (
-                <div className="card" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1))' }}>
-                    <div>
-                        <h1 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{eventDetails.title}</h1>
-                        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                            <p style={{ color: 'var(--text-muted)', margin: 0 }}>Etkinlik Sahibi: <strong>{eventDetails.owner}</strong></p>
-                            {eventDetails.event_date && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                                    <Calendar size={16} />
-                                    <span>{new Date(eventDetails.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                                </div>
-                            )}
+
+            {/* Mobile Warning Banner */}
+            <div className="mobile-only card" style={{
+                marginBottom: '1.5rem',
+                background: 'rgba(234, 179, 8, 0.1)',
+                border: '1px solid rgba(234, 179, 8, 0.3)',
+                padding: '1rem',
+                textAlign: 'center'
+            }}>
+                <p style={{ color: '#eab308', margin: 0, fontSize: '0.9rem', fontWeight: '500' }}>
+                    ⚠️ En iyi deneyim için lütfen bilgisayardan veya tabletten giriş yapınız.
+                </p>
+            </div>
+            {
+                eventDetails && (
+                    <div className="card" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1))' }}>
+                        <div>
+                            <h1 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{eventDetails.title}</h1>
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                                <p style={{ color: 'var(--text-muted)', margin: 0 }}>Etkinlik Sahibi: <strong>{eventDetails.owner}</strong></p>
+                                {eventDetails.event_date && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                                        <Calendar size={16} />
+                                        <span>{new Date(eventDetails.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>Silinecek Erişim Şifresi</span>
-                        <code style={{ background: 'var(--glass)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>{eventDetails.password}</code>
-                    </div>
-                </div>
-            )}
+                )
+            }
 
-            <div style={{ display: 'grid', gridTemplateColumns: '250px 1fr', gap: '2rem' }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: window.innerWidth < 1024 ? 'column' : 'row',
+                gap: '1.5rem',
+                alignItems: 'flex-start'
+            }}>
                 {/* Sidebar */}
-                <aside className="card" style={{ padding: '1.5rem', height: 'fit-content' }}>
-                    <h3 style={{ marginBottom: '2rem', padding: '0 0.5rem' }}>Yönetim</h3>
-                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <aside className="card" style={{
+                    padding: '1.25rem',
+                    width: window.innerWidth < 1024 ? '100%' : '280px',
+                    position: window.innerWidth < 1024 ? 'static' : 'sticky',
+                    top: '6rem'
+                }}>
+                    <h3 style={{ marginBottom: '1.5rem', padding: '0 0.5rem', fontSize: '1.1rem' }}>Yönetim</h3>
+                    <nav style={{
+                        display: 'flex',
+                        flexDirection: window.innerWidth < 1024 ? 'row' : 'column',
+                        gap: '0.5rem',
+                        overflowX: window.innerWidth < 1024 ? 'auto' : 'visible',
+                        paddingBottom: window.innerWidth < 1024 ? '0.5rem' : '0'
+                    }} className="no-scrollbar">
                         <button
                             className={`btn ${activeTab === 'recommendations' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: '100%', justifyContent: 'flex-start' }}
+                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('recommendations')}
                         >
-                            <Gift size={20} /> Önerilen Ürünler
+                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Öneriler</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'inventory' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: '100%', justifyContent: 'flex-start' }}
+                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('inventory')}
                         >
-                            <Gift size={20} /> Hediye Listesi
+                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Hediye Listesi</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'guests' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: '100%', justifyContent: 'flex-start' }}
+                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('guests')}
                         >
-                            <Users size={20} /> Davetli Listesi
+                            <Users size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Davetliler</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'admin' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: '100%', justifyContent: 'flex-start' }}
+                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('admin')}
                         >
-                            <LayoutDashboard size={20} /> Olaylar
+                            <LayoutDashboard size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Olaylar</span>
                         </button>
                     </nav>
                 </aside>
 
                 {/* Content Area */}
-                <main>
+                <main style={{ flex: 1, width: '100%', minWidth: 0 }}>
                     {activeTab === 'inventory' && (
                         <div className="card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -385,7 +558,14 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
                             {/* Add Gift Form */}
                             {/* Add Gift Form */}
-                            <div className="glass" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'grid', gridTemplateColumns: 'minmax(150px, 1fr) minmax(120px, 1fr) minmax(120px, 1fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) auto', gap: '0.75rem', alignItems: 'end' }}>
+                            <div className="glass" style={{
+                                padding: '1.5rem',
+                                marginBottom: '2rem',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                gap: '1rem',
+                                alignItems: 'end'
+                            }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Hediye Adı</label>
                                     <input
@@ -436,15 +616,40 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         onChange={e => setNewGift({ ...newGift, amazon_url: e.target.value })}
                                     />
                                 </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Kategori</label>
+                                    <select
+                                        className="glass"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', color: 'white', background: 'var(--card-bg)' }}
+                                        value={newGift.category}
+                                        onChange={e => setNewGift({ ...newGift, category: e.target.value })}
+                                    >
+                                        <option value="Diğer">Diğer</option>
+                                        <option value="Elektronik">Elektronik</option>
+                                        <option value="Ev Gereçleri">Ev Gereçleri</option>
+                                        <option value="Mutfak">Mutfak</option>
+                                        <option value="Züccaciye">Züccaciye</option>
+                                        <option value="Tekstil">Tekstil</option>
+                                    </select>
+                                </div>
                                 <button className="btn btn-primary" onClick={addGift}><Plus size={20} /></button>
                             </div>
 
                             {/* Excel Gift Import Section */}
-                            <div className="glass" style={{ padding: '1.5rem', marginBottom: '2rem', border: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div className="glass" style={{
+                                padding: '1.5rem',
+                                marginBottom: '2rem',
+                                border: '1px solid var(--border)',
+                                display: 'flex',
+                                flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                                justifyContent: 'space-between',
+                                alignItems: window.innerWidth < 768 ? 'stretch' : 'center',
+                                gap: '1.5rem'
+                            }}>
                                 <div>
                                     <h4 style={{ margin: '0 0 0.25rem 0' }}>Excel'den Hediye Yükle</h4>
                                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
-                                        Kolonlar: Hediye Adı | Marka | Model | Hepsiburada | Amazon (İlk satırdan başlar)
+                                        Kolonlar: Hediye Adı | Marka | Model | Hepsiburada | Amazon | Kategori (İlk satırdan başlar)
                                     </p>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem' }}>
@@ -467,11 +672,20 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                             </div>
 
                             {/* Gift List */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                                maxHeight: '450px',
+                                overflowY: 'auto',
+                                paddingRight: '0.5rem',
+                                scrollbarWidth: 'thin',
+                                scrollbarColor: 'var(--primary) transparent'
+                            }}>
                                 {sortedGifts.map(gift => (
                                     <div key={gift.id} className="glass" style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         {editingGiftId === gift.id ? (
-                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.5fr 1.5fr', gap: '0.5rem', flex: 1, marginRight: '1.5rem' }}>
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr', gap: '0.5rem', flex: 1, marginRight: '1.5rem' }}>
                                                 <input
                                                     className="glass"
                                                     style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--primary)', color: 'white', fontSize: '0.875rem' }}
@@ -490,6 +704,19 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                                     value={editFormData.model}
                                                     onChange={e => setEditFormData({ ...editFormData, model: e.target.value })}
                                                 />
+                                                <select
+                                                    className="glass"
+                                                    style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--primary)', color: 'white', fontSize: '0.875rem', background: 'var(--card-bg)' }}
+                                                    value={editFormData.category}
+                                                    onChange={e => setEditFormData({ ...editFormData, category: e.target.value })}
+                                                >
+                                                    <option value="Diğer">Diğer</option>
+                                                    <option value="Elektronik">Elektronik</option>
+                                                    <option value="Ev Gereçleri">Ev Gereçleri</option>
+                                                    <option value="Mutfak">Mutfak</option>
+                                                    <option value="Züccaciye">Züccaciye</option>
+                                                    <option value="Tekstil">Tekstil</option>
+                                                </select>
                                                 <input
                                                     className="glass"
                                                     style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--primary)', color: 'white', fontSize: '0.875rem' }}
@@ -510,6 +737,9 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                                 <h4 style={{ marginBottom: '0.25rem' }}>{gift.name}</h4>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                                                     <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} - {gift.model}</p>
+                                                    <span style={{ fontSize: '0.7rem', color: 'var(--primary)', background: 'rgba(99, 102, 241, 0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                                                        {gift.category || 'Diğer'}
+                                                    </span>
                                                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                                                         {gift.hepsiburada_url && (
                                                             <a href={gift.hepsiburada_url} target="_blank" rel="noopener noreferrer" title="Hepsiburada" style={{ color: '#ff6000', display: 'flex', alignItems: 'center' }}>
@@ -564,6 +794,41 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                     </div>
                                 ))}
                             </div>
+
+                            {/* Export Options */}
+                            <div className="glass" style={{
+                                marginTop: '2rem',
+                                padding: '1.5rem',
+                                border: '1px solid var(--border)',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <h4 style={{ margin: '0 0 0.25rem 0' }}>Hediye Envanterini Aktar</h4>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+                                        Mevcut hediye listenizi Excel veya TXT formatında bilgisayarınıza indirin.
+                                    </p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <button
+                                        onClick={() => exportGifts('excel')}
+                                        className="btn-outline"
+                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderColor: '#22c55e', color: '#22c55e' }}
+                                        disabled={isExportingGifts}
+                                    >
+                                        <FileSpreadsheet size={18} /> Excel'e Aktar
+                                    </button>
+                                    <button
+                                        onClick={() => exportGifts('txt')}
+                                        className="btn-outline"
+                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                        disabled={isExportingGifts}
+                                    >
+                                        <FileText size={18} /> TXT'ye Aktar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
 
@@ -580,9 +845,6 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         <div className="card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                                 <h2>Davetlileri Yönet</h2>
-                                <button className="btn btn-primary" style={{ fontSize: '0.875rem' }}>
-                                    Hepsine Davet Gönder <Send size={16} />
-                                </button>
                             </div>
 
                             {/* Bulk Invitation Tool */}
@@ -591,22 +853,15 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                     <ShieldCheck size={20} style={{ color: 'var(--primary)' }} />
                                     <h4 style={{ margin: 0 }}>Toplu Davet</h4>
                                 </div>
-                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Sistemdeki tüm davetlilere toplu olarak davet mesajı gönderin.</p>
-                                <div style={{ display: 'flex', gap: '1rem' }}>
-                                    <input
-                                        type="text"
-                                        className="glass"
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', color: 'white' }}
-                                        placeholder="Davet Mesajı Notu"
-                                        value={bulkPassword}
-                                        onChange={e => setBulkPassword(e.target.value)}
-                                    />
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Sistemdeki tüm davetlilere toplu olarak davet mesajı gönderin.</p>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <button
-                                        className="btn btn-outline"
+                                        className="btn btn-primary"
+                                        style={{ padding: '0.75rem 3rem' }}
                                         onClick={handleBulkInvite}
                                         disabled={isUpdatingBulk}
                                     >
-                                        {isUpdatingBulk ? 'Gönderiliyor...' : 'Gönder'}
+                                        {isUpdatingBulk ? 'Davetler Gönderiliyor...' : 'Tüm Davetleri Gönder'}
                                     </button>
                                 </div>
                                 {bulkMessage && <p style={{ marginTop: '0.75rem', fontSize: '0.875rem', color: bulkMessage.includes('başarıyla') ? '#4ade80' : '#ef4444' }}>{bulkMessage}</p>}
@@ -640,7 +895,14 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                             </div>
 
                             {/* Add Guest Form */}
-                            <div className="glass" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '1rem', alignItems: 'end' }}>
+                            <div className="glass" style={{
+                                padding: '1.5rem',
+                                marginBottom: '2rem',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                                gap: '1rem',
+                                alignItems: 'end'
+                            }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Ad Soyad</label>
                                     <input
@@ -661,19 +923,32 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         onChange={e => setNewGuest({ ...newGuest, email: e.target.value })}
                                     />
                                 </div>
-                                <button className="btn btn-primary" onClick={addGuest}><Plus size={20} /></button>
+                                <button className="btn btn-primary" style={{ padding: '0.75rem 2rem' }} onClick={addGuest}>Ekle</button>
                             </div>
 
                             {/* Guest List */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {guests.map(guest => (
-                                    <div key={guest.id} className="glass" style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                                maxHeight: '400px',
+                                overflowY: 'auto',
+                                paddingRight: '0.5rem',
+                                scrollbarWidth: 'thin',
+                                scrollbarColor: 'var(--primary) transparent'
+                            }}>
+                                {sortedGuests.map(guest => (
+                                    <div key={guest.id} className="glass" style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', minHeight: '85px' }}>
                                         <div>
                                             <h4 style={{ marginBottom: '0.25rem' }}>{guest.name}</h4>
-                                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{guest.email}</p>
+                                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{guest.email}</p>
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                            <button className="btn-outline" style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}>
+                                            <button
+                                                className="btn-outline"
+                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}
+                                                onClick={() => handleSingleInvite(guest)}
+                                            >
                                                 Davet et
                                             </button>
                                             <button className="btn-outline" style={{ border: 'none', color: '#ef4444' }} onClick={() => removeGuest(guest.id)}>
@@ -775,8 +1050,11 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         </div>
                     )}
                 </main>
+                <div style={{ textAlign: 'center', padding: '1rem', fontSize: '10px', color: 'var(--text-muted)', opacity: 0.5 }}>
+                    v2.1 - Sistem Güncellendi
+                </div>
             </div>
-        </div>
+        </div >
     );
 };
 

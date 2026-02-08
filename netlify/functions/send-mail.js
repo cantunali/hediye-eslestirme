@@ -12,7 +12,7 @@ exports.handler = async (event) => {
         return { statusCode: 400, body: "Geçersiz JSON formatı." };
     }
 
-    const { name, email, message, type, resetLink } = body;
+    const { name, email, message, type, resetLink, to, subject, html: customHtml } = body;
 
     console.log("E-posta gönderim isteği alındı:", { type: type || 'contact', email });
 
@@ -55,6 +55,18 @@ exports.handler = async (event) => {
                 </div>
             `,
             text: `HediyeEşle Şifre Sıfırlama\n\nŞifrenizi sıfırlamak için şu linke tıklayın: ${resetLink}\n\nEğer bu talebi siz yapmadıysanız bu e-postayı görmezden gelebilirsiniz.`
+        };
+    } else if (type === 'invite') {
+        mailOptions = {
+            from: process.env.MAIL_FROM || process.env.SMTP_USER,
+            to: to || email,
+            subject: subject || 'HediyeEşle Davet',
+            html: customHtml || `
+                <div style="font-family: sans-serif; padding: 20px;">
+                    <p>${message}</p>
+                </div>
+            `,
+            text: message
         };
     } else {
         mailOptions = {

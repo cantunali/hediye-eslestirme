@@ -95,7 +95,9 @@ const FeaturedGifts = ({ eventId, onGiftsAdded }) => {
         }
     };
 
-    const categories = ['Hepsi', ...new Set(featuredGifts.map(g => g.category))];
+    const baseCategories = ['Hepsi', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Züccaciye', 'Tekstil'];
+    const dataCategories = [...new Set(featuredGifts.map(g => g.category))];
+    const categories = [...new Set([...baseCategories, ...dataCategories])];
     const filteredGifts = activeCategory === 'Hepsi'
         ? featuredGifts
         : featuredGifts.filter(g => g.category === activeCategory);
@@ -107,9 +109,9 @@ const FeaturedGifts = ({ eventId, onGiftsAdded }) => {
                 <meta name="description" content="Özenle seçilmiş hediye önerileri. Sevdikleriniz için en güzel hediye fikirleri." />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', padding: '0 1rem' }}>
                     <div>
-                        <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Önerilen Ürünler</h2>
+                        <h2 className="hero-title" style={{ marginBottom: '0.5rem' }}>Önerilen Ürünler</h2>
                         <p style={{ color: 'var(--text-muted)' }}>Popüler ve en çok tercih edilen hediyeleri tek tıkla listenize ekleyin.</p>
                     </div>
 

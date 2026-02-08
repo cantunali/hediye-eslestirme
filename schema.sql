@@ -32,6 +32,7 @@ CREATE TABLE gifts (
   hepsiburada_url TEXT,
   amazon_url TEXT,
   status TEXT DEFAULT 'available', -- 'available', 'reserved'
+  category TEXT DEFAULT 'Diğer',
   reserved_by UUID,
   group_id UUID,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -80,7 +81,9 @@ INSERT INTO featured_gifts (name, brand, model, hepsiburada_url, amazon_url, cat
 ('Robot Süpürge', 'Roborock', 'Q7 Max', 'https://www.hepsiburada.com/ara?q=roborock+q7', 'https://www.amazon.com.tr/s?k=roborock+q7', 'Ev Gereçleri'),
 ('Airfryer XXL', 'Philips', 'HD9650/90', 'https://www.hepsiburada.com/ara?q=philips+airfryer+xxl', 'https://www.amazon.com.tr/s?k=philips+airfryer+xxl', 'Mutfak'),
 ('Döküm Tencere Seti', 'Lava', 'Vintage', 'https://www.hepsiburada.com/ara?q=lava+dokum+tencere', 'https://www.amazon.com.tr/s?k=lava+dokum+tencere', 'Mutfak'),
-('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik');
+('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik'),
+('Nevresim Takımı', 'Linens', 'Saten', 'https://www.hepsiburada.com/ara?q=linens+nevresim', 'https://www.amazon.com.tr/s?k=linens+nevresim', 'Tekstil'),
+('Yemek Takımı', 'Kütahya Porselen', '6 Kişilik', 'https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi', 'https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi', 'Züccaciye');
 
 
 CREATE TABLE public.users (

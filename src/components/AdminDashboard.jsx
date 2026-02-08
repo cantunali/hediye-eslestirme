@@ -124,97 +124,107 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="section container animate-fade-in" style={{ padding: '2rem' }}>
+        <div className="section container animate-fade-in" style={{ padding: '1.5rem 1rem' }}>
             <Helmet>
                 <title>HediyeEşle - Sistem Admin Paneli</title>
             </Helmet>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+            <div className="admin-header" style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '2.5rem',
+                gap: '1.5rem'
+            }}>
                 <div>
-                    <h1 style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <h1 className="hero-title" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}>
                         <Shield style={{ color: 'var(--primary)' }} /> Sistem <span className="gradient-text">Yönetimi</span>
                     </h1>
-                    <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Platform genel verileri ve aktivite takibi.</p>
+                    <p style={{ color: 'var(--text-muted)', marginTop: '0.25rem', fontSize: '0.9rem' }}>Platform genel verileri ve aktivite takibi.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="btn btn-outline" onClick={() => setIsAuthorized(false)}>
+                <div style={{ display: 'flex', gap: '0.75rem', width: '100%', maxWidth: '400px' }} className="mobile-only-stack">
+                    <button className="btn btn-outline" style={{ flex: 1, padding: '0.75rem' }} onClick={() => setIsAuthorized(false)}>
                         Güvenli Çıkış
                     </button>
-                    <button className="btn btn-outline" onClick={() => navigate('/')}>
+                    <button className="btn btn-outline" style={{ flex: 1, padding: '0.75rem' }} onClick={() => navigate('/')}>
                         <ArrowLeft size={18} /> Siteye Dön
                     </button>
                 </div>
             </div>
 
             {error && (
-                <div className="glass" style={{ padding: '1.5rem', marginBottom: '2rem', border: '1px solid #ef4444', color: '#ef4444', textAlign: 'center' }}>
+                <div className="glass" style={{ padding: '1rem', marginBottom: '2rem', border: '1px solid #ef4444', color: '#ef4444', textAlign: 'center', fontSize: '0.9rem' }}>
                     {error}
                 </div>
             )}
 
             {/* Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
-                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--primary)' }}>
-                    <Users size={32} style={{ color: 'var(--primary)', marginBottom: '1rem' }} />
-                    <h2 style={{ fontSize: '2.5rem' }}>{stats.users}</h2>
-                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 'bold' }}>Sistem Kullanıcısı</p>
+            <div className="grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--primary)', padding: '1.5rem' }}>
+                    <Users size={28} style={{ color: 'var(--primary)', marginBottom: '0.75rem' }} />
+                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{stats.users}</h2>
+                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 'bold', letterSpacing: '0.05em' }}>Kullanıcı</p>
                 </div>
-                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--secondary)' }}>
-                    <Calendar size={32} style={{ color: 'var(--secondary)', marginBottom: '1rem' }} />
-                    <h2 style={{ fontSize: '2.5rem' }}>{stats.events}</h2>
-                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 'bold' }}>Oluşturulan Etkinlik</p>
+                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--secondary)', padding: '1.5rem' }}>
+                    <Calendar size={28} style={{ color: 'var(--secondary)', marginBottom: '0.75rem' }} />
+                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{stats.events}</h2>
+                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 'bold', letterSpacing: '0.05em' }}>Etkinlik</p>
                 </div>
-                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--accent)' }}>
-                    <Gift size={32} style={{ color: 'var(--accent)', marginBottom: '1rem' }} />
-                    <h2 style={{ fontSize: '2.5rem' }}>{stats.gifts}</h2>
-                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 'bold' }}>Toplam Hediye</p>
+                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid var(--accent)', padding: '1.5rem' }}>
+                    <Gift size={28} style={{ color: 'var(--accent)', marginBottom: '0.75rem' }} />
+                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{stats.gifts}</h2>
+                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 'bold', letterSpacing: '0.05em' }}>Hediye</p>
                 </div>
-                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid #4ade80' }}>
-                    <Shield size={32} style={{ color: '#4ade80', marginBottom: '1rem' }} />
-                    <h2 style={{ fontSize: '2.5rem' }}>{stats.guests}</h2>
-                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 'bold' }}>Kayıtlı Davetli</p>
+                <div className="card" style={{ textAlign: 'center', borderBottom: '4px solid #4ade80', padding: '1.5rem' }}>
+                    <Shield size={28} style={{ color: '#4ade80', marginBottom: '0.75rem' }} />
+                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{stats.guests}</h2>
+                    <p style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 'bold', letterSpacing: '0.05em' }}>Davetli</p>
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '3rem' }}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))',
+                gap: '2rem'
+            }}>
                 {/* Events Management */}
-                <div className="card" style={{ padding: '0' }}>
-                    <div style={{ padding: '2rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <Calendar size={20} style={{ color: 'var(--primary)' }} /> Son Etkinlikler
+                <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                    <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
+                            <Calendar size={18} style={{ color: 'var(--primary)' }} /> Son Etkinlikler
                         </h3>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Son 20 Kayıt</span>
                     </div>
-                    <div style={{ maxHeight: '500px', overflowY: 'auto', padding: '1rem' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '500px' }}>
                             <thead>
-                                <tr style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                <tr style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                     <th style={{ padding: '1rem' }}>Başlık</th>
                                     <th style={{ padding: '1rem' }}>Sahibi</th>
                                     <th style={{ padding: '1rem' }}>Tarih</th>
-                                    <th style={{ padding: '1rem' }}>İşlem</th>
+                                    <th style={{ padding: '1rem', textAlign: 'center' }}>İşlem</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {events.map((event) => (
-                                    <tr key={event.id} style={{ borderTop: '1px solid var(--border)', fontSize: '0.9rem' }}>
-                                        <td style={{ padding: '1.25rem' }}>
+                                    <tr key={event.id} style={{ borderTop: '1px solid var(--border)', fontSize: '0.85rem' }}>
+                                        <td style={{ padding: '1rem' }}>
                                             <span style={{ fontWeight: '600' }}>{event.title}</span>
                                         </td>
-                                        <td style={{ padding: '1.25rem' }}>
+                                        <td style={{ padding: '1rem' }}>
                                             <div>{event.owner_name}</div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{event.owner_email}</div>
+                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{event.owner_email}</div>
                                         </td>
-                                        <td style={{ padding: '1.25rem' }}>
+                                        <td style={{ padding: '1rem' }}>
                                             {event.event_date ? new Date(event.event_date).toLocaleDateString('tr-TR') : '-'}
                                         </td>
-                                        <td style={{ padding: '1.25rem' }}>
+                                        <td style={{ padding: '1rem', textAlign: 'center' }}>
                                             <button
                                                 className="btn-outline"
                                                 style={{ padding: '0.4rem', borderRadius: '8px' }}
-                                                title="Detaylar (Geliştirme Aşamasında)"
+                                                onClick={() => { }}
                                             >
-                                                <ExternalLink size={16} />
+                                                <ExternalLink size={14} />
                                             </button>
                                         </td>
                                     </tr>
@@ -225,29 +235,29 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Global Activity Feed */}
-                <div className="card" style={{ padding: '0' }}>
-                    <div style={{ padding: '2rem', borderBottom: '1px solid var(--border)' }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <Activity size={20} style={{ color: 'var(--secondary)' }} /> Global Hareketler
+                <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                    <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)' }}>
+                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
+                            <Activity size={18} style={{ color: 'var(--secondary)' }} /> Hareketler
                         </h3>
                     </div>
-                    <div style={{ padding: '1rem', maxHeight: '500px', overflowY: 'auto' }}>
+                    <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
                         {activities.length > 0 ? (
                             activities.map((act) => (
                                 <div key={act.id} style={{ padding: '1.25rem', borderBottom: '1px solid var(--border)', display: 'flex', gap: '1rem' }}>
-                                    <div style={{ color: 'var(--secondary)', paddingTop: '0.25rem' }}><Clock size={16} /></div>
+                                    <div style={{ color: 'var(--secondary)', paddingTop: '0.2rem' }}><Clock size={14} /></div>
                                     <div>
-                                        <p style={{ fontSize: '0.95rem', marginBottom: '0.4rem', lineHeight: '1.5' }}>
-                                            <strong style={{ color: 'var(--primary)' }}>[{act.events?.title || 'Bilinmeyen'}]</strong> {act.content}
+                                        <p style={{ fontSize: '0.9rem', marginBottom: '0.3rem', lineHeight: '1.5' }}>
+                                            <strong style={{ color: 'var(--primary)', fontSize: '0.8rem' }}>[{act.events?.title || 'Bilinmeyen'}]</strong> {act.content}
                                         </p>
-                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                                             {new Date(act.created_at).toLocaleString('tr-TR')}
                                         </span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>Henüz bir hareket bulunmuyor.</p>
+                            <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Henüz bir hareket bulunmuyor.</p>
                         )}
                     </div>
                 </div>

@@ -79,6 +79,14 @@ export const db = {
         const { data, error } = await supabase.from('events').select('*');
         return { data, error };
     },
+    getEventById: async (eventId) => {
+        const { data, error } = await supabase
+            .from('events')
+            .select('*')
+            .eq('id', eventId)
+            .maybeSingle();
+        return { data, error };
+    },
     checkEventTitleExists: async (title) => {
         const { data, error } = await supabase
             .from('events')
@@ -182,6 +190,7 @@ export const db = {
                 ...gift,
                 event_id: eventId,
                 status: 'available',
+                category: gift.category || 'Diğer',
                 hepsiburada_url: gift.hepsiburada_url || '',
                 amazon_url: gift.amazon_url || ''
             }])
@@ -201,6 +210,7 @@ export const db = {
             name: g.name,
             brand: g.brand || '',
             model: g.model || '',
+            category: g.category || 'Diğer',
             hepsiburada_url: g.hepsiburada_url || '',
             amazon_url: g.amazon_url || '',
             event_id: eventId,
@@ -219,6 +229,7 @@ export const db = {
                 name: updates.name,
                 brand: updates.brand,
                 model: updates.model,
+                category: updates.category,
                 hepsiburada_url: updates.hepsiburada_url,
                 amazon_url: updates.amazon_url
             })
@@ -300,6 +311,7 @@ export const db = {
             name: g.name,
             brand: g.brand,
             model: g.model,
+            category: g.category,
             hepsiburada_url: g.hepsiburada_url,
             amazon_url: g.amazon_url,
             status: 'available'
