@@ -39,17 +39,17 @@ const FeaturesPage = ({ onStart }) => {
                 <meta name="description" content="Etkinlik oluşturma, hediye listesi yapma ve davetli yönetimi. HediyeEşle özelliklerini keşfedin." />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
+                <h1 className="animate-reveal stagger-1" style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Nasıl <span className="gradient-text">Çalışır?</span>
                 </h1>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
+                <p className="animate-reveal stagger-2" style={{ color: 'var(--text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
                     En özel günlerinizde hediye karmaşasına son veriyoruz. İşte HediyeEşle'nin kolay kullanım adımları:
                 </p>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2.5rem', marginBottom: '5rem' }}>
                 {steps.map((step, index) => (
-                    <div key={index} className="card" style={{ position: 'relative', overflow: 'hidden' }}>
+                    <div key={index} className={`card animate-reveal stagger-${index + 3}`} style={{ position: 'relative', overflow: 'hidden' }}>
                         <div style={{
                             width: '64px',
                             height: '64px',

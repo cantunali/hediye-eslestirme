@@ -273,14 +273,14 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="section hero-section" style={{ textAlign: 'center' }}>
         <div className="container">
-          <h1 className="hero-title">
+          <h1 className="hero-title animate-reveal stagger-1">
             Hayalindeki <span className="gradient-text">Hediyeleri</span> <br />
             Sevdiklerinle Buluştur
           </h1>
-          <p style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 2.5rem', lineHeight: '1.6' }}>
+          <p className="animate-reveal stagger-2" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 2.5rem', lineHeight: '1.6' }}>
             Düğün, doğum günü veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla.
           </p>
-          <div style={{
+          <div className="animate-reveal stagger-3" style={{
             display: 'flex',
             justifyContent: 'center',
             gap: '1rem',
@@ -289,11 +289,11 @@ const LandingPage = () => {
             margin: '0 auto'
           }}>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-micro"
               style={{ flex: '1 1 200px', minHeight: '3.5rem' }}
               onClick={() => navigate('/davetli-girisi')}
             >
-              Davetli Girişi <Users size={22} />
+              Davetli Girişi <Users size={22} className="glow-soft" />
             </button>
             <button
               className="btn btn-outline"
@@ -304,7 +304,7 @@ const LandingPage = () => {
             </button>
           </div>
 
-          <div style={{ marginTop: '2rem' }}>
+          <div className="animate-reveal stagger-4" style={{ marginTop: '2rem' }}>
             <Link
               to="/ozellikler"
               className="btn btn-outline"
@@ -322,7 +322,7 @@ const LandingPage = () => {
                 background: 'rgba(255, 255, 255, 0.05)'
               }}
             >
-              Özellikleri Keşfet <Star size={16} />
+              Özellikleri Keşfet <Star size={16} className="glow-soft" />
             </Link>
           </div>
         </div>
@@ -332,22 +332,22 @@ const LandingPage = () => {
       <section id="features" className="section" style={{ background: 'rgba(0,0,0,0.1)' }}>
         <div className="container">
           <div className="grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
-            <div className="card" style={{ textAlign: 'center' }}>
-              <Package size={32} style={{ color: 'var(--primary)', marginBottom: '0.75rem' }} />
+            <div className="card animate-reveal stagger-1" style={{ textAlign: 'center' }}>
+              <Package size={32} className="glow-soft" style={{ color: 'var(--accent-sharp)', marginBottom: '0.75rem' }} />
               <h2 style={{ marginBottom: '0.5rem' }}>42</h2>
               <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
             </div>
-            <div className="card" style={{ textAlign: 'center' }}>
+            <div className="card animate-reveal stagger-2" style={{ textAlign: 'center' }}>
               <Users size={32} style={{ color: 'var(--secondary)', marginBottom: '0.75rem' }} />
               <h2 style={{ marginBottom: '0.5rem' }}>85</h2>
               <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
             </div>
-            <div className="card" style={{ textAlign: 'center' }}>
+            <div className="card animate-reveal stagger-3" style={{ textAlign: 'center' }}>
               <Gift size={32} style={{ color: 'var(--accent)', marginBottom: '0.75rem' }} />
               <h2 style={{ marginBottom: '0.5rem' }}>18</h2>
               <p style={{ color: 'var(--text-muted)' }}>Alınan Hediyeler</p>
             </div>
-            <div className="card" style={{ textAlign: 'center' }}>
+            <div className="card animate-reveal stagger-4" style={{ textAlign: 'center' }}>
               <Heart size={32} style={{ color: '#ef4444', marginBottom: '0.75rem' }} />
               <h2 style={{ marginBottom: '0.5rem' }}>24</h2>
               <p style={{ color: 'var(--text-muted)' }}>Kalan Hediyeler</p>
