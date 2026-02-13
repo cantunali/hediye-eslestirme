@@ -15,11 +15,14 @@ import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import FAQ from './components/FAQ';
 import TermsOfService from './components/TermsOfService';
+import KVKK from './components/KVKK';
+import MarketingConsent from './components/MarketingConsent';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import SmtpTest from './components/SmtpTest';
+import Profile from './components/Profile';
 import AdminDashboard from './components/AdminDashboard';
 import { useAuth } from './context/AuthContext';
 
@@ -46,6 +49,13 @@ const Navbar = () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const handleGuestPortalClick = async () => {
+    if (user) {
+      await signOut();
+    }
+    navigate('/davetli-girisi');
+  };
 
   return (
     <>
@@ -88,7 +98,7 @@ const Navbar = () => {
           <div className="desktop-only" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <button
               className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/davetli-girisi')}
+              onClick={handleGuestPortalClick}
               style={{ padding: '0.6rem 1.25rem' }}
             >
               Davetli Girişi
@@ -144,7 +154,7 @@ const Navbar = () => {
         }}>
           <button
             className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => navigate('/davetli-girisi')}
+            onClick={handleGuestPortalClick}
             style={{ fontSize: '1.1rem', padding: '1rem' }}
           >
             <Users size={20} /> Davetli Girişi
@@ -224,7 +234,9 @@ const Footer = () => {
             <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>İletişim</Link>
             <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Sıkça Sorulan Sorular</Link>
             <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Gizlilik Politikası</Link>
-            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Kullanım Koşulları</Link>
+            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Kullanıcı Sözleşmesi</Link>
+            <Link to="/kvkk" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>KVKK Aydınlatma Metni</Link>
+            <Link to="/pazarlama-izni" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Pazarlama İzni</Link>
             <Link to="/admin" style={{
               color: 'var(--primary)',
               textDecoration: 'none',
@@ -439,6 +451,9 @@ function App() {
           <Route path="/gizlilik-politikasi" element={<PrivacyPolicy />} />
           <Route path="/sss" element={<FAQ />} />
           <Route path="/kullanim-kosullari" element={<TermsOfService />} />
+          <Route path="/kvkk" element={<KVKK />} />
+          <Route path="/pazarlama-izni" element={<MarketingConsent />} />
+          <Route path="/profil" element={<Profile />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>

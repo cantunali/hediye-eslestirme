@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
-const STANDARD_CATEGORIES = ['Hepsi', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Züccaciye', 'Tekstil', 'Diğer'];
+const STANDARD_CATEGORIES = ['Hepsi', 'Aksesuar', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Tekstil', 'Züccaciye'];
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,7 +38,10 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                 cats.add(gift.category);
             }
         });
-        return Array.from(cats);
+
+        const catsArray = Array.from(cats);
+        const others = catsArray.filter(c => c !== 'Hepsi').sort((a, b) => a.localeCompare(b, 'tr'));
+        return ['Hepsi', ...others];
     }, [eventGifts]);
 
     const filteredGifts = useMemo(() => {
@@ -85,8 +89,18 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         setIsDropdownOpen(false);
     };
 
+    const [termsConsent, setTermsConsent] = useState(false);
+    const [kvkkConsent, setKvkkConsent] = useState(false);
+    const [marketingConsent, setMarketingConsent] = useState(false);
+
     const handleLogin = async (e) => {
         e.preventDefault();
+
+        if (!termsConsent || !kvkkConsent) {
+            setLoginError('Lütfen Kullanıcı Sözleşmesi ve KVKK metnini onaylayın.');
+            return;
+        }
+
         if (!loginData.title) {
             setLoginError('Lütfen bir etkinlik seçin.');
             return;
@@ -99,6 +113,15 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
             const { success, guest, eventId, error } = await db.verifyGuestLogin(loginData.title, loginData.email);
 
             if (success) {
+                // Record guest consents
+                if (guest?.id) {
+                    await db.recordGuestConsents(guest.id, {
+                        terms: termsConsent,
+                        kvkk: kvkkConsent,
+                        marketing: marketingConsent
+                    });
+                }
+
                 setCurrentEvent({ id: eventId, title: loginData.title });
                 setCurrentGuest(guest);
                 setIsLoggedIn(true);
@@ -289,6 +312,48 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                                     required
                                 />
+                            </div>
+
+                            {/* Legal Checkboxes */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                    <input
+                                        type="checkbox"
+                                        id="termsConsent"
+                                        checked={termsConsent}
+                                        onChange={(e) => setTermsConsent(e.target.checked)}
+                                        style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                    />
+                                    <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                        <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
+                                    </label>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                    <input
+                                        type="checkbox"
+                                        id="kvkkConsent"
+                                        checked={kvkkConsent}
+                                        onChange={(e) => setKvkkConsent(e.target.checked)}
+                                        style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                    />
+                                    <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                        <Link to="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
+                                    </label>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                    <input
+                                        type="checkbox"
+                                        id="marketingConsent"
+                                        checked={marketingConsent}
+                                        onChange={(e) => setMarketingConsent(e.target.checked)}
+                                        style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                    />
+                                    <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                        <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
+                                    </label>
+                                </div>
                             </div>
 
                             {loginError && (

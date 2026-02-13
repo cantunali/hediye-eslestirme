@@ -1,0 +1,52 @@
+('Filtre Kahve Makinesi'	 'Moccamaster'	 'KBG Select'	 'https://www.hepsiburada.com/ara?q=moccamaster'	 'https://www.amazon.com.tr/s?k=moccamaster'	 'Elektronik')	
+Robot Süpürge	 Roborock	roborock-s8-pro-akilli-robot-supurge	https://www.hepsiburada.com/roborock-s8-pro-akilli-robot-supurge-pm-HBC00008MAIV1	https://amzn.eu/d/06kHSa5Y	 Ev Gereçleri	('Robot Süpürge',' Roborock','roborock-s8-pro-akilli-robot-supurge','https://www.hepsiburada.com/roborock-s8-pro-akilli-robot-supurge-pm-HBC00008MAIV1','https://amzn.eu/d/06kHSa5Y',' Ev Gereçleri'),
+Robot Süpürge	Xiaomi	Xiaomi Mi Robot Vacuum S10T Robot Süpürge ve Paspas	https://www.hepsiburada.com/xiaomi-8000pa-ultra-guc-wi-fi-akilli-kontrol-mi-robot-s10t-robot-supurge-ve-paspas-lidar-tarama-hepa-filtre-pm-HBC00005EYNKG	https://www.amazon.com.tr/Xiaomi-Vacuum-S10T-S%C3%BCp%C3%BCrge-Paspas/dp/B0BHY5ST6H?ref_=Oct_d_obs_d_13511459031_1&pd_rd_w=q8Gls&content-id=amzn1.sym.3d1902e7-cf73-457c-b1cb-c20adb8bd591&pf_rd_p=3d1902e7-cf73-457c-b1cb-c20adb8bd591&pf_rd_r=MV9K0QRQS8A6GC6F652T&pd_rd_wg=agcFo&pd_rd_r=f8d7de98-1f7e-4bb9-9cf2-a671550104cd&pd_rd_i=B0BHY5ST6H	 Ev Gereçleri	('Robot Süpürge','Xiaomi','Xiaomi Mi Robot Vacuum S10T Robot Süpürge ve Paspas','https://www.hepsiburada.com/xiaomi-8000pa-ultra-guc-wi-fi-akilli-kontrol-mi-robot-s10t-robot-supurge-ve-paspas-lidar-tarama-hepa-filtre-pm-HBC00005EYNKG','https://www.amazon.com.tr/Xiaomi-Vacuum-S10T-S%C3%BCp%C3%BCrge-Paspas/dp/B0BHY5ST6H?ref_=Oct_d_obs_d_13511459031_1&pd_rd_w=q8Gls&content-id=amzn1.sym.3d1902e7-cf73-457c-b1cb-c20adb8bd591&pf_rd_p=3d1902e7-cf73-457c-b1cb-c20adb8bd591&pf_rd_r=MV9K0QRQS8A6GC6F652T&pd_rd_wg=agcFo&pd_rd_r=f8d7de98-1f7e-4bb9-9cf2-a671550104cd&pd_rd_i=B0BHY5ST6H',' Ev Gereçleri'),
+Robot Süpürge	 Roborock	Roborock Qrevo L Ak?ll? Robot süpürge	https://www.hepsiburada.com/roborock-qrevo-l-akilli-robot-supurge-p-HBCV00008MAJ5I		 Ev Gereçleri	('Robot Süpürge',' Roborock','Roborock Qrevo L Ak?ll? Robot süpürge','https://www.hepsiburada.com/roborock-qrevo-l-akilli-robot-supurge-p-HBCV00008MAJ5I','',' Ev Gereçleri'),
+Robot Süpürge	 Roborock	Roborock S8 Pro Plus Ak?ll? Robot Süpürge	https://www.hepsiburada.com/s8-pro-plus-akilli-robot-supurge-beyaz-pm-HBC000090LZ1E		 Ev Gereçleri	('Robot Süpürge',' Roborock','Roborock S8 Pro Plus Ak?ll? Robot Süpürge','https://www.hepsiburada.com/s8-pro-plus-akilli-robot-supurge-beyaz-pm-HBC000090LZ1E','',' Ev Gereçleri'),
+						('','','','','',''),
+Airfryer XXL	 Philips	 HD9650/90	 https://www.hepsiburada.com/ara?q=philips+airfryer+xxl	 https://www.amazon.com.tr/s?k=philips+airfryer+xxl	 Mutfak	('Airfryer XXL',' Philips',' HD9650/90',' https://www.hepsiburada.com/ara?q=philips+airfryer+xxl',' https://www.amazon.com.tr/s?k=philips+airfryer+xxl',' Mutfak'),
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+Döküm Tencere Seti	 Lava	 Vintage	 https://www.hepsiburada.com/ara?q=lava+dokum+tencere	 https://www.amazon.com.tr/s?k=lava+dokum+tencere	 Mutfak	('Döküm Tencere Seti',' Lava',' Vintage',' https://www.hepsiburada.com/ara?q=lava+dokum+tencere',' https://www.amazon.com.tr/s?k=lava+dokum+tencere',' Mutfak'),
+Ak?ll? Saat	 Apple	 Watch Series 8	 https://www.hepsiburada.com/ara?q=apple+watch+8	 https://www.amazon.com.tr/s?k=apple+watch+8	 Elektronik	('Ak?ll? Saat',' Apple',' Watch Series 8',' https://www.hepsiburada.com/ara?q=apple+watch+8',' https://www.amazon.com.tr/s?k=apple+watch+8',' Elektronik'),
+Nevresim Tak?m?	 Linens	 Saten	 https://www.hepsiburada.com/ara?q=linens+nevresim	 https://www.amazon.com.tr/s?k=linens+nevresim	 Tekstil	('Nevresim Tak?m?',' Linens',' Saten',' https://www.hepsiburada.com/ara?q=linens+nevresim',' https://www.amazon.com.tr/s?k=linens+nevresim',' Tekstil'),
+Yemek Tak?m?	 KÃ¼tahya Porselen	 6 KiÅŸilik	 https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi	 https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi	 Züccaciye	('Yemek Tak?m?',' KÃ¼tahya Porselen',' 6 KiÅŸilik',' https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi',' https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi',' Züccaciye'),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),
+						('','','','','',''),

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, User, Lock, ArrowRight, Sparkles, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Calendar, User, Lock, ArrowRight, Sparkles, AlertCircle, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -8,7 +8,8 @@ const CreateEvent = ({ onCreated }) => {
     const { user } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
-        event_date: ''
+        event_date: '',
+        event_type: 'Evlilik - Ev Hediyesi'
     });
     const [showPassword, setShowPassword] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
@@ -115,6 +116,27 @@ const CreateEvent = ({ onCreated }) => {
                             required
                             disabled={isChecking}
                         />
+                    </div>
+                </div>
+
+                <div style={{ position: 'relative' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', fontWeight: '500' }}>Etkinlik Tipi</label>
+                    <div style={{ position: 'relative' }}>
+                        <Sparkles size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                        <select
+                            className="glass"
+                            style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', color: 'white', borderRadius: '12px', outline: 'none', background: 'var(--card-bg)', appearance: 'none' }}
+                            value={formData.event_type}
+                            onChange={(e) => setFormData({ ...formData, event_type: e.target.value })}
+                            required
+                            disabled={isChecking}
+                        >
+                            <option value="Evlilik - Ev Hediyesi">Evlilik - Ev Hediyesi</option>
+                            <option value="Kız Bebek Hediyesi">Kız Bebek Hediyesi</option>
+                            <option value="Erkek Bebek Hediyesi">Erkek Bebek Hediyesi</option>
+                            <option value="Doğum Günü Hediyesi">Doğum Günü Hediyesi</option>
+                        </select>
+                        <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                     </div>
                 </div>
 

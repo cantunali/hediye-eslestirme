@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
@@ -7,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 
 const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [userEvents, setUserEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -59,7 +61,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                 <aside className="card" style={{ padding: '1.5rem', position: 'sticky', top: '2rem' }}>
                     <h3 style={{ marginBottom: '1.5rem', padding: '0 0.5rem' }}>İşlemler</h3>
                     <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={() => window.location.href = '/'}>
+                        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={() => navigate('/profil')}>
                             <User size={20} /> Profilim
                         </button>
                         <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={onGoToCreate}>

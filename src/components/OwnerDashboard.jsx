@@ -54,12 +54,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         setIsLoadingActivities(false);
     };
 
-    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
+    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
     const [newGuest, setNewGuest] = useState({ name: '', email: '' });
     const [isUpdatingBulk, setIsUpdatingBulk] = useState(false);
     const [bulkMessage, setBulkMessage] = useState('');
     const [editingGiftId, setEditingGiftId] = useState(null);
-    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
+    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
     const [sortBy, setSortBy] = useState('name'); // 'name' or 'status'
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
@@ -92,7 +92,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             const { data, error } = await db.addGift(eventDetails.id, newGift);
             if (data) {
                 setGifts([...gifts, data]);
-                setNewGift({ name: '', brand: '', model: '', category: 'Diğer', hepsiburada_url: '', amazon_url: '' });
+                setNewGift({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
             }
         }
     };
@@ -126,7 +126,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             name: gift.name,
             brand: gift.brand,
             model: gift.model,
-            category: gift.category || 'Diğer',
+            category: gift.category || 'Aksesuar',
             hepsiburada_url: gift.hepsiburada_url || '',
             amazon_url: gift.amazon_url || ''
         });
@@ -310,7 +310,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                     'Hediye Adı': g.name,
                     'Marka': g.brand || '',
                     'Model': g.model || '',
-                    'Kategori': g.category || 'Diğer',
+                    'Kategori': g.category || 'Aksesuar',
                     'Durum': g.status === 'reserved' ? 'Alındı' : 'Beklemede',
                     'Hepsiburada': g.hepsiburada_url || '',
                     'Amazon': g.amazon_url || ''
@@ -320,7 +320,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                 XLSX.writeFile(workbook, `${fileName}.xlsx`);
             } else if (type === 'txt') {
                 const content = gifts.map(g =>
-                    `Hediye: ${g.name}\nMarka: ${g.brand || '-'}\nModel: ${g.model || '-'}\nKategori: ${g.category || 'Diğer'}\nDurum: ${g.status === 'reserved' ? 'Alındı' : 'Beklemede'}\n${g.hepsiburada_url ? 'HB: ' + g.hepsiburada_url + '\n' : ''}${g.amazon_url ? 'Amazon: ' + g.amazon_url + '\n' : ''}-------------------`
+                    `Hediye: ${g.name}\nMarka: ${g.brand || '-'}\nModel: ${g.model || '-'}\nKategori: ${g.category || 'Aksesuar'}\nDurum: ${g.status === 'reserved' ? 'Alındı' : 'Beklemede'}\n${g.hepsiburada_url ? 'HB: ' + g.hepsiburada_url + '\n' : ''}${g.amazon_url ? 'Amazon: ' + g.amazon_url + '\n' : ''}-------------------`
                 ).join('\n');
                 const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
@@ -410,7 +410,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         model: row[2] ? row[2].toString() : '',
                         hepsiburada_url: row[3] ? row[3].toString() : '',
                         amazon_url: row[4] ? row[4].toString() : '',
-                        category: row[5] ? row[5].toString() : 'Diğer'
+                        category: row[5] ? row[5].toString() : 'Aksesuar'
                     }));
 
                 if (giftsToImport.length > 0) {
@@ -503,7 +503,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                             style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('recommendations')}
                         >
-                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Öneriler</span>
+                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Önerilen Ürünler</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'inventory' ? 'btn-primary' : 'btn-outline'}`}
@@ -624,12 +624,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         value={newGift.category}
                                         onChange={e => setNewGift({ ...newGift, category: e.target.value })}
                                     >
-                                        <option value="Diğer">Diğer</option>
+                                        <option value="Aksesuar">Aksesuar</option>
                                         <option value="Elektronik">Elektronik</option>
                                         <option value="Ev Gereçleri">Ev Gereçleri</option>
                                         <option value="Mutfak">Mutfak</option>
-                                        <option value="Züccaciye">Züccaciye</option>
                                         <option value="Tekstil">Tekstil</option>
+                                        <option value="Züccaciye">Züccaciye</option>
                                     </select>
                                 </div>
                                 <button className="btn btn-primary" onClick={addGift}><Plus size={20} /></button>
@@ -710,12 +710,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                                     value={editFormData.category}
                                                     onChange={e => setEditFormData({ ...editFormData, category: e.target.value })}
                                                 >
-                                                    <option value="Diğer">Diğer</option>
+                                                    <option value="Aksesuar">Aksesuar</option>
                                                     <option value="Elektronik">Elektronik</option>
                                                     <option value="Ev Gereçleri">Ev Gereçleri</option>
                                                     <option value="Mutfak">Mutfak</option>
-                                                    <option value="Züccaciye">Züccaciye</option>
                                                     <option value="Tekstil">Tekstil</option>
+                                                    <option value="Züccaciye">Züccaciye</option>
                                                 </select>
                                                 <input
                                                     className="glass"
@@ -738,7 +738,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                                                     <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} - {gift.model}</p>
                                                     <span style={{ fontSize: '0.7rem', color: 'var(--primary)', background: 'rgba(99, 102, 241, 0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
-                                                        {gift.category || 'Diğer'}
+                                                        {gift.category || 'Aksesuar'}
                                                     </span>
                                                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                                                         {gift.hepsiburada_url && (
@@ -836,6 +836,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         <div className="card">
                             <FeaturedGifts
                                 eventId={eventDetails?.id}
+                                eventType={eventDetails?.event_type}
                                 onGiftsAdded={fetchGifts}
                             />
                         </div>

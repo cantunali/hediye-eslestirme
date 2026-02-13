@@ -13,12 +13,20 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const { signUp } = useAuth();
+    const [termsConsent, setTermsConsent] = useState(false);
+    const [kvkkConsent, setKvkkConsent] = useState(false);
+    const [marketingConsent, setMarketingConsent] = useState(false);
+    const { signUp, recordConsents } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        if (!termsConsent || !kvkkConsent) {
+            setError('Lütfen Kullanıcı Sözleşmesi ve KVKK metnini onaylayın.');
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError('Şifreler eşleşmiyor.');
@@ -28,8 +36,18 @@ const Signup = () => {
         setLoading(true);
 
         try {
-            const { error } = await signUp(email, password, fullname);
+            const { data, error } = await signUp(email, password, fullname);
             if (error) throw error;
+
+            // Record consents in the database
+            if (data?.user?.id) {
+                await recordConsents(data.user.id, {
+                    terms: termsConsent,
+                    kvkk: kvkkConsent,
+                    marketing: marketingConsent
+                });
+            }
+
             setSuccess(true);
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {
@@ -143,6 +161,48 @@ const Signup = () => {
                         </div>
                     </div>
 
+                    {/* Legal Checkboxes */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                            <input
+                                type="checkbox"
+                                id="termsConsent"
+                                checked={termsConsent}
+                                onChange={(e) => setTermsConsent(e.target.checked)}
+                                style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
+                            </label>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                            <input
+                                type="checkbox"
+                                id="kvkkConsent"
+                                checked={kvkkConsent}
+                                onChange={(e) => setKvkkConsent(e.target.checked)}
+                                style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
+                            </label>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                            <input
+                                type="checkbox"
+                                id="marketingConsent"
+                                checked={marketingConsent}
+                                onChange={(e) => setMarketingConsent(e.target.checked)}
+                                style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
+                            </label>
+                        </div>
+                    </div>
+
                     {error && (
                         <div style={{ padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', fontSize: '0.875rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
                             {error}
@@ -150,7 +210,7 @@ const Signup = () => {
                     )}
 
                     <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }} disabled={loading}>
-                        {loading ? <Loader2 className="animate-spin" size={20} /> : 'Hesap Oluştur'}
+                        {loading ? <Loader2 className="animate-spin" size={20} /> : 'Ücretsiz Hesap Oluştur'}
                         {!loading && <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />}
                     </button>
                 </form>

@@ -25,10 +25,11 @@ export const db = {
             .select('*')
             .eq('email', email)
             .eq('password', password)
+            .eq('is_active', true)
             .single();
 
         if (error || !data) {
-            return { data: null, error: error || { message: 'Invalid credentials' } };
+            return { data: null, error: error || { message: 'Geçersiz bilgiler veya hesap pasif durumda.' } };
         }
         return { data: { user: data }, error: null };
     },
@@ -64,6 +65,56 @@ export const db = {
             .from('users')
             .update({ password: newPassword })
             .eq('email', email);
+        return { data, error };
+    },
+    updateProfile: async (userId, updates) => {
+        const { data, error } = await supabase
+            .from('users')
+            .update(updates)
+            .eq('id', userId)
+            .select()
+            .single();
+        return { data: { user: data }, error };
+    },
+    deactivateAccount: async (userId) => {
+        const { data, error } = await supabase
+            .from('users')
+            .update({ is_active: false })
+            .eq('id', userId);
+        return { data, error };
+    },
+
+    recordConsents: async (userId, consents) => {
+        const entries = Object.entries(consents)
+            .filter(([_, accepted]) => accepted)
+            .map(([type, _]) => ({
+                user_id: userId,
+                consent_type: type,
+                accepted_at: new Date().toISOString()
+            }));
+
+        if (entries.length === 0) return { data: null, error: null };
+
+        const { data, error } = await supabase
+            .from('user_consents')
+            .insert(entries);
+        return { data, error };
+    },
+
+    recordGuestConsents: async (guestId, consents) => {
+        const entries = Object.entries(consents)
+            .filter(([_, accepted]) => accepted)
+            .map(([type, _]) => ({
+                guest_id: guestId,
+                consent_type: type,
+                accepted_at: new Date().toISOString()
+            }));
+
+        if (entries.length === 0) return { data: null, error: null };
+
+        const { data, error } = await supabase
+            .from('guest_consents')
+            .insert(entries);
         return { data, error };
     },
 
@@ -126,7 +177,7 @@ export const db = {
         }
         return { data, error };
     },
-    createEvent: async ({ title, owner_name, owner_email, password, event_date, user_id }) => {
+    createEvent: async ({ title, owner_name, owner_email, password, event_date, user_id, event_type = 'Evlilik - Ev Hediyesi' }) => {
         const { data: eventData, error: eventError } = await supabase
             .from('events')
             .insert([{
@@ -136,7 +187,7 @@ export const db = {
                 password,
                 event_date,
                 user_id, // Link to the logged-in user
-                type: 'general'
+                event_type // Categorization of the event
             }])
             .select()
             .single();
@@ -298,10 +349,12 @@ export const db = {
         return { data, error };
     },
 
-    getFeaturedGifts: async () => {
-        const { data, error } = await supabase
-            .from('featured_gifts')
-            .select('*');
+    getFeaturedGifts: async (eventType = null) => {
+        let query = supabase.from('featured_gifts').select('*');
+        if (eventType) {
+            query = query.eq('event_type', eventType);
+        }
+        const { data, error } = await query;
         return { data, error };
     },
 

@@ -45,6 +45,25 @@ export const AuthProvider = ({ children }) => {
             return db.updatePassword(newPassword, user.id);
         },
         updatePasswordByEmail: (email, newPassword) => db.updatePasswordByEmail(email, newPassword),
+        updateProfile: async (updates) => {
+            if (!user?.id) return { error: { message: 'Not logged in' } };
+            const { data, error } = await db.updateProfile(user.id, updates);
+            if (!error && data?.user) {
+                setUser(data.user);
+                localStorage.setItem('hediye_user', JSON.stringify(data.user));
+            }
+            return { data, error };
+        },
+        deactivateAccount: async () => {
+            if (!user?.id) return { error: { message: 'Not logged in' } };
+            const { error } = await db.deactivateAccount(user.id);
+            if (!error) {
+                localStorage.removeItem('hediye_user');
+                setUser(null);
+            }
+            return { error };
+        },
+        recordConsents: (userId, consents) => db.recordConsents(userId, consents),
         user,
         loading
     };

@@ -1,3 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /yonetim/
+Disallow: /admin/
+Disallow: /davetli-girisi/
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+
 Sitemap: https://hediyeeslestir.netlify.app/sitemap.xml

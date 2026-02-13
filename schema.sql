@@ -8,6 +8,35 @@ DROP TABLE IF EXISTS gifts;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
 
+-- Users Table
+CREATE TABLE public.users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  fullname TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- User Consents Table (for KVKK, Terms, Marketing tracking)
+CREATE TABLE public.user_consents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  consent_type TEXT NOT NULL, -- 'kvkk', 'terms', 'marketing'
+  accepted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  ip_address TEXT,
+  user_agent TEXT
+);
+
+-- Guest Consents Table (for KVKK, Terms, Marketing tracking)
+CREATE TABLE public.guest_consents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  guest_id UUID NOT NULL REFERENCES public.guests(id) ON DELETE CASCADE,
+  consent_type TEXT NOT NULL, -- 'kvkk', 'terms', 'marketing'
+  accepted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  ip_address TEXT,
+  user_agent TEXT
+);
 
 -- Events Table
 CREATE TABLE events (
@@ -16,7 +45,7 @@ CREATE TABLE events (
   owner_email TEXT NOT NULL,
   password TEXT NOT NULL,
   title TEXT NOT NULL UNIQUE,
-  type TEXT DEFAULT 'general',
+  event_type TEXT DEFAULT 'Evlilik - Ev Hediyesi',
   event_date DATE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -73,23 +102,15 @@ CREATE TABLE featured_gifts (
   amazon_url TEXT,
   image_url TEXT,
   category TEXT,
+  event_type TEXT DEFAULT 'Evlilik - Ev Hediyesi',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 -- Sample Data for Featured Gifts
-INSERT INTO featured_gifts (name, brand, model, hepsiburada_url, amazon_url, category) VALUES
-('Filtre Kahve Makinesi', 'Moccamaster', 'KBG Select', 'https://www.hepsiburada.com/ara?q=moccamaster', 'https://www.amazon.com.tr/s?k=moccamaster', 'Elektronik'),
-('Robot Süpürge', 'Roborock', 'Q7 Max', 'https://www.hepsiburada.com/ara?q=roborock+q7', 'https://www.amazon.com.tr/s?k=roborock+q7', 'Ev Gereçleri'),
-('Airfryer XXL', 'Philips', 'HD9650/90', 'https://www.hepsiburada.com/ara?q=philips+airfryer+xxl', 'https://www.amazon.com.tr/s?k=philips+airfryer+xxl', 'Mutfak'),
-('Döküm Tencere Seti', 'Lava', 'Vintage', 'https://www.hepsiburada.com/ara?q=lava+dokum+tencere', 'https://www.amazon.com.tr/s?k=lava+dokum+tencere', 'Mutfak'),
-('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik'),
-('Nevresim Takımı', 'Linens', 'Saten', 'https://www.hepsiburada.com/ara?q=linens+nevresim', 'https://www.amazon.com.tr/s?k=linens+nevresim', 'Tekstil'),
-('Yemek Takımı', 'Kütahya Porselen', '6 Kişilik', 'https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi', 'https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi', 'Züccaciye');
-
-
-CREATE TABLE public.users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  email TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL,
-  fullname TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+INSERT INTO featured_gifts (name, brand, model, hepsiburada_url, amazon_url, category, event_type) VALUES
+('Filtre Kahve Makinesi', 'Moccamaster', 'KBG Select', 'https://www.hepsiburada.com/ara?q=moccamaster', 'https://www.amazon.com.tr/s?k=moccamaster', 'Elektronik', 'Evlilik - Ev Hediyesi'),
+('Robot Süpürge', 'Roborock', 'Q7 Max', 'https://www.hepsiburada.com/ara?q=roborock+q7', 'https://www.amazon.com.tr/s?k=roborock+q7', 'Ev Gereçleri', 'Evlilik - Ev Hediyesi'),
+('Airfryer XXL', 'Philips', 'HD9650/90', 'https://www.hepsiburada.com/ara?q=philips+airfryer+xxl', 'https://www.amazon.com.tr/s?k=philips+airfryer+xxl', 'Mutfak', 'Evlilik - Ev Hediyesi'),
+('Döküm Tencere Seti', 'Lava', 'Vintage', 'https://www.hepsiburada.com/ara?q=lava+dokum+tencere', 'https://www.amazon.com.tr/s?k=lava+dokum+tencere', 'Mutfak', 'Evlilik - Ev Hediyesi'),
+('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik', 'Evlilik - Ev Hediyesi'),
+('Nevresim Takımı', 'Linens', 'Saten', 'https://www.hepsiburada.com/ara?q=linens+nevresim', 'https://www.amazon.com.tr/s?k=linens+nevresim', 'Tekstil', 'Evlilik - Ev Hediyesi'),
+('Yemek Takımı', 'Kütahya Porselen', '6 Kişilik', 'https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi', 'https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi', 'Züccaciye', 'Evlilik - Ev Hediyesi');
