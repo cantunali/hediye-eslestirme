@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User } from 'lucide-react';
+import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User, Link as LinkIcon, Copy, Check } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -32,6 +32,29 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
         fetchUserEvents();
     }, [user]);
 
+    const slugify = (text) => {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-');
+    };
+
+    const [copiedId, setCopiedId] = useState(null);
+
+    const handleCopyLink = (e, event) => {
+        e.stopPropagation();
+        const slug = slugify(event.title);
+        const url = `${window.location.origin}/davetli-girisi/${slug}`;
+
+        navigator.clipboard.writeText(url).then(() => {
+            setCopiedId(event.id);
+            setTimeout(() => setCopiedId(null), 2000);
+        });
+    };
+
     const handleSelectEvent = (event) => {
         onEventSelected({
             id: event.id,
@@ -39,7 +62,8 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
             owner: event.owner_name,
             email: event.owner_email,
             password: event.password,
-            event_date: event.event_date
+            event_date: event.event_date,
+            event_type: event.event_type
         });
     };
 
@@ -106,9 +130,24 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                                             </span>
                                         </div>
                                     </div>
-                                    <button className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
-                                        Yönet <Pencil size={16} style={{ marginLeft: '0.5rem' }} />
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                        <button
+                                            className="btn btn-outline"
+                                            style={{
+                                                padding: '0.5rem 1rem',
+                                                borderColor: copiedId === event.id ? '#4ade80' : 'var(--border)',
+                                                color: copiedId === event.id ? '#4ade80' : 'var(--text)'
+                                            }}
+                                            onClick={(e) => handleCopyLink(e, event)}
+                                            title="Davet Linkini Kopyala"
+                                        >
+                                            {copiedId === event.id ? <Check size={16} /> : <LinkIcon size={16} />}
+                                            {copiedId === event.id ? ' Kopyalandı' : ' Linki Kopyala'}
+                                        </button>
+                                        <button className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
+                                            Yönet <Pencil size={16} style={{ marginLeft: '0.5rem' }} />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

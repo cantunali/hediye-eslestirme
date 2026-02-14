@@ -113,4 +113,6 @@ INSERT INTO featured_gifts (name, brand, model, hepsiburada_url, amazon_url, cat
 ('Döküm Tencere Seti', 'Lava', 'Vintage', 'https://www.hepsiburada.com/ara?q=lava+dokum+tencere', 'https://www.amazon.com.tr/s?k=lava+dokum+tencere', 'Mutfak', 'Evlilik - Ev Hediyesi'),
 ('Akıllı Saat', 'Apple', 'Watch Series 8', 'https://www.hepsiburada.com/ara?q=apple+watch+8', 'https://www.amazon.com.tr/s?k=apple+watch+8', 'Elektronik', 'Evlilik - Ev Hediyesi'),
 ('Nevresim Takımı', 'Linens', 'Saten', 'https://www.hepsiburada.com/ara?q=linens+nevresim', 'https://www.amazon.com.tr/s?k=linens+nevresim', 'Tekstil', 'Evlilik - Ev Hediyesi'),
-('Yemek Takımı', 'Kütahya Porselen', '6 Kişilik', 'https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi', 'https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi', 'Züccaciye', 'Evlilik - Ev Hediyesi');
+('Yemek Takımı', 'Kütahya Porselen', '6 Kişilik', 'https://www.hepsiburada.com/ara?q=kutahya+porselen+yemek+takimi', 'https://www.amazon.com.tr/s?k=kutahya+porselen+yemek+takimi', 'Züccaciye', 'Evlilik - Ev Hediyesi'),
+('Bebek Bezi 4 Numara 120li', 'Prima', 'Premium Care', 'https://www.hepsiburada.com/ara?q=prima+premium+care+4', 'https://www.amazon.com.tr/s?k=prima+premium+care+4', 'Bebek Bezi', 'Kız Bebek Hediyesi'),
+('Bebek Arabası', 'Chicco', 'Lite Way', 'https://www.hepsiburada.com/ara?q=chicco+lite+way', 'https://www.amazon.com.tr/s?k=chicco+lite+way', 'Mobilite', 'Kız Bebek Hediyesi');

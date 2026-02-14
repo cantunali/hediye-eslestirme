@@ -109,7 +109,7 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
     };
 
     const categories = useMemo(() => {
-        const dataCats = featuredGifts.map(g => g.category || 'Aksesuar');
+        const dataCats = featuredGifts.map(g => g.category || 'Diğer');
         const uniqueCats = Array.from(new Set(dataCats)).sort((a, b) => a.localeCompare(b, 'tr'));
         return ['Hepsi', ...uniqueCats];
     }, [featuredGifts]);

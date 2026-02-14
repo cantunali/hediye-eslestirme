@@ -194,27 +194,47 @@ export const db = {
 
         return { data: eventData, error: eventError };
     },
-    verifyGuestLogin: async (eventTitle, email) => {
+    verifyGuestLogin: async (eventTitle, email, name = null) => {
         // 1. Find the event
         const { data: event, error: eventError } = await supabase
             .from('events')
-            .select('id')
+            .select('id, event_type')
             .eq('title', eventTitle)
             .single();
 
         if (eventError || !event) return { success: false, error: 'Etkinlik bulunamadı.' };
 
         // 2. Check if guest exists for this event with this email
-        const { data: guest, error: guestError } = await supabase
+        let { data: guest, error: guestError } = await supabase
             .from('guests')
             .select('*')
             .eq('event_id', event.id)
             .eq('email', email)
             .maybeSingle();
 
+        // 3. If guest doesn't exist and name is provided, auto-register
+        if (!guest && name) {
+            const { data: newGuest, error: createError } = await supabase
+                .from('guests')
+                .insert([{
+                    event_id: event.id,
+                    email: email,
+                    name: name,
+                    password: '' // No password for auto-registered guests
+                }])
+                .select()
+                .single();
+
+            if (createError) return { success: false, error: 'Davetli kaydı oluşturulurken hata oluştu.' };
+            guest = newGuest;
+
+            // Log this as an activity
+            await db.logActivity(event.id, `${name} (${email}) adlı misafir etkinliğe kendiliğinden katıldı.`);
+        }
+
         if (guestError || !guest) return { success: false, error: 'Bu e-posta adresi ile kayıtlı davetli bulunamadı.' };
 
-        return { success: true, guest, eventId: event.id };
+        return { success: true, guest, eventId: event.id, eventType: event.event_type };
     },
     verifyEventPassword: async (title, email, password) => {
         const { data, error } = await supabase

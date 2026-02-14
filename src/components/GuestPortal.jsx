@@ -1,14 +1,27 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
+const getCategoriesByEventType = (type) => {
+    switch (type) {
+        case 'Kız Bebek Hediyesi':
+        case 'Erkek Bebek Hediyesi':
+            return ['Bebek Bezi', 'Giyim', 'Oyuncak', 'Bakım Ürünleri', 'Beslenme', 'Tekstil', 'Mobilya & Güvenlik', 'Aksesuar'];
+        case 'Doğum Günü Hediyesi':
+            return ['Oyuncak', 'Hobi & Oyun', 'Giyim', 'Aksesuar', 'Kitap & Kırtasiye', 'Elektronik', 'Diğer'];
+        default: // Evlilik - Ev Hediyesi
+            return ['Elektronik', 'Ev Gereçleri', 'Mutfak', 'Tekstil', 'Züccaciye', 'Aksesuar', 'Diğer'];
+    }
+};
+
 const STANDARD_CATEGORIES = ['Hepsi', 'Aksesuar', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Tekstil', 'Züccaciye'];
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
+    const { urlSlug } = useParams();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loginData, setLoginData] = useState({ title: '', email: '' });
+    const [loginData, setLoginData] = useState({ title: '', email: '', fullname: '' });
     const [currentGuest, setCurrentGuest] = useState(null);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [loginError, setLoginError] = useState('');
@@ -30,11 +43,38 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [activeCategory, setActiveCategory] = useState('Hepsi');
 
+    // Restore session on mount
+    useEffect(() => {
+        const savedGuest = localStorage.getItem('guest_portal_guest');
+        const savedEvent = localStorage.getItem('guest_portal_event');
+
+        if (savedGuest && savedEvent) {
+            const guest = JSON.parse(savedGuest);
+            const event = JSON.parse(savedEvent);
+            setCurrentGuest(guest);
+            setCurrentEvent(event);
+            setIsLoggedIn(true);
+            fetchEventData(event.id);
+        }
+    }, []);
+
+    // Save session when logged in
+    useEffect(() => {
+        if (isLoggedIn && currentGuest && currentEvent) {
+            localStorage.setItem('guest_portal_guest', JSON.stringify(currentGuest));
+            localStorage.setItem('guest_portal_event', JSON.stringify(currentEvent));
+        } else if (!isLoggedIn) {
+            localStorage.removeItem('guest_portal_guest');
+            localStorage.removeItem('guest_portal_event');
+        }
+    }, [isLoggedIn, currentGuest, currentEvent]);
+
     const categories = useMemo(() => {
-        const cats = new Set(STANDARD_CATEGORIES);
-        // Also add any custom categories that might exist in the data
+        const cats = new Set(['Hepsi']);
+
+        // Only show categories that actually have gifts in this event
         eventGifts.forEach(gift => {
-            if (gift.category && !STANDARD_CATEGORIES.includes(gift.category)) {
+            if (gift.category) {
                 cats.add(gift.category);
             }
         });
@@ -89,6 +129,27 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         setIsDropdownOpen(false);
     };
 
+    // Helper to slugify title for matching
+    const slugify = (text) => {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')     // Replace spaces with -
+            .replace(/[^\w-]+/g, '') // Remove all non-word chars
+            .replace(/--+/g, '-');    // Replace multiple - with single -
+    };
+
+    // Auto-select event if urlSlug is present
+    useEffect(() => {
+        if (urlSlug && availableEvents.length > 0) {
+            const matchedEvent = availableEvents.find(ev => slugify(ev.title) === urlSlug);
+            if (matchedEvent) {
+                handleSelectEvent(matchedEvent.title);
+            }
+        }
+    }, [urlSlug, availableEvents]);
+
     const [termsConsent, setTermsConsent] = useState(false);
     const [kvkkConsent, setKvkkConsent] = useState(false);
     const [marketingConsent, setMarketingConsent] = useState(false);
@@ -96,8 +157,8 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        if (!termsConsent || !kvkkConsent) {
-            setLoginError('Lütfen Kullanıcı Sözleşmesi ve KVKK metnini onaylayın.');
+        if (!termsConsent || !kvkkConsent || !marketingConsent) {
+            setLoginError('Lütfen Kullanıcı Sözleşmesi, KVKK ve Pazarlama İzni metinlerini onaylayın.');
             return;
         }
 
@@ -110,7 +171,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         setIsLoggingIn(true);
 
         try {
-            const { success, guest, eventId, error } = await db.verifyGuestLogin(loginData.title, loginData.email);
+            const { success, guest, eventId, eventType, error } = await db.verifyGuestLogin(loginData.title, loginData.email, loginData.fullname);
 
             if (success) {
                 // Record guest consents
@@ -122,7 +183,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                     });
                 }
 
-                setCurrentEvent({ id: eventId, title: loginData.title });
+                setCurrentEvent({ id: eventId, title: loginData.title, event_type: eventType });
                 setCurrentGuest(guest);
                 setIsLoggedIn(true);
                 fetchEventData(eventId);
@@ -299,6 +360,19 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         )}
                                     </div>
                                 )}
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Ad Soyad</label>
+                                <input
+                                    type="text"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '12px', color: 'white', outline: 'none' }}
+                                    placeholder="Adınız ve Soyadınız"
+                                    value={loginData.fullname}
+                                    onChange={(e) => setLoginData({ ...loginData, fullname: e.target.value })}
+                                    required
+                                />
                             </div>
 
                             <div>

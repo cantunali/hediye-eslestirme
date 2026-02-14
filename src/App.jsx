@@ -430,6 +430,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/ozellikler" element={<div className="section container"><Features onStart={() => window.location.href = '/yonetim/olustur'} /></div>} />
           <Route path="/davetli-girisi" element={<GuestPortal />} />
+          <Route path="/davetli-girisi/:urlSlug" element={<GuestPortal />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -23,8 +23,8 @@ const Signup = () => {
         e.preventDefault();
         setError('');
 
-        if (!termsConsent || !kvkkConsent) {
-            setError('Lütfen Kullanıcı Sözleşmesi ve KVKK metnini onaylayın.');
+        if (!termsConsent || !kvkkConsent || !marketingConsent) {
+            setError('Lütfen Kullanıcı Sözleşmesi, KVKK ve Pazarlama İzni metinlerini onaylayın.');
             return;
         }
 

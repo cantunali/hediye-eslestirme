@@ -5,6 +5,18 @@ import * as XLSX from 'xlsx';
 import { db } from '../services/supabase';
 import FeaturedGifts from './FeaturedGifts';
 
+const getCategoriesByEventType = (type) => {
+    switch (type) {
+        case 'Kız Bebek Hediyesi':
+        case 'Erkek Bebek Hediyesi':
+            return ['Bebek Bezi', 'Giyim', 'Oyuncak', 'Bakım Ürünleri', 'Beslenme', 'Tekstil', 'Mobilya & Güvenlik', 'Aksesuar'];
+        case 'Doğum Günü Hediyesi':
+            return ['Oyuncak', 'Hobi & Oyun', 'Giyim', 'Aksesuar', 'Kitap & Kırtasiye', 'Elektronik', 'Diğer'];
+        default: // Evlilik - Ev Hediyesi
+            return ['Elektronik', 'Ev Gereçleri', 'Mutfak', 'Tekstil', 'Züccaciye', 'Aksesuar', 'Diğer'];
+    }
+};
+
 const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     const [activeTab, setActiveTab] = useState('inventory');
     const [currentEvent, setCurrentEvent] = useState(eventDetails);
@@ -54,12 +66,14 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
         setIsLoadingActivities(false);
     };
 
-    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
+    const eventCategories = useMemo(() => getCategoriesByEventType(currentEvent?.event_type), [currentEvent?.event_type]);
+
+    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
     const [newGuest, setNewGuest] = useState({ name: '', email: '' });
     const [isUpdatingBulk, setIsUpdatingBulk] = useState(false);
     const [bulkMessage, setBulkMessage] = useState('');
     const [editingGiftId, setEditingGiftId] = useState(null);
-    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
+    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
     const [sortBy, setSortBy] = useState('name'); // 'name' or 'status'
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
@@ -92,7 +106,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             const { data, error } = await db.addGift(eventDetails.id, newGift);
             if (data) {
                 setGifts([...gifts, data]);
-                setNewGift({ name: '', brand: '', model: '', category: 'Aksesuar', hepsiburada_url: '', amazon_url: '' });
+                setNewGift({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
             }
         }
     };
@@ -624,12 +638,9 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         value={newGift.category}
                                         onChange={e => setNewGift({ ...newGift, category: e.target.value })}
                                     >
-                                        <option value="Aksesuar">Aksesuar</option>
-                                        <option value="Elektronik">Elektronik</option>
-                                        <option value="Ev Gereçleri">Ev Gereçleri</option>
-                                        <option value="Mutfak">Mutfak</option>
-                                        <option value="Tekstil">Tekstil</option>
-                                        <option value="Züccaciye">Züccaciye</option>
+                                        {eventCategories.map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <button className="btn btn-primary" onClick={addGift}><Plus size={20} /></button>
@@ -710,12 +721,9 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                                     value={editFormData.category}
                                                     onChange={e => setEditFormData({ ...editFormData, category: e.target.value })}
                                                 >
-                                                    <option value="Aksesuar">Aksesuar</option>
-                                                    <option value="Elektronik">Elektronik</option>
-                                                    <option value="Ev Gereçleri">Ev Gereçleri</option>
-                                                    <option value="Mutfak">Mutfak</option>
-                                                    <option value="Tekstil">Tekstil</option>
-                                                    <option value="Züccaciye">Züccaciye</option>
+                                                    {eventCategories.map(cat => (
+                                                        <option key={cat} value={cat}>{cat}</option>
+                                                    ))}
                                                 </select>
                                                 <input
                                                     className="glass"
