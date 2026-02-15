@@ -5,6 +5,7 @@ import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
+import { slugify } from '../utils/helpers';
 
 const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     const { user } = useAuth();
@@ -32,15 +33,6 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
         fetchUserEvents();
     }, [user]);
 
-    const slugify = (text) => {
-        return text
-            .toString()
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, '')
-            .replace(/--+/g, '-');
-    };
 
     const [copiedId, setCopiedId] = useState(null);
 

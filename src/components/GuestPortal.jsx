@@ -4,6 +4,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
+import { slugify } from '../utils/helpers';
 
 const getCategoriesByEventType = (type) => {
     switch (type) {
@@ -132,16 +133,6 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         setIsDropdownOpen(false);
     };
 
-    // Helper to slugify title for matching
-    const slugify = (text) => {
-        return text
-            .toString()
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, '-')     // Replace spaces with -
-            .replace(/[^\w-]+/g, '') // Remove all non-word chars
-            .replace(/--+/g, '-');    // Replace multiple - with single -
-    };
 
     // Auto-select event if urlSlug is present
     useEffect(() => {

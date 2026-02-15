@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../services/supabase';
-import { Users, Calendar, Gift, Activity, ArrowLeft, Shield, ExternalLink, Clock } from 'lucide-react';
+import { Users, Calendar, Gift, Activity, ArrowLeft, Shield, ExternalLink, Clock, FileSpreadsheet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { slugify } from '../utils/helpers';
+import * as XLSX from 'xlsx';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -39,8 +41,8 @@ const AdminDashboard = () => {
         try {
             const [statsRes, eventsRes, activitiesRes] = await Promise.all([
                 db.getGlobalStats(),
-                db.getAllEvents(20),
-                db.getPlatformActivities(15)
+                db.getAllEvents(50),
+                db.getPlatformActivities(100)
             ]);
 
             if (statsRes.error) throw statsRes.error;
@@ -53,6 +55,37 @@ const AdminDashboard = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const exportEventsToExcel = () => {
+        if (!events || events.length === 0) return;
+
+        const worksheet = XLSX.utils.json_to_sheet(events.map(e => ({
+            'Başlık': e.title,
+            'Sahibi': e.owner_name,
+            'E-posta': e.owner_email,
+            'Etkinlik Tarihi': e.event_date ? new Date(e.event_date).toLocaleDateString('tr-TR') : '-',
+            'Oluşturulma': new Date(e.created_at).toLocaleDateString('tr-TR'),
+            'Tip': e.event_type || 'Evlilik'
+        })));
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Etkinlikler");
+        XLSX.writeFile(workbook, `Sistem_Etkinlik_Listesi_${new Date().toLocaleDateString('tr-TR')}.xlsx`);
+    };
+
+    const exportActivitiesToExcel = () => {
+        if (!activities || activities.length === 0) return;
+
+        const worksheet = XLSX.utils.json_to_sheet(activities.map(a => ({
+            'Tarih': new Date(a.created_at).toLocaleString('tr-TR'),
+            'Etkinlik': a.events?.title || 'Bilinmeyen',
+            'İçerik': a.content
+        })));
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Hareketler");
+        XLSX.writeFile(workbook, `Sistem_Hareket_Loglari_${new Date().toLocaleDateString('tr-TR')}.xlsx`);
     };
 
     if (!isAuthorized) {
@@ -222,7 +255,7 @@ const AdminDashboard = () => {
                                             <button
                                                 className="btn-outline"
                                                 style={{ padding: '0.4rem', borderRadius: '8px' }}
-                                                onClick={() => { }}
+                                                onClick={() => window.open(`/davetli-girisi/${slugify(event.title)}`, '_blank')}
                                             >
                                                 <ExternalLink size={14} />
                                             </button>
@@ -231,6 +264,15 @@ const AdminDashboard = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                    <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+                        <button
+                            className="btn btn-secondary"
+                            style={{ fontSize: '0.85rem', width: '100%', justifyContent: 'center' }}
+                            onClick={exportEventsToExcel}
+                        >
+                            <FileSpreadsheet size={16} /> Tüm Etkinlikleri Excel'e Aktar
+                        </button>
                     </div>
                 </div>
 
@@ -259,6 +301,15 @@ const AdminDashboard = () => {
                         ) : (
                             <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Henüz bir hareket bulunmuyor.</p>
                         )}
+                    </div>
+                    <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+                        <button
+                            className="btn btn-secondary"
+                            style={{ fontSize: '0.85rem', width: '100%', justifyContent: 'center' }}
+                            onClick={exportActivitiesToExcel}
+                        >
+                            <FileSpreadsheet size={16} /> Tüm Hareketleri Excel'e Aktar
+                        </button>
                     </div>
                 </div>
             </div>

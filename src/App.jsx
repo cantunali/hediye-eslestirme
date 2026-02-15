@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Gift, Users, Package, ArrowRight, Star, Heart, Menu, X, Instagram, Twitter, Facebook, Settings } from 'lucide-react';
 import logo from './assets/logo.jpg';
 import './index.css';
+import { db } from './services/supabase';
 import GuestPortal from './components/GuestPortal';
 import OwnerDashboard from './components/OwnerDashboard';
 import CreateEvent from './components/CreateEvent';
@@ -279,6 +280,19 @@ const Footer = () => {
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({ users: 0, events: 0, gifts: 0, guests: 0 });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await db.getGlobalStats();
+        if (data) setStats(data);
+      } catch (err) {
+        console.error('Stats fetch error:', err);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <div className="animate-fade-in">
@@ -351,23 +365,23 @@ const LandingPage = () => {
           <div className="grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             <div className="card animate-reveal stagger-1" style={{ textAlign: 'center' }}>
               <Package size={32} className="glow-soft" style={{ color: 'var(--accent-sharp)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>42</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
+              <h2 style={{ marginBottom: '0.5rem' }}>{stats.users || 0}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Kullanıcı Sayısı</p>
             </div>
             <div className="card animate-reveal stagger-2" style={{ textAlign: 'center' }}>
               <Users size={32} style={{ color: 'var(--secondary)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>85</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
+              <h2 style={{ marginBottom: '0.5rem' }}>{stats.events || 0}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Toplam Etkinlik</p>
             </div>
             <div className="card animate-reveal stagger-3" style={{ textAlign: 'center' }}>
               <Gift size={32} style={{ color: 'var(--accent)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>18</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Alınan Hediyeler</p>
+              <h2 style={{ marginBottom: '0.5rem' }}>{stats.gifts || 0}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
             </div>
             <div className="card animate-reveal stagger-4" style={{ textAlign: 'center' }}>
               <Heart size={32} style={{ color: '#ef4444', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>24</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Kalan Hediyeler</p>
+              <h2 style={{ marginBottom: '0.5rem' }}>{stats.guests || 0}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
             </div>
           </div>
         </div>
