@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User, Link as LinkIcon, Copy, Check } from 'lucide-react';
+import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User, Link as LinkIcon, Copy, Check, MessageCircle, Twitter, Share2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -45,7 +45,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     const [copiedId, setCopiedId] = useState(null);
 
     const handleCopyLink = (e, event) => {
-        e.stopPropagation();
+        if (e) e.stopPropagation();
         const slug = slugify(event.title);
         const url = `${window.location.origin}/davetli-girisi/${slug}`;
 
@@ -53,6 +53,35 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
             setCopiedId(event.id);
             setTimeout(() => setCopiedId(null), 2000);
         });
+    };
+
+    const handleShare = (e, platform, event) => {
+        e.stopPropagation();
+        const slug = slugify(event.title);
+        const url = `${window.location.origin}/davetli-girisi/${slug}`;
+        const text = `${event.title} etkinliğimizin hediye listesine buradan ulaşabilirsiniz: `;
+
+        switch (platform) {
+            case 'whatsapp':
+                window.open(`https://wa.me/?text=${encodeURIComponent(text + url)}`, '_blank');
+                break;
+            case 'twitter':
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                break;
+            case 'share':
+                if (navigator.share) {
+                    navigator.share({
+                        title: event.title,
+                        text: text,
+                        url: url,
+                    }).catch(console.error);
+                } else {
+                    handleCopyLink(null, event);
+                }
+                break;
+            default:
+                break;
+        }
     };
 
     const handleSelectEvent = (event) => {
@@ -130,13 +159,40 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '0.25rem', borderRight: '1px solid var(--border)', paddingRight: '0.75rem', marginRight: '0.25rem' }}>
+                                            <button
+                                                className="btn-icon"
+                                                onClick={(e) => handleShare(e, 'whatsapp', event)}
+                                                title="WhatsApp'ta Paylaş"
+                                                style={{ color: '#25D366' }}
+                                            >
+                                                <MessageCircle size={18} />
+                                            </button>
+                                            <button
+                                                className="btn-icon"
+                                                onClick={(e) => handleShare(e, 'twitter', event)}
+                                                title="Twitter'da Paylaş"
+                                                style={{ color: '#1DA1F2' }}
+                                            >
+                                                <Twitter size={18} />
+                                            </button>
+                                            <button
+                                                className="btn-icon"
+                                                onClick={(e) => handleShare(e, 'share', event)}
+                                                title="Paylaş"
+                                                style={{ color: 'var(--primary)' }}
+                                            >
+                                                <Share2 size={18} />
+                                            </button>
+                                        </div>
                                         <button
                                             className="btn btn-outline"
                                             style={{
                                                 padding: '0.5rem 1rem',
                                                 borderColor: copiedId === event.id ? '#4ade80' : 'var(--border)',
-                                                color: copiedId === event.id ? '#4ade80' : 'var(--text)'
+                                                color: copiedId === event.id ? '#4ade80' : 'var(--text)',
+                                                fontSize: '0.875rem'
                                             }}
                                             onClick={(e) => handleCopyLink(e, event)}
                                             title="Davet Linkini Kopyala"
@@ -144,7 +200,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                                             {copiedId === event.id ? <Check size={16} /> : <LinkIcon size={16} />}
                                             {copiedId === event.id ? ' Kopyalandı' : ' Linki Kopyala'}
                                         </button>
-                                        <button className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
+                                        <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
                                             Yönet <Pencil size={16} style={{ marginLeft: '0.5rem' }} />
                                         </button>
                                     </div>
@@ -176,6 +232,20 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                     transform: translateY(-2px);
                     background: rgba(255, 255, 255, 0.03);
                     border-color: var(--primary) !important;
+                }
+                .btn-icon {
+                    background: none;
+                    border: none;
+                    padding: 0.5rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 8px;
+                    transition: background 0.2s ease;
+                }
+                .btn-icon:hover {
+                    background: rgba(255, 255, 255, 0.05);
                 }
                 @media (max-width: 768px) {
                     .manage-grid {

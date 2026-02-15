@@ -283,7 +283,7 @@ const LandingPage = () => {
   return (
     <div className="animate-fade-in">
       <Helmet>
-        <title>HediyeEşle - Hayalindeki Hediyeleri Sevdiklerinle Buluştur</title>
+        <title>HediyeEşle - Sevdiklerinle Hayallerindeki Hediyeleri Buluştur</title>
         <meta name="description" content="Düğün, doğum günü veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla." />
       </Helmet>
 
@@ -291,8 +291,8 @@ const LandingPage = () => {
       <section className="section hero-section" style={{ textAlign: 'center' }}>
         <div className="container">
           <h1 className="hero-title animate-reveal stagger-1">
-            Hayalindeki <span className="gradient-text">Hediyeleri</span> <br />
-            Sevdiklerinle Buluştur
+            Sevdiklerinle <span className="gradient-text">Hayallerindeki Hediyeleri</span> <br />
+            Buluştur
           </h1>
           <p className="animate-reveal stagger-2" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 2.5rem', lineHeight: '1.6' }}>
             Düğün, doğum günü veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla.

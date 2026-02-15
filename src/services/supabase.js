@@ -118,6 +118,44 @@ export const db = {
         return { data, error };
     },
 
+    checkGuestConsentsByEmailAndName: async (email, name, eventId) => {
+        if (!eventId) return { accepted: false };
+
+        // Find if this specific guest record exists for THIS event
+        const { data: guest, error: guestError } = await supabase
+            .from('guests')
+            .select('id')
+            .eq('event_id', eventId)
+            .eq('email', email)
+            .eq('name', name)
+            .maybeSingle();
+
+        if (guestError || !guest) return { accepted: false };
+
+        // Check if THIS guest ID has recorded consents
+        const { data: consents, error: consentError } = await supabase
+            .from('guest_consents')
+            .select('consent_type')
+            .eq('guest_id', guest.id);
+
+        if (consentError || !consents) return { accepted: false };
+
+        // We look for 'terms', 'kvkk', and 'marketing'
+        const types = consents.map(c => c.consent_type);
+        const hasTerms = types.includes('terms');
+        const hasKvkk = types.includes('kvkk');
+        const hasMarketing = types.includes('marketing');
+
+        return {
+            accepted: hasTerms && hasKvkk && hasMarketing,
+            consents: {
+                terms: hasTerms,
+                kvkk: hasKvkk,
+                marketing: hasMarketing
+            }
+        };
+    },
+
     getUserEvents: async (userId) => {
         const { data, error } = await supabase
             .from('events')

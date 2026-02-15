@@ -153,6 +153,32 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [termsConsent, setTermsConsent] = useState(false);
     const [kvkkConsent, setKvkkConsent] = useState(false);
     const [marketingConsent, setMarketingConsent] = useState(false);
+    const [isAutoConsented, setIsAutoConsented] = useState(false);
+
+    // Auto-check consents when email and name are entered
+    useEffect(() => {
+        const checkConsents = async () => {
+            if (loginData.email && loginData.fullname && loginData.email.includes('@') && loginData.title) {
+                // Find current event ID
+                const matchedEvent = availableEvents.find(ev => ev.title === loginData.title);
+                if (matchedEvent) {
+                    const result = await db.checkGuestConsentsByEmailAndName(loginData.email, loginData.fullname, matchedEvent.id);
+                    if (result.accepted) {
+                        setTermsConsent(true);
+                        setKvkkConsent(true);
+                        setMarketingConsent(true);
+                        setIsAutoConsented(true);
+                        return;
+                    }
+                }
+            }
+            // Reset if not auto-consented
+            setIsAutoConsented(false);
+        };
+
+        const timer = setTimeout(checkConsents, 1000); // Debounce
+        return () => clearTimeout(timer);
+    }, [loginData.email, loginData.fullname, loginData.title, availableEvents]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -389,7 +415,12 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                             </div>
 
                             {/* Legal Checkboxes */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.5rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.5rem', opacity: isAutoConsented ? 0.7 : 1 }}>
+                                {isAutoConsented && (
+                                    <div style={{ fontSize: '0.75rem', color: '#4ade80', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
+                                        <CheckCircle2 size={14} /> Bilgileriniz doğrulandı, onaylarınız otomatik uygulandı.
+                                    </div>
+                                )}
                                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                                     <input
                                         type="checkbox"
@@ -397,6 +428,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         checked={termsConsent}
                                         onChange={(e) => setTermsConsent(e.target.checked)}
                                         style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                        disabled={isAutoConsented}
                                     />
                                     <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
                                         <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
@@ -410,6 +442,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         checked={kvkkConsent}
                                         onChange={(e) => setKvkkConsent(e.target.checked)}
                                         style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                        disabled={isAutoConsented}
                                     />
                                     <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
                                         <Link to="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
@@ -423,6 +456,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         checked={marketingConsent}
                                         onChange={(e) => setMarketingConsent(e.target.checked)}
                                         style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                        disabled={isAutoConsented}
                                     />
                                     <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
                                         <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
