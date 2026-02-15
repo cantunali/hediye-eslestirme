@@ -24,6 +24,10 @@ import ResetPassword from './components/ResetPassword';
 import SmtpTest from './components/SmtpTest';
 import Profile from './components/Profile';
 import AdminDashboard from './components/AdminDashboard';
+import Blog from './components/Blog';
+import BebekHediyesiBlog from './components/BlogPosts/BebekHediyesiBlog';
+import GenelHediyeRehberiBlog from './components/BlogPosts/GenelHediyeRehberiBlog';
+import DugunHediyesiBlog from './components/BlogPosts/DugunHediyesiBlog';
 import { useAuth } from './context/AuthContext';
 
 const Navbar = () => {
@@ -231,6 +235,7 @@ const Footer = () => {
           <h4 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Kurumsal</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link to="/hakkimizda" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Hakkımızda</Link>
+            <Link to="/blog" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Blog</Link>
             <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>İletişim</Link>
             <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Sıkça Sorulan Sorular</Link>
             <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Gizlilik Politikası</Link>
@@ -456,6 +461,10 @@ function App() {
           <Route path="/pazarlama-izni" element={<MarketingConsent />} />
           <Route path="/profil" element={<Profile />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026" element={<BebekHediyesiBlog />} />
+          <Route path="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi" element={<GenelHediyeRehberiBlog />} />
+          <Route path="/blog/dugun-hediyesi-karmasasina-son-akilli-liste-sistemi" element={<DugunHediyesiBlog />} />
         </Routes>
       </main>
       <Footer />
