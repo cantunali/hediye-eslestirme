@@ -63,6 +63,7 @@ CREATE TABLE gifts (
   status TEXT DEFAULT 'available', -- 'available', 'reserved'
   category TEXT DEFAULT 'Diğer',
   reserved_by UUID,
+  reservation_message TEXT,
   group_id UUID,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

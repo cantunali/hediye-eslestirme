@@ -188,18 +188,20 @@ export const db = {
         const { data, error } = await supabase.from('gifts').select('*').eq('event_id', eventId);
         return { data, error };
     },
-    reserveGift: async (giftId, guestId, eventId, content, groupId = null) => {
+    reserveGift: async (giftId, guestId, eventId, content, message = null, groupId = null) => {
         const { data, error } = await supabase
             .from('gifts')
             .update({
                 status: 'reserved',
                 reserved_by: guestId,
+                reservation_message: message,
                 group_id: groupId
             })
             .eq('id', giftId);
 
         if (!error && eventId && content) {
-            await db.logActivity(eventId, content);
+            const finalContent = message ? `${content} - Mesaj: ${message}` : content;
+            await db.logActivity(eventId, finalContent);
         }
         return { data, error };
     },

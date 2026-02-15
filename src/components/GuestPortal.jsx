@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, CreditCard, Landmark, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
+import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 
@@ -32,16 +33,18 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
-    const [selectedGift, setSelectedGift] = useState(null);
-    const [showPaymentModal, setShowPaymentModal] = useState(false);
-    const [paymentData, setPaymentData] = useState({ amount: '', cardNumber: '', expiry: '', cvv: '', cardHolder: '' });
-    const [isPaying, setIsPaying] = useState(false);
+    const [selectedGiftId, setSelectedGiftId] = useState(null);
+    const [showReservationModal, setShowReservationModal] = useState(false);
+    const [reservationMessage, setReservationMessage] = useState('');
+    const [isReserving, setIsReserving] = useState(false);
 
     const [eventGifts, setEventGifts] = useState([]);
     const [eventGuests, setEventGuests] = useState([]);
     const [currentEvent, setCurrentEvent] = useState(null);
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [activeCategory, setActiveCategory] = useState('Hepsi');
+
+    const activeGift = useMemo(() => eventGifts.find(g => g.id === selectedGiftId), [eventGifts, selectedGiftId]);
 
     // Restore session on mount
     useEffect(() => {
@@ -248,45 +251,47 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         }
     };
 
-    const handleSelectGift = async (giftId) => {
-        const gift = eventGifts.find(g => g.id === giftId);
-        const { error } = await db.reserveGift(
-            giftId,
-            currentGuest.id,
-            currentEvent.id,
-            `${currentGuest.name} adlı davetli ${gift.name} adlı hediyeyi ayırdı.`
-        );
-        if (!error) {
-            setEventGifts(prev => {
-                const updated = prev.map(g => g.id === giftId ? { ...g, status: 'reserved', reserved_by: currentGuest.id } : g);
-                return [...updated].sort((a, b) => {
-                    if (a.status === 'available' && b.status !== 'available') return -1;
-                    if (a.status !== 'available' && b.status === 'available') return 1;
-                    return a.name.localeCompare(b.name);
-                });
-            });
-            alert('Hediye başarıyla ayrıldı!');
-        }
+    const handleReservationInit = (gift) => {
+        if (!gift || !gift.id) return;
+        setSelectedGiftId(gift.id);
+        setReservationMessage('');
+        setShowReservationModal(true);
     };
 
-    const handlePaymentSubmit = async (e) => {
-        e.preventDefault();
-        setIsPaying(true);
+    const handleConfirmReservation = async () => {
+        if (!activeGift || !currentGuest || !currentEvent) return;
 
-        setTimeout(async () => {
-            const { error } = await db.logActivity(
+        setIsReserving(true);
+        try {
+            const { error } = await db.reserveGift(
+                activeGift.id,
+                currentGuest.id,
                 currentEvent.id,
-                `${currentGuest.name} adlı davetli ${selectedGift.name} için ${paymentData.amount} TL nakit katkıda bulundu.`
+                `${currentGuest.name} adlı davetli ${activeGift.name} adlı hediyeyi ayırdı.`,
+                reservationMessage
             );
 
             if (!error) {
-                setShowPaymentModal(false);
-                setSelectedGift(null);
-                setPaymentData({ amount: '', cardNumber: '', expiry: '', cvv: '', cardHolder: '' });
-                alert('Ödemeniz başarıyla alındı! Katkınız etkinlik sahibine iletildi.');
+                setEventGifts(prev => {
+                    const updated = prev.map(g => g.id === activeGift.id ? { ...g, status: 'reserved', reserved_by: currentGuest.id } : g);
+                    return [...updated].sort((a, b) => {
+                        if (a.status === 'available' && b.status !== 'available') return -1;
+                        if (a.status !== 'available' && b.status === 'available') return 1;
+                        return (a.name || '').localeCompare(b.name || '');
+                    });
+                });
+                alert('Tebrikler! Hediye başarıyla ayrıldı.');
+                setShowReservationModal(false);
+                setSelectedGiftId(null);
+            } else {
+                alert('Hediye ayrılırken bir hata oluştu: ' + (error.message || 'Bilinmeyen hata'));
             }
-            setIsPaying(false);
-        }, 2000);
+        } catch (err) {
+            console.error('Reservation error:', err);
+            alert('Bir bağlantı hatası oluştu.');
+        } finally {
+            setIsReserving(false);
+        }
     };
 
     if (!isLoggedIn) {
@@ -549,7 +554,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '800px', overflowY: 'auto', paddingRight: '0.5rem' }} className="no-scrollbar">
                     {filteredGifts.map((gift) => (
                         <div key={gift.id} className="glass" style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: gift.status === 'reserved' ? 0.7 : 1 }}>
                             <div style={{ width: '250px' }}>
@@ -603,25 +608,13 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         Alındı
                                     </span>
                                 ) : (
-                                    <>
-                                        <button
-                                            className="btn btn-primary"
-                                            style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
-                                            onClick={() => handleSelectGift(gift.id)}
-                                        >
-                                            Hediyeyi Al
-                                        </button>
-                                        <button
-                                            className="btn btn-outline"
-                                            style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
-                                            onClick={() => {
-                                                setSelectedGift(gift);
-                                                setShowPaymentModal(true);
-                                            }}
-                                        >
-                                            Nakit Katıl
-                                        </button>
-                                    </>
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ fontSize: '0.875rem', padding: '0.6rem 1.2rem' }}
+                                        onClick={() => handleReservationInit(gift)}
+                                    >
+                                        Hediyeyi Al
+                                    </button>
                                 )}
                             </div>
                         </div>
@@ -629,8 +622,8 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                 </div>
             </div>
 
-            {/* Payment Modal */}
-            {showPaymentModal && selectedGift && (
+            {/* Reservation Message Modal */}
+            {showReservationModal && activeGift && createPortal(
                 <div style={{
                     position: 'fixed',
                     top: 0,
@@ -641,12 +634,21 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    zIndex: 1000,
+                    zIndex: 9999,
                     padding: '1rem'
                 }}>
-                    <div className="card animate-fade-in" style={{ maxWidth: '500px', width: '100%', position: 'relative', border: '1px solid var(--primary)' }}>
+                    <div style={{
+                        maxWidth: '500px',
+                        width: '100%',
+                        position: 'relative',
+                        background: '#1e293b',
+                        border: '1px solid var(--primary)',
+                        borderRadius: '16px',
+                        padding: '2rem',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                    }}>
                         <button
-                            onClick={() => setShowPaymentModal(false)}
+                            onClick={() => setShowReservationModal(false)}
                             style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
                         >
                             <X size={24} />
@@ -654,95 +656,70 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
 
                         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                             <div style={{ width: '48px', height: '48px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
-                                <CreditCard size={24} style={{ color: 'var(--primary)' }} />
+                                <Gift size={24} style={{ color: 'var(--primary)' }} />
                             </div>
-                            <h2 style={{ marginBottom: '0.5rem' }}>Nakit Katıl</h2>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{selectedGift.name} için ödeme yapın</p>
+                            <h2 style={{ marginBottom: '0.5rem', color: 'white' }}>Hediyeyi Ayır</h2>
+                            <p style={{ color: 'var(--primary)', fontSize: '0.9rem', fontWeight: '500' }}>{activeGift.name || 'Hediye Detayı'}</p>
                         </div>
 
-                        <form onSubmit={handlePaymentSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Katkı Tutarı (TL)</label>
-                                <input
-                                    type="number"
-                                    className="glass"
-                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', color: 'white' }}
-                                    placeholder="Örn: 1000"
-                                    value={paymentData.amount}
-                                    onChange={(e) => setPaymentData({ ...paymentData, amount: e.target.value })}
-                                    required
-                                />
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <div style={{
+                                padding: '1rem',
+                                borderRadius: '12px',
+                                borderLeft: '4px solid #f59e0b',
+                                background: 'rgba(245, 158, 11, 0.1)',
+                                marginBottom: '1.5rem'
+                            }}>
+                                <p style={{ fontSize: '0.85rem', color: '#fbbf24', margin: 0, lineHeight: '1.5' }}>
+                                    ⚠️ <strong>Önemli:</strong> Eğer bu hediyeyi ortak alıyorsanız, lütfen diğer arkadaşlarınızın isimlerini de mesaj bölümünde belirtiniz.
+                                </p>
                             </div>
 
-                            <div className="glass" style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%)' }}>
-                                <div style={{ marginBottom: '1.25rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Kart Üzerindeki İsim</label>
-                                    <input
-                                        className="glass"
-                                        style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
-                                        placeholder="AD SOYAD"
-                                        value={paymentData.cardHolder}
-                                        onChange={(e) => setPaymentData({ ...paymentData, cardHolder: e.target.value.toUpperCase() })}
-                                        required
-                                    />
-                                </div>
-                                <div style={{ marginBottom: '1.25rem' }}>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Kart Numarası</label>
-                                    <input
-                                        className="glass"
-                                        style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white', letterSpacing: '2px' }}
-                                        placeholder="0000 0000 0000 0000"
-                                        maxLength="19"
-                                        value={paymentData.cardNumber}
-                                        onChange={(e) => setPaymentData({ ...paymentData, cardNumber: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Sön Kullanma</label>
-                                        <input
-                                            className="glass"
-                                            style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
-                                            placeholder="AA/YY"
-                                            maxLength="5"
-                                            value={paymentData.expiry}
-                                            onChange={(e) => setPaymentData({ ...paymentData, expiry: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', color: '#a5b4fc', textTransform: 'uppercase', marginBottom: '0.25rem' }}>CVV</label>
-                                        <input
-                                            className="glass"
-                                            style={{ width: '100%', padding: '0.5rem', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white' }}
-                                            placeholder="000"
-                                            maxLength="3"
-                                            value={paymentData.cvv}
-                                            onChange={(e) => setPaymentData({ ...paymentData, cvv: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>
+                                Etkinlik sahibine bir mesaj bırakın (Opsiyonel)
+                            </label>
+                            <textarea
+                                style={{
+                                    width: '100%',
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    color: 'white',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                    minHeight: '120px',
+                                    resize: 'none',
+                                    outline: 'none',
+                                    fontSize: '1rem',
+                                    border: '1px solid var(--border)'
+                                }}
+                                placeholder="Tebrik mesajınızı veya ortak alım detaylarını buraya yazabilirsiniz..."
+                                value={reservationMessage}
+                                onChange={(e) => setReservationMessage(e.target.value)}
+                            />
+                        </div>
 
+                        <div style={{ display: 'flex', gap: '1rem' }}>
                             <button
-                                type="submit"
-                                className="btn btn-primary"
-                                style={{ width: '100%', justifyContent: 'center', padding: '1rem', marginTop: '1rem' }}
-                                disabled={isPaying}
+                                className="btn btn-outline"
+                                style={{ flex: 1, justifyContent: 'center' }}
+                                onClick={() => setShowReservationModal(false)}
+                                disabled={isReserving}
                             >
-                                {isPaying ? 'İşlem Yapılıyor...' : `${paymentData.amount ? paymentData.amount + ' TL' : ''} Ödemeyi Tamamla`}
+                                Vazgeç
                             </button>
-
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                                <ShieldCheck size={14} /> 256-bit SSL Güvenli Ödeme
-                            </div>
-                        </form>
+                            <button
+                                className="btn btn-primary"
+                                style={{ flex: 2, justifyContent: 'center' }}
+                                onClick={handleConfirmReservation}
+                                disabled={isReserving}
+                            >
+                                {isReserving ? 'İşleniyor...' : 'Hediyeyi Al ve Kaydet'}
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
-        </div>
+        </div >
     );
 };
 
