@@ -250,6 +250,7 @@ export const db = {
             .select('*')
             .eq('event_id', event.id)
             .eq('email', email)
+            .eq('is_active', true)
             .maybeSingle();
 
         // 3. If guest doesn't exist and name is provided, auto-register
@@ -368,6 +369,13 @@ export const db = {
             .single();
         return { data, error };
     },
+    softDeleteGuest: async (guestId) => {
+        const { data, error } = await supabase
+            .from('guests')
+            .update({ is_active: false })
+            .eq('id', guestId);
+        return { data, error };
+    },
     removeGuest: async (guestId) => {
         const { data, error } = await supabase
             .from('guests')
@@ -478,6 +486,26 @@ export const db = {
             .select('*, events(title)')
             .order('created_at', { ascending: false })
             .limit(limit);
+        return { data, error };
+    },
+
+    // Admin Config Methods
+    verifyAdminPassword: async (password) => {
+        const { data, error } = await supabase
+            .from('admin_config')
+            .select('value')
+            .eq('key', 'admin_password')
+            .single();
+
+        if (error) return { success: false, error };
+        return { success: data.value === password, error: null };
+    },
+
+    updateAdminPassword: async (newPassword) => {
+        const { data, error } = await supabase
+            .from('admin_config')
+            .update({ value: newPassword, updated_at: new Date().toISOString() })
+            .eq('key', 'admin_password');
         return { data, error };
     }
 };

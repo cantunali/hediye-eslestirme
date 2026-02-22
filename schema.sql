@@ -7,6 +7,22 @@ DROP TABLE IF EXISTS guests;
 DROP TABLE IF EXISTS gifts;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user_consents;
+DROP TABLE IF EXISTS guest_consents;
+DROP TABLE IF EXISTS activities;
+DROP TABLE IF EXISTS featured_gifts;
+DROP TABLE IF EXISTS admin_config;
+
+-- Admin Configuration Table
+CREATE TABLE public.admin_config (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Seed initial admin password
+INSERT INTO public.admin_config (key, value) VALUES ('admin_password', 'admin123');
+
 
 -- Users Table
 CREATE TABLE public.users (
@@ -75,6 +91,7 @@ CREATE TABLE guests (
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   password TEXT NOT NULL,
+  is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -85,6 +102,8 @@ CREATE TABLE groups (
   name TEXT NOT NULL,
   members JSONB DEFAULT '[]',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  
+  
 );-- Activities Table
 CREATE TABLE activities (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

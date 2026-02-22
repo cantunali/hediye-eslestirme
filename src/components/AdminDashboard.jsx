@@ -18,6 +18,13 @@ const AdminDashboard = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [loginData, setLoginData] = useState({ username: '', password: '' });
     const [authError, setAuthError] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+    // Password change state
+    const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
+    const [passError, setPassError] = useState('');
+    const [passSuccess, setPassSuccess] = useState('');
+    const [isUpdatingPass, setIsUpdatingPass] = useState(false);
 
     useEffect(() => {
         if (isAuthorized) {
@@ -25,14 +32,67 @@ const AdminDashboard = () => {
         }
     }, [isAuthorized]);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Simple hardcoded check - change this to env variables or specific table in production
-        if (loginData.username === 'admin' && loginData.password === 'admin123') {
-            setIsAuthorized(true);
-            setAuthError('');
-        } else {
-            setAuthError('Geçersiz kullanıcı adı veya şifre.');
+        setAuthError('');
+        setIsLoggingIn(true);
+
+        try {
+            // Username is still 'admin' for now, but password is dynamic
+            if (loginData.username !== 'admin') {
+                setAuthError('Geçersiz kullanıcı adı.');
+                return;
+            }
+
+            const { success, error } = await db.verifyAdminPassword(loginData.password);
+            if (success) {
+                setIsAuthorized(true);
+            } else {
+                setAuthError(error ? 'Sistem hatası.' : 'Geçersiz şifre.');
+            }
+        } catch (err) {
+            console.error('Login Error:', err);
+            setAuthError('Giriş yapılırken bir hata oluştu.');
+        } finally {
+            setIsLoggingIn(false);
+        }
+    };
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        setPassError('');
+        setPassSuccess('');
+
+        if (passwords.new !== passwords.confirm) {
+            setPassError('Yeni şifreler uyuşmuyor.');
+            return;
+        }
+
+        if (passwords.new.length < 6) {
+            setPassError('Yeni şifre en az 6 karakter olmalıdır.');
+            return;
+        }
+
+        setIsUpdatingPass(true);
+        try {
+            // First verify current password
+            const { success } = await db.verifyAdminPassword(passwords.current);
+            if (!success) {
+                setPassError('Mevcut şifre hatalı.');
+                return;
+            }
+
+            // Update password
+            const { error } = await db.updateAdminPassword(passwords.new);
+            if (error) throw error;
+
+            setPassSuccess('Şifre başarıyla güncellendi.');
+            setPasswords({ current: '', new: '', confirm: '' });
+        } catch (err) {
+            console.error('Update Password Error:', err);
+            setPassError('Şifre güncellenirken bir hata oluştu.');
+        } finally {
+            setIsUpdatingPass(false);
         }
     };
 
@@ -130,8 +190,13 @@ const AdminDashboard = () => {
                             </div>
                         )}
 
-                        <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }}>
-                            Giriş Yap <ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} />
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ width: '100%', justifyContent: 'center', padding: '1rem' }}
+                            disabled={isLoggingIn}
+                        >
+                            {isLoggingIn ? 'Kontrol Ediliyor...' : 'Giriş Yap'} <ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} />
                         </button>
                     </form>
 
@@ -312,6 +377,62 @@ const AdminDashboard = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Admin Password Change Section */}
+            <div className="card shadow-soft" style={{ marginTop: '3rem', padding: '2rem', maxWidth: '600px', margin: '3rem auto 0' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
+                    <Shield size={20} style={{ color: 'var(--primary)' }} /> Yönetici Şifresini Değiştir
+                </h3>
+                <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Mevcut Şifre</label>
+                            <input
+                                type="password"
+                                className="glass"
+                                style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                value={passwords.current}
+                                onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre</label>
+                            <input
+                                type="password"
+                                className="glass"
+                                style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                value={passwords.new}
+                                onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre (Tekrar)</label>
+                        <input
+                            type="password"
+                            className="glass"
+                            style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                            value={passwords.confirm}
+                            onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
+                            required
+                        />
+                    </div>
+
+                    {passError && <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>{passError}</div>}
+                    {passSuccess && <div style={{ color: '#4ade80', fontSize: '0.85rem' }}>{passSuccess}</div>}
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ alignSelf: 'flex-start', padding: '0.75rem 2rem' }}
+                        disabled={isUpdatingPass}
+                    >
+                        {isUpdatingPass ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}
+                    </button>
+                </form>
             </div>
         </div>
     );

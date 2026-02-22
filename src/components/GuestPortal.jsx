@@ -502,6 +502,22 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     }
 
 
+    const handleDeleteAccount = async () => {
+        if (window.confirm('Kaydınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) {
+            try {
+                const { error } = await db.softDeleteGuest(currentGuest.id);
+                if (!error) {
+                    alert('Kaydınız başarıyla silindi.');
+                    setIsLoggedIn(false);
+                } else {
+                    alert('Hata oluştu: ' + error.message);
+                }
+            } catch (err) {
+                console.error('Delete account error:', err);
+            }
+        }
+    };
+
     return (
         <div className="section container animate-fade-in">
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -509,13 +525,22 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                     <h2 style={{ fontSize: '2.5rem' }}>Hoş Geldiniz, <span className="gradient-text">{currentGuest?.name || 'Davetli'}</span></h2>
                     <p style={{ color: 'var(--text-muted)' }}>Mevcut hediyeleri inceleyebilir veya bir grup kurarak ortak hediye alabilirsiniz.</p>
                 </div>
-                <button
-                    className="btn btn-outline"
-                    onClick={() => setIsLoggedIn(false)}
-                    style={{ fontSize: '0.875rem' }}
-                >
-                    Çıkış Yap
-                </button>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button
+                        className="btn btn-outline"
+                        onClick={handleDeleteAccount}
+                        style={{ fontSize: '0.875rem', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}
+                    >
+                        Kaydımı Sil
+                    </button>
+                    <button
+                        className="btn btn-outline"
+                        onClick={() => setIsLoggedIn(false)}
+                        style={{ fontSize: '0.875rem' }}
+                    >
+                        Çıkış Yap
+                    </button>
+                </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
