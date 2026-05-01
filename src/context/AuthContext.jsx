@@ -45,6 +45,9 @@ export const AuthProvider = ({ children }) => {
         signIn: async (email, password) => {
             return await db.signIn(email, password);
         },
+        signInWithGoogle: async () => {
+            return await db.signInWithGoogle();
+        },
         signOut: async () => {
             return await db.signOut();
         },

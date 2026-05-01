@@ -55,6 +55,15 @@ export const db = {
         });
         return { data, error };
     },
+    signInWithGoogle: async () => {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`
+            }
+        });
+        return { data, error };
+    },
     signOut: async () => {
         return await supabase.auth.signOut();
     },
@@ -92,6 +101,14 @@ export const db = {
             .from('users')
             .update({ is_active: false })
             .eq('id', userId);
+        return { data, error };
+    },
+
+    getUserConsents: async (userId) => {
+        const { data, error } = await supabase
+            .from('user_consents')
+            .select('consent_type')
+            .eq('user_id', userId);
         return { data, error };
     },
 

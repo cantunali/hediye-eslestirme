@@ -30,6 +30,8 @@ import GenelHediyeRehberiBlog from './components/BlogPosts/GenelHediyeRehberiBlo
 import DugunHediyesiBlog from './components/BlogPosts/DugunHediyesiBlog';
 import { useAuth } from './context/AuthContext';
 import AdBanner from './components/AdBanner';
+import AuthCallback from './components/AuthCallback';
+import Consent from './components/Consent';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -439,6 +441,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/consent" element={<Consent />} />
 
           {/* Management Routes */}
           <Route path="/yonetim" element={<ManagementWrapper />} />
