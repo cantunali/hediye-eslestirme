@@ -532,7 +532,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
                     <h2 style={{ fontSize: '2.5rem' }}>Hoş Geldiniz, <span className="gradient-text">{currentGuest?.name || 'Davetli'}</span></h2>
-                    <p style={{ color: 'var(--text-muted)' }}>Mevcut hediyeleri inceleyebilir veya bir grup kurarak ortak hediye alabilirsiniz.</p>
+                    <p style={{ color: 'var(--text-muted)' }}>Mevcut hediyeleri inceleyebilir ve burada ilgili link üzerinden alabilirsiniz.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button

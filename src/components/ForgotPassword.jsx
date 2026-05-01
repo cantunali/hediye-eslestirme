@@ -16,30 +16,8 @@ const ForgotPassword = () => {
         setLoading(true);
 
         try {
-            // First, trigger Supabase password reset to get the token/session (simulated or real)
-            const { data, error: resetError } = await resetPassword(email);
+            const { error: resetError } = await resetPassword(email);
             if (resetError) throw resetError;
-
-            // Generate the reset link (pointing to our ResetPassword component)
-            // In a real flow, Supabase sends this, but since we want to control the email:
-            const resetLink = `${window.location.origin}/reset-password?email=${encodeURIComponent(email)}`;
-
-            // Send the custom email via our Netlify function
-            const response = await fetch('/.netlify/functions/send-mail', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email,
-                    type: 'reset',
-                    resetLink
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.text();
-                throw new Error(errorData || 'E-posta gönderilemedi.');
-            }
-
             setSuccess(true);
         } catch (err) {
             console.error('Reset Password Error:', err);

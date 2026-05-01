@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText, Loader2, UploadCloud } from 'lucide-react';
+import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText, Loader2, UploadCloud, Activity, Share2, ClipboardList } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
 import { db } from '../services/supabase';
@@ -18,7 +18,7 @@ const getCategoriesByEventType = (type) => {
 };
 
 const OwnerDashboard = ({ eventDetails, initialGuests }) => {
-    const [activeTab, setActiveTab] = useState('inventory');
+    const [activeTab, setActiveTab] = useState('summary');
     const [currentEvent, setCurrentEvent] = useState(eventDetails);
     const [gifts, setGifts] = useState([]);
     const [guests, setGuests] = useState([]);
@@ -565,6 +565,13 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         paddingBottom: window.innerWidth < 1024 ? '0.5rem' : '0'
                     }} className="no-scrollbar">
                         <button
+                            className={`btn ${activeTab === 'summary' ? 'btn-primary' : 'btn-outline'}`}
+                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            onClick={() => setActiveTab('summary')}
+                        >
+                            <LayoutDashboard size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Özet</span>
+                        </button>
+                        <button
                             className={`btn ${activeTab === 'recommendations' ? 'btn-primary' : 'btn-outline'}`}
                             style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('recommendations')}
@@ -590,13 +597,112 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                             style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('admin')}
                         >
-                            <LayoutDashboard size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Olaylar</span>
+                            <Activity size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Olaylar</span>
                         </button>
                     </nav>
                 </aside>
 
                 {/* Content Area */}
                 <main style={{ flex: 1, width: '100%', minWidth: 0 }}>
+                    {activeTab === 'summary' && (
+                        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                                <div className="card" style={{ padding: '1.5rem', background: 'rgba(99, 102, 241, 0.05)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <Gift style={{ color: 'var(--primary)' }} size={24} />
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Hediye Durumu</span>
+                                    </div>
+                                    <h2 style={{ margin: 0, fontSize: '2rem' }}>{gifts.length}</h2>
+                                    <p style={{ margin: '0.5rem 0 0', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                                        <span style={{ color: '#4ade80' }}>{gifts.filter(g => g.status === 'reserved').length} Ayırıldı</span> • {gifts.filter(g => g.status !== 'reserved').length} Bekliyor
+                                    </p>
+                                </div>
+                                <div className="card" style={{ padding: '1.5rem', background: 'rgba(168, 85, 247, 0.05)', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <Users style={{ color: '#a855f7' }} size={24} />
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Toplam Davetli</span>
+                                    </div>
+                                    <h2 style={{ margin: 0, fontSize: '2rem' }}>{guests.length}</h2>
+                                    <p style={{ margin: '0.5rem 0 0', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Aktif Katılımcı Listesi</p>
+                                </div>
+                                <div className="card" style={{ padding: '1.5rem', background: 'rgba(234, 179, 8, 0.05)', border: '1px solid rgba(234, 179, 8, 0.2)' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <Calendar style={{ color: '#eab308' }} size={24} />
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Kalan Gün</span>
+                                    </div>
+                                    <h2 style={{ margin: 0, fontSize: '2rem' }}>
+                                        {eventDetails.event_date ? Math.ceil((new Date(eventDetails.event_date) - new Date()) / (1000 * 60 * 60 * 24)) : '-'}
+                                    </h2>
+                                    <p style={{ margin: '0.5rem 0 0', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Etkinliğe Kalan Süre</p>
+                                </div>
+                            </div>
+
+                            <div className="card" style={{ padding: '2rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                    <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <Share2 size={20} style={{ color: 'var(--primary)' }} /> Paylaşım Linki
+                                    </h3>
+                                </div>
+                                <div className="glass" style={{ padding: '1.25rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <input 
+                                        readOnly 
+                                        className="glass" 
+                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.875rem' }}
+                                        value={`${window.location.origin}/davetli-girisi`}
+                                    />
+                                    <button 
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(`${window.location.origin}/davetli-girisi`);
+                                            alert('Bağlantı kopyalandı!');
+                                        }}
+                                    >
+                                        Kopyala
+                                    </button>
+                                </div>
+                                <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                                    Davetlileriniz bu bağlantıyı kullanarak hediye listenize ulaşabilir ve seçim yapabilirler.
+                                </p>
+                            </div>
+
+                            <div className="card" style={{ padding: '2rem' }}>
+                                <h3 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <Activity size={20} style={{ color: 'var(--primary)' }} /> Son Hareketler
+                                </h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {activities.slice(0, 5).map((activity, index) => (
+                                        <div key={index} style={{ 
+                                            padding: '1rem', 
+                                            borderRadius: '12px', 
+                                            background: 'rgba(255,255,255,0.02)',
+                                            borderLeft: '3px solid var(--primary)',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }}>
+                                            <span style={{ fontSize: '0.9rem' }}>{activity.content}</span>
+                                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                                {new Date(activity.created_at).toLocaleDateString('tr-TR')}
+                                            </span>
+                                        </div>
+                                    ))}
+                                    {activities.length === 0 && (
+                                        <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>Henüz bir hareket bulunmuyor.</p>
+                                    )}
+                                </div>
+                                {activities.length > 5 && (
+                                    <button 
+                                        className="btn btn-outline" 
+                                        style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}
+                                        onClick={() => setActiveTab('admin')}
+                                    >
+                                        Tümünü Gör
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     {activeTab === 'inventory' && (
                         <div className="card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>

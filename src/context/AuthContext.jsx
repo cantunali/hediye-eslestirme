@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { db } from '../services/supabase';
+import { supabase, db } from '../services/supabase';
 
 const AuthContext = createContext();
 
@@ -8,66 +8,73 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check local storage for existing session
-        const storedUser = localStorage.getItem('hediye_user');
-        if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (e) {
-                console.error('Failed to parse stored user', e);
-                localStorage.removeItem('hediye_user');
+        // Get initial session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) {
+                // Map user metadata for compatibility
+                const mappedUser = {
+                    ...session.user,
+                    fullname: session.user.user_metadata?.fullname || 'İsimsiz Kullanıcı'
+                };
+                setUser(mappedUser);
             }
-        }
-        setLoading(false);
+            setLoading(false);
+        });
+
+        // Listen for changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+                const mappedUser = {
+                    ...session.user,
+                    fullname: session.user.user_metadata?.fullname || 'İsimsiz Kullanıcı'
+                };
+                setUser(mappedUser);
+            } else {
+                setUser(null);
+            }
+            setLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const value = {
         signUp: async (email, password, fullname) => {
-            const { data, error } = await db.signUp(email, password, fullname);
-            return { data, error };
+            return await db.signUp(email, password, fullname);
         },
         signIn: async (email, password) => {
-            const { data, error } = await db.signIn(email, password);
-            if (data?.user) {
-                setUser(data.user);
-                localStorage.setItem('hediye_user', JSON.stringify(data.user));
-            }
-            return { data, error };
+            return await db.signIn(email, password);
         },
         signOut: async () => {
-            localStorage.removeItem('hediye_user');
-            setUser(null);
-            return { error: null };
+            return await db.signOut();
         },
         resetPassword: (email) => db.resetPassword(email),
         updatePassword: (newPassword) => {
-            if (!user?.id) return { error: { message: 'Not logged in' } };
-            return db.updatePassword(newPassword, user.id);
+            return db.updatePassword(newPassword);
         },
         updatePasswordByEmail: (email, newPassword) => db.updatePasswordByEmail(email, newPassword),
         updateProfile: async (updates) => {
-            if (!user?.id) return { error: { message: 'Not logged in' } };
-            const { data, error } = await db.updateProfile(user.id, updates);
-            if (!error && data?.user) {
-                setUser(data.user);
-                localStorage.setItem('hediye_user', JSON.stringify(data.user));
+            const res = await db.updateProfile(user.id, updates);
+            if (!res.error) {
+                // Also update auth metadata if fullname changes
+                if (updates.fullname) {
+                    await supabase.auth.updateUser({
+                        data: { fullname: updates.fullname }
+                    });
+                }
             }
-            return { data, error };
+            return res;
         },
         deactivateAccount: async () => {
             if (!user?.id) return { error: { message: 'Not logged in' } };
-            const { error } = await db.deactivateAccount(user.id);
-            if (!error) {
-                localStorage.removeItem('hediye_user');
-                setUser(null);
+            const res = await db.deactivateAccount(user.id);
+            if (!res.error) {
+                await db.signOut();
             }
-            return { error };
+            return res;
         },
         recordConsents: (userId, consents) => db.recordConsents(userId, consents),
-        checkPassword: (password) => {
-            if (!user?.password) return false;
-            return db.checkPassword(password, user.password);
-        },
+        checkPassword: () => true, // Deprecated with Supabase Auth
         user,
         loading
     };

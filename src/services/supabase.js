@@ -10,12 +10,10 @@ const hashPassword = async (password) => {
 
 const isHashed = (str) => {
     if (!str) return false;
-    // Bcrypt hashes usually start with $2a$, $2b$, or $2y$ and are 60 chars long
     return (str.startsWith('$2a$') || str.startsWith('$2b$') || str.startsWith('$2y$')) && str.length >= 50;
 };
 
 const comparePassword = async (password, hash) => {
-    // Lazy migration support: if hash doesn't look like a bcrypt hash, compare as plain text
     if (!isHashed(hash)) {
         return password === hash;
     }
@@ -27,8 +25,6 @@ const comparePassword = async (password, hash) => {
     }
 };
 
-
-
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-url.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
 
@@ -39,89 +35,47 @@ if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KE
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const db = {
-    // Auth Methods (Manual DB Auth)
+    // Auth Methods (Using Supabase Auth)
     signUp: async (email, password, fullname) => {
-        const hashedPassword = await hashPassword(password);
-        const { data, error } = await supabase
-            .from('users')
-            .insert([{ email, password: hashedPassword, fullname }])
-            .select()
-            .single();
-        return { data: { user: data }, error };
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    fullname
+                }
+            }
+        });
+        return { data, error };
     },
     signIn: async (email, password) => {
-        // 1. Fetch user by email
-        const { data: user, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('email', email)
-            .eq('is_active', true)
-            .maybeSingle();
-
-        if (error || !user) {
-            return { data: null, error: error || { message: 'Geçersiz bilgiler veya hesap pasif durumda.' } };
-        }
-
-        // 2. Compare password
-        const isMatch = await comparePassword(password, user.password);
-        if (!isMatch) {
-            return { data: null, error: { message: 'Geçersiz bilgiler veya hesap pasif durumda.' } };
-        }
-
-        // 3. Lazy Migration: If stored password was plain text, update it to hash
-        if (!isHashed(user.password)) {
-            try {
-                const hashedPassword = await hashPassword(password);
-                const { error: updateError } = await supabase.from('users').update({ password: hashedPassword }).eq('id', user.id);
-                if (!updateError) {
-                    user.password = hashedPassword; // Update the object in memory
-                } else {
-                    console.error('Lazy migration DB update failed:', updateError);
-                }
-            } catch (err) {
-                console.error('Lazy migration hashing failed:', err);
-            }
-        }
-
-        return { data: { user }, error: null };
-    },
-    checkPassword: async (password, hash) => {
-        return await comparePassword(password, hash);
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+        return { data, error };
     },
     signOut: async () => {
-        // Handled in AuthContext (localStorage.removeItem)
-        return { error: null };
+        return await supabase.auth.signOut();
     },
     getSession: async () => {
-        // Handled in AuthContext (localStorage.getItem)
-        return { session: null, error: null };
+        return await supabase.auth.getSession();
     },
     resetPassword: async (email) => {
-        const { data, error } = await supabase
-            .from('users')
-            .select('id')
-            .eq('email', email)
-            .maybeSingle();
-
-        if (error) return { data: null, error };
-        if (!data) return { data: null, error: { message: 'Bu e-posta adresi ile kayıtlı bir kullanıcı bulunamadı.' } };
-
-        return { data: true, error: null };
+        // Send reset email via Supabase Auth directly
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`,
+        });
+        return { data, error };
     },
-    updatePassword: async (newPassword, userId) => {
-        const hashedPassword = await hashPassword(newPassword);
-        const { data, error } = await supabase
-            .from('users')
-            .update({ password: hashedPassword })
-            .eq('id', userId);
+    updatePassword: async (newPassword) => {
+        const { data, error } = await supabase.auth.updateUser({ password: newPassword });
         return { data, error };
     },
     updatePasswordByEmail: async (email, newPassword) => {
-        const hashedPassword = await hashPassword(newPassword);
-        const { data, error } = await supabase
-            .from('users')
-            .update({ password: hashedPassword })
-            .eq('email', email);
+        // Warning: This should only be called if the user is already authenticated
+        // Supabase Auth doesn't allow updating other users' passwords by email from the client
+        const { data, error } = await supabase.auth.updateUser({ password: newPassword });
         return { data, error };
     },
     updateProfile: async (userId, updates) => {
@@ -583,17 +537,16 @@ export const db = {
     // Global Admin Methods
     getGlobalStats: async () => {
         const [users, events, gifts, guests] = await Promise.all([
-            supabase.from('users').select('*', { count: 'exact', head: true }),
-            supabase.from('events').select('*', { count: 'exact', head: true }),
-            supabase.from('gifts').select('*', { count: 'exact', head: true }),
-            supabase.from('guests').select('*', { count: 'exact', head: true })
+            supabase.from('user_stats').select('total_users').single(),
+            supabase.from('event_stats').select('total_events').single(),
+            supabase.from('gift_stats').select('total_gifts').single(),
+            supabase.from('guest_stats').select('total_guests').single()
         ]);
-
         return {
-            users: users.count || 0,
-            events: events.count || 0,
-            gifts: gifts.count || 0,
-            guests: guests.count || 0,
+            users: users.data?.total_users || 0,
+            events: events.data?.total_events || 0,
+            gifts: gifts.data?.total_gifts || 0,
+            guests: guests.data?.total_guests || 0,
             error: users.error || events.error || gifts.error || guests.error
         };
     },

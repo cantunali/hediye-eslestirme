@@ -131,10 +131,10 @@ const CreateEvent = ({ onCreated }) => {
                             required
                             disabled={isChecking}
                         >
-                            <option value="Evlilik - Ev Hediyesi">Evlilik - Ev Hediyesi</option>
-                            <option value="Kız Bebek Hediyesi">Kız Bebek Hediyesi</option>
-                            <option value="Erkek Bebek Hediyesi">Erkek Bebek Hediyesi</option>
-                            <option value="Doğum Günü Hediyesi">Doğum Günü Hediyesi</option>
+                            <option value="Evlilik - Ev Hediyesi" style={{ color: '#333' }}>Evlilik - Ev Hediyesi</option>
+                            <option value="Kız Bebek Hediyesi" style={{ color: '#333' }}>Kız Bebek Hediyesi</option>
+                            <option value="Erkek Bebek Hediyesi" style={{ color: '#333' }}>Erkek Bebek Hediyesi</option>
+                            <option value="Doğum Günü Hediyesi" style={{ color: '#333' }}>Doğum Günü Hediyesi</option>
                         </select>
                         <ChevronDown size={20} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                     </div>
