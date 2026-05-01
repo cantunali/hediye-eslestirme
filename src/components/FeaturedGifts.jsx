@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { db } from '../services/supabase';
-import { Gift, Plus, ShoppingCart, ExternalLink, CheckCircle2, Loader2 } from 'lucide-react';
+import { Gift, Plus, ShoppingCart, ExternalLink, CheckCircle2, Loader2, UploadCloud } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
@@ -9,6 +9,46 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
     const [selectedGifts, setSelectedGifts] = useState([]);
     const [isAdding, setIsAdding] = useState(false);
     const [activeCategory, setActiveCategory] = useState('Hepsi');
+    const fileInputRef = React.useRef(null);
+    const [uploadingGiftId, setUploadingGiftId] = useState(null);
+
+    const handleImageUploadClick = (e, giftId) => {
+        e.stopPropagation();
+        setUploadingGiftId(giftId);
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file || !uploadingGiftId) return;
+
+        try {
+            setFeaturedGifts(prev => prev.map(g =>
+                g.id === uploadingGiftId ? { ...g, isUploading: true } : g
+            ));
+
+            const { url, error } = await db.uploadGiftImage(file);
+            if (error) throw error;
+
+            if (url) {
+                await db.updateFeaturedGiftImage(uploadingGiftId, url);
+                setFeaturedGifts(prev => prev.map(g =>
+                    g.id === uploadingGiftId ? { ...g, img_url: url, isUploading: false } : g
+                ));
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Görsel yüklenemedi: ' + error.message);
+            setFeaturedGifts(prev => prev.map(g =>
+                g.id === uploadingGiftId ? { ...g, isUploading: false } : g
+            ));
+        } finally {
+            e.target.value = '';
+            setUploadingGiftId(null);
+        }
+    };
 
     useEffect(() => {
         fetchFeaturedGifts();
@@ -120,9 +160,18 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
     return (
         <div className="section container animate-fade-in">
             <Helmet>
-                <title>HediyeEşle - Hediye Önerileri</title>
+                <title>HediyeEşleştir - Hediye Önerileri</title>
                 <meta name="description" content="Özenle seçilmiş hediye önerileri. Sevdikleriniz için en güzel hediye fikirleri." />
             </Helmet>
+
+            <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                accept="image/*"
+                onChange={handleFileChange}
+            />
+
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', padding: '0 1rem' }}>
                     <div>
@@ -234,9 +283,17 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        marginBottom: '1.25rem'
+                                        marginBottom: '1.25rem',
+                                        overflow: 'hidden',
+                                        flexShrink: 0
                                     }}>
-                                        <Gift size={24} style={{ color: 'var(--primary)' }} />
+                                        {gift.isUploading ? (
+                                            <Loader2 size={24} className="animate-spin" style={{ color: 'var(--primary)' }} />
+                                        ) : gift.img_url ? (
+                                            <img src={gift.img_url} alt={gift.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        ) : (
+                                            <Gift size={24} style={{ color: 'var(--primary)' }} />
+                                        )}
                                     </div>
 
                                     <div style={{ flex: 1 }}>
@@ -245,7 +302,7 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
                                         <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1rem' }}>{gift.brand} - {gift.model}</p>
                                     </div>
 
-                                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+                                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', alignItems: 'center' }}>
                                         {gift.hepsiburada_url && (
                                             <a
                                                 href={gift.hepsiburada_url}
@@ -270,6 +327,14 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
                                                 <ExternalLink size={18} />
                                             </a>
                                         )}
+
+                                        <button
+                                            onClick={(e) => handleImageUploadClick(e, gift.id)}
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', marginLeft: 'auto', padding: '0.25rem' }}
+                                            title="Görsel Yükle"
+                                        >
+                                            <UploadCloud size={18} />
+                                        </button>
                                     </div>
                                 </div>
                             ))}

@@ -64,6 +64,10 @@ export const AuthProvider = ({ children }) => {
             return { error };
         },
         recordConsents: (userId, consents) => db.recordConsents(userId, consents),
+        checkPassword: (password) => {
+            if (!user?.password) return false;
+            return db.checkPassword(password, user.password);
+        },
         user,
         loading
     };

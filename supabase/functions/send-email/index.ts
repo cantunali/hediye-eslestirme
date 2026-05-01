@@ -8,7 +8,7 @@ const SMTP_CONFIG = {
     hostname: "smtp.turkticaret.net",
     port: 465,
     username: "info@photo-transform.com",
-    password: "S6$7c&uFont&", // This should ideally be a secret in production
+    password: Deno.env.get("SMTP_PASSWORD") ?? "",
 }
 
 const client = new SmtpClient()
@@ -26,7 +26,7 @@ serve(async (req) => {
             hostname: "smtp.turkticaret.net",
             port: 465,
             username: "info@photo-transform.com",
-            password: "S6$7c&uFont&",
+            password: Deno.env.get("SMTP_PASSWORD") ?? "",
         }
 
         const client = new SmtpClient()

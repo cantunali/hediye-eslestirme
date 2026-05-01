@@ -22,7 +22,6 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import SmtpTest from './components/SmtpTest';
 import Profile from './components/Profile';
 import AdminDashboard from './components/AdminDashboard';
 import Blog from './components/Blog';
@@ -30,6 +29,7 @@ import BebekHediyesiBlog from './components/BlogPosts/BebekHediyesiBlog';
 import GenelHediyeRehberiBlog from './components/BlogPosts/GenelHediyeRehberiBlog';
 import DugunHediyesiBlog from './components/BlogPosts/DugunHediyesiBlog';
 import { useAuth } from './context/AuthContext';
+import AdBanner from './components/AdBanner';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -66,20 +66,16 @@ const Navbar = () => {
     <>
       <nav className="glass" style={{
         position: 'sticky',
-        top: '0.75rem',
-        margin: '0.75rem',
+        top: '0',
         zIndex: 100,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '0.75rem 1rem'
+        padding: '1rem 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem', fontWeight: 'bold', cursor: 'pointer' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem', fontWeight: '800', cursor: 'pointer', color: '#ffffff' }}
             onClick={() => navigate('/')}
           >
-            <img src={logo} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
-            <span className="gradient-text">HediyeEşle</span>
+            <span style={{ letterSpacing: '-0.03em' }}>HediyeEşleştir</span>
           </div>
 
           {/* Hamburger Menu Icon */}
@@ -90,49 +86,46 @@ const Navbar = () => {
               padding: '0.5rem',
               border: 'none',
               background: 'none',
-              color: 'var(--text)',
+              color: 'var(--on-surface)',
               cursor: 'pointer',
-              alignItems: 'center',
-              justifyContent: 'center'
+              display: 'flex',
+              alignItems: 'center'
             }}
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 
           {/* Desktop Menu */}
-          <div className="desktop-only" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div className="desktop-only" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <button
               className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
               onClick={handleGuestPortalClick}
-              style={{ padding: '0.6rem 1.25rem' }}
             >
               Davetli Girişi
             </button>
 
             {user ? (
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <button
                   className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
                   onClick={() => navigate('/yonetim')}
-                  style={{ padding: '0.6rem 1.25rem' }}
                 >
                   <Settings size={18} /> Panelim
                 </button>
-                <button className="btn btn-outline" onClick={signOut} style={{ padding: '0.6rem 1.25rem' }}>Çıkış</button>
+                <button className="btn btn-outline" onClick={signOut}>Çıkış</button>
               </div>
             ) : (
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', gap: '1rem' }}>
                 <button
-                  className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
+                  className="btn"
                   onClick={() => navigate('/login')}
-                  style={{ padding: '0.6rem 1.25rem' }}
+                  style={{ color: 'var(--on-surface)', background: 'none' }}
                 >
                   Giriş Yap
                 </button>
                 <button
-                  className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
+                  className="btn btn-primary"
                   onClick={() => navigate('/signup')}
-                  style={{ padding: '0.6rem 1.25rem' }}
                 >
                   Kayıt Ol
                 </button>
@@ -150,7 +143,7 @@ const Navbar = () => {
           left: '0',
           right: '0',
           bottom: '0',
-          background: '#0f172a', // Solid color
+          background: 'var(--surface)',
           padding: '7rem 1.5rem 2rem',
           display: 'flex',
           flexDirection: 'column',
@@ -160,7 +153,7 @@ const Navbar = () => {
           <button
             className={`btn ${currentPath === '/davetli-girisi' ? 'btn-primary' : 'btn-outline'}`}
             onClick={handleGuestPortalClick}
-            style={{ fontSize: '1.1rem', padding: '1rem' }}
+            style={{ fontSize: '1.1rem', padding: '1.25rem' }}
           >
             <Users size={20} /> Davetli Girişi
           </button>
@@ -170,14 +163,14 @@ const Navbar = () => {
               <button
                 className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
                 onClick={() => navigate('/yonetim')}
-                style={{ fontSize: '1.1rem', padding: '1rem' }}
+                style={{ fontSize: '1.1rem', padding: '1.25rem' }}
               >
                 <Settings size={20} /> Panelim
               </button>
               <button
                 className="btn btn-outline"
                 onClick={signOut}
-                style={{ fontSize: '1.1rem', padding: '1rem' }}
+                style={{ fontSize: '1.1rem', padding: '1.25rem' }}
               >
                 Çıkış Yap
               </button>
@@ -185,23 +178,23 @@ const Navbar = () => {
           ) : (
             <>
               <button
-                className={`btn ${currentPath === '/login' ? 'btn-primary' : 'btn-outline'}`}
+                className="btn btn-outline"
                 onClick={() => navigate('/login')}
-                style={{ fontSize: '1.1rem', padding: '1rem' }}
+                style={{ fontSize: '1.1rem', padding: '1.25rem' }}
               >
                 Giriş Yap
               </button>
               <button
-                className={`btn ${currentPath === '/signup' ? 'btn-primary' : 'btn-outline'}`}
+                className="btn btn-primary"
                 onClick={() => navigate('/signup')}
-                style={{ fontSize: '1.1rem', padding: '1rem' }}
+                style={{ fontSize: '1.1rem', padding: '1.25rem' }}
               >
                 Kayıt Ol
               </button>
             </>
           )}
-          <div style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            HediyeEşle &copy; 2026
+          <div style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--on-surface-variant)', fontSize: '0.9rem' }}>
+            HediyeEşleştir &copy; 2026
           </div>
         </div>
       )}
@@ -212,67 +205,59 @@ const Navbar = () => {
 const Footer = () => {
   const navigate = useNavigate();
   return (
-    <footer className="glass" style={{
+    <footer style={{
+      padding: '2rem 0',
       marginTop: 'auto',
-      padding: '3rem 1.5rem',
-      margin: '1.5rem 0.75rem 0.75rem',
-      borderRadius: '24px'
+      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+      background: 'transparent'
     }}>
       <div className="container" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '2.5rem'
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '2rem'
       }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <img src={logo} alt="Logo" style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
-            <h3 className="gradient-text">HediyeEşle</h3>
-          </div>
-          <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.95rem' }}>
-            En özel günlerinizde hediyelerinizi sevdiklerinizle kolayca eşleştirin. Mutluluğu paylaşın, karmaşayı önleyin.
-          </p>
+        <div
+          style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
+          onClick={() => navigate('/')}
+        >
+          <h3 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.02em', margin: 0 }}>HediyeEşleştir</h3>
         </div>
-        <div>
-          <h4 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Kurumsal</h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <Link to="/hakkimizda" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Hakkımızda</Link>
-            <Link to="/blog" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Blog</Link>
-            <Link to="/iletisim" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>İletişim</Link>
-            <Link to="/sss" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Sıkça Sorulan Sorular</Link>
-            <Link to="/gizlilik-politikasi" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Gizlilik Politikası</Link>
-            <Link to="/kullanim-kosullari" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Kullanıcı Sözleşmesi</Link>
-            <Link to="/kvkk" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>KVKK Aydınlatma Metni</Link>
-            <Link to="/pazarlama-izni" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Pazarlama İzni</Link>
-            <Link to="/admin" style={{
-              color: 'var(--primary)',
-              textDecoration: 'none',
-              fontWeight: '600',
-              marginTop: '0.5rem',
-              paddingTop: '0.75rem',
-              borderTop: '1px solid var(--border)',
-              display: 'inline-block'
-            }}>Admin Paneli</Link>
-          </div>
-        </div>
-        <div>
-          <h4 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Bizi Takip Edin</h4>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Facebook size={20} /></a>
-            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Twitter size={20} /></a>
-            <a href="#" className="btn-outline" style={{ padding: '10px', borderRadius: '50%', color: 'var(--text)', display: 'flex' }}><Instagram size={20} /></a>
-          </div>
-        </div>
-      </div>
 
-      <div style={{
-        textAlign: 'center',
-        marginTop: '3rem',
-        color: 'var(--text-muted)',
-        borderTop: '1px solid var(--border)',
-        paddingTop: '2rem',
-        fontSize: '0.875rem'
-      }}>
-        © 2026 HediyeEşle. Tüm Hakları Saklıdır.
+        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[
+            { t: 'Hakkımızda', p: '/hakkimizda' },
+            { t: 'İletişim', p: '/iletisim' },
+            { t: 'Kullanım Şartları', p: '/kullanim-kosullari' },
+            { t: 'Gizlilik Politikası', p: '/gizlilik-politikasi' },
+            { t: 'KVKK', p: '/kvkk' },
+            { t: 'Blog', p: '/blog' },
+            { t: 'S.S.S', p: '/sss' },
+            { t: 'Admin', p: '/admin' }
+          ].map((link, i) => (
+            <Link key={i} to={link.p} style={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', fontSize: '0.9rem', transition: 'var(--transition)' }}>{link.t}</Link>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          {[Facebook, Twitter, Instagram].map((Icon, i) => (
+            <a key={i} href="#" style={{ 
+              width: '36px', 
+              height: '36px', 
+              borderRadius: '50%', 
+              border: '1px solid rgba(255, 255, 255, 0.3)', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              color: '#ffffff',
+              textDecoration: 'none'
+            }}>
+              <Icon size={18} />
+            </a>
+          ))}
+        </div>
       </div>
     </footer>
   );
@@ -297,95 +282,95 @@ const LandingPage = () => {
   return (
     <div className="animate-fade-in">
       <Helmet>
-        <title>HediyeEşle - Sevdiklerinle Hayallerindeki Hediyeleri Buluştur</title>
+        <title>HediyeEşleştir - Sevdiklerinle Hayallerindeki Hediyeleri Buluştur</title>
         <meta name="description" content="Düğün, doğum veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla." />
       </Helmet>
 
       {/* Hero Section */}
-      <section className="section hero-section" style={{ textAlign: 'center' }}>
+      <section className="section hero-section" style={{ textAlign: 'center', paddingTop: '6rem', paddingBottom: '6rem' }}>
         <div className="container">
-          <h1 className="hero-title animate-reveal stagger-1">
+          <h1 className="animate-reveal stagger-1" style={{ marginBottom: '1.5rem' }}>
             Sevdiklerinle <span className="gradient-text">Hayallerindeki Hediyeleri</span> <br />
             Buluştur
           </h1>
-          <p className="animate-reveal stagger-2" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto 2.5rem', lineHeight: '1.6' }}>
+          <p className="animate-reveal stagger-2" style={{ fontSize: 'clamp(1.125rem, 3vw, 1.35rem)', color: 'var(--on-surface-variant)', maxWidth: '800px', margin: '0 auto 3rem', lineHeight: '1.6' }}>
             Düğün, doğum veya yeni ev hazırlığında... İhtiyaçlarını belirle, sevdiklerinle paylaş ve mükemmel eşleşmeyi sağla.
           </p>
           <div className="animate-reveal stagger-3" style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '1rem',
+            gap: '1.25rem',
             flexWrap: 'wrap',
-            maxWidth: '650px',
+            maxWidth: '600px',
             margin: '0 auto'
           }}>
             <button
-              className="btn btn-primary btn-micro"
-              style={{ flex: '1 1 200px', minHeight: '3.5rem' }}
+              className="btn btn-primary"
+              style={{ flex: '1 1 240px', height: '4rem', fontSize: '1.1rem' }}
               onClick={() => navigate('/davetli-girisi')}
             >
-              Davetli Girişi <Users size={22} className="glow-soft" />
+              Davetli Girişi <Users size={22} />
             </button>
             <button
               className="btn btn-outline"
-              style={{ flex: '1 1 200px', minHeight: '3.5rem' }}
+              style={{ flex: '1 1 240px', height: '4rem', fontSize: '1.1rem' }}
               onClick={() => navigate('/yonetim/olustur')}
             >
               Etkinlik Başlat <ArrowRight size={22} />
             </button>
           </div>
 
-          <div className="animate-reveal stagger-4" style={{ marginTop: '2rem' }}>
+          <div className="animate-reveal stagger-4" style={{ marginTop: '3rem' }}>
             <Link
               to="/ozellikler"
               className="btn btn-outline"
               style={{
                 width: 'auto',
-                padding: '0.6rem 1.5rem',
-                fontSize: '0.95rem',
-                border: '1px solid var(--border)',
-                color: 'var(--text-muted)',
+                padding: '0.75rem 1.75rem',
+                fontSize: '1rem',
                 borderRadius: '50px',
                 textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'rgba(255, 255, 255, 0.05)'
+                background: 'rgba(255, 255, 255, 0.1)'
               }}
             >
-              Özellikleri Keşfet <Star size={16} className="glow-soft" />
+              Özellikleri Keşfet <Star size={18} style={{ color: '#ffffff' }} />
             </Link>
           </div>
         </div>
       </section>
 
       {/* Features/Stats Section */}
-      <section id="features" className="section" style={{ background: 'rgba(0,0,0,0.1)' }}>
+      <section className="section" style={{ borderTop: '1px solid var(--outline-variant)', borderBottom: '1px solid var(--outline-variant)' }}>
         <div className="container">
-          <div className="grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
             <div className="card animate-reveal stagger-1" style={{ textAlign: 'center' }}>
-              <Package size={32} className="glow-soft" style={{ color: 'var(--accent-sharp)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>{stats.users || 0}</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Kullanıcı Sayısı</p>
+              <Users size={40} style={{ color: '#ffffff', marginBottom: '1rem' }} />
+              <h2>{stats.guests || 0}</h2>
+              <p>Toplam Katılımcı</p>
             </div>
             <div className="card animate-reveal stagger-2" style={{ textAlign: 'center' }}>
-              <Users size={32} style={{ color: 'var(--secondary)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>{stats.events || 0}</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Toplam Etkinlik</p>
+              <Package size={40} style={{ color: '#ffffff', marginBottom: '1rem' }} />
+              <h2>{stats.events || 0}</h2>
+              <p>Toplam Etkinlik</p>
             </div>
             <div className="card animate-reveal stagger-3" style={{ textAlign: 'center' }}>
-              <Gift size={32} style={{ color: 'var(--accent)', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>{stats.gifts || 0}</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Toplam Hediye</p>
+              <Gift size={40} style={{ color: '#ffffff', marginBottom: '1rem' }} />
+              <h2>{stats.gifts || 0}</h2>
+              <p>Toplam Hediye</p>
             </div>
             <div className="card animate-reveal stagger-4" style={{ textAlign: 'center' }}>
-              <Heart size={32} style={{ color: '#ef4444', marginBottom: '0.75rem' }} />
-              <h2 style={{ marginBottom: '0.5rem' }}>{stats.guests || 0}</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Davetli Sayısı</p>
+              <Heart size={40} style={{ color: '#ffffff', marginBottom: '1rem' }} />
+              <h2>%99</h2>
+              <p>Memnuniyet Oranı</p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Ad Section */}
+      <div className="container">
+        <AdBanner slot="homepage_bottom" />
+      </div>
     </div>
   );
 };
@@ -438,9 +423,9 @@ function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Helmet>
-        <link rel="canonical" href={`https://hediyeeslestir.netlify.app${location.pathname}`} />
-        <meta property="og:url" content={`https://hediyeeslestir.netlify.app${location.pathname}`} />
-        <meta property="og:site_name" content="HediyeEşle" />
+        <link rel="canonical" href={`https://hediyeeslestir.com${location.pathname}`} />
+        <meta property="og:url" content={`https://hediyeeslestir.com${location.pathname}`} />
+        <meta property="og:site_name" content="HediyeEşleştir" />
         <meta name="robots" content="index, follow" />
       </Helmet>
       <Navbar />
@@ -454,7 +439,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/smtp-test" element={<SmtpTest />} />
 
           {/* Management Routes */}
           <Route path="/yonetim" element={<ManagementWrapper />} />

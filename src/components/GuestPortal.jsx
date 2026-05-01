@@ -4,7 +4,8 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
-import { slugify } from '../utils/helpers';
+import AdBanner from './AdBanner';
+import { slugify, isEventExpired } from '../utils/helpers';
 
 const getCategoriesByEventType = (type) => {
     switch (type) {
@@ -100,7 +101,9 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
             try {
                 const { data, error } = await db.getEvents();
                 if (data) {
-                    const sorted = [...data].sort((a, b) => a.title.localeCompare(b.title));
+                    const sorted = [...data]
+                        .filter(ev => !isEventExpired(ev.event_date))
+                        .sort((a, b) => a.title.localeCompare(b.title));
                     setAvailableEvents(sorted);
                 }
             } catch (err) {
@@ -252,6 +255,12 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     const handleConfirmReservation = async () => {
         if (!activeGift || !currentGuest || !currentEvent) return;
 
+        // Double check expiration before reserving
+        if (currentEvent.event_date && isEventExpired(currentEvent.event_date)) {
+            alert('Bu etkinliğin süresi dolduğu için artık hediye ayrılamaz.');
+            return;
+        }
+
         setIsReserving(true);
         try {
             const { error } = await db.reserveGift(
@@ -289,8 +298,8 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
         return (
             <div className="section container animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto', padding: '2rem' }}>
                 <Helmet>
-                    <title>HediyeEşle - Davetli Girişi</title>
-                    <meta name="description" content="HediyeEşle davetli paneline giriş yapın ve sevdiklerinizin hediye listesine ulaşın." />
+                    <title>HediyeEşleştir - Davetli Girişi</title>
+                    <meta name="description" content="HediyeEşleştir davetli paneline giriş yapın ve sevdiklerinizin hediye listesine ulaşın." />
                     <meta name="robots" content="noindex, nofollow" />
                 </Helmet>
                 <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -571,11 +580,24 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '800px', overflowY: 'auto', paddingRight: '0.5rem' }} className="no-scrollbar">
-                    {filteredGifts.map((gift) => (
+                    {filteredGifts.map((gift, index) => (
+                        <React.Fragment key={gift.id}>
                         <div key={gift.id} className="glass" style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: gift.status === 'reserved' ? 0.7 : 1 }}>
-                            <div style={{ width: '250px' }}>
-                                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{gift.name}</h3>
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>{gift.brand} {gift.brand && gift.model ? '-' : ''} {gift.model}</p>
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', width: '350px' }}>
+                                <div style={{
+                                    width: '56px', height: '56px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0
+                                }}>
+                                    {gift.img_url ? (
+                                        <img src={gift.img_url} alt={gift.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <Gift size={28} style={{ color: 'var(--primary)' }} />
+                                    )}
+                                </div>
+                                <div>
+                                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', lineHeight: '1.2' }}>{gift.name}</h3>
+                                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0, lineHeight: '1.4' }}>{gift.brand} {gift.brand && gift.model ? '-' : ''} {gift.model}</p>
+                                </div>
                             </div>
 
                             {/* Shopping Links Area */}
@@ -623,6 +645,10 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                     <span style={{ color: '#4ade80', fontSize: '0.875rem', fontWeight: '500', background: 'rgba(34, 197, 94, 0.1)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
                                         Alındı
                                     </span>
+                                ) : currentEvent?.event_date && isEventExpired(currentEvent.event_date) ? (
+                                    <span style={{ color: '#ef4444', fontSize: '0.875rem', fontWeight: '500', background: 'rgba(239, 68, 68, 0.1)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
+                                        Süre Doldu
+                                    </span>
                                 ) : (
                                     <button
                                         className="btn btn-primary"
@@ -634,6 +660,12 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                 )}
                             </div>
                         </div>
+                        {index === 2 && (
+                            <div style={{ margin: '1rem 0' }}>
+                                <AdBanner slot="guest_portal_middle" />
+                            </div>
+                        )}
+                    </React.Fragment>
                     ))}
                 </div>
             </div>
@@ -671,8 +703,12 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                         </button>
 
                         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                            <div style={{ width: '48px', height: '48px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
-                                <Gift size={24} style={{ color: 'var(--primary)' }} />
+                            <div style={{ width: '64px', height: '64px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', overflow: 'hidden' }}>
+                                {activeGift.img_url ? (
+                                    <img src={activeGift.img_url} alt={activeGift.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                    <Gift size={32} style={{ color: 'var(--primary)' }} />
+                                )}
                             </div>
                             <h2 style={{ marginBottom: '0.5rem', color: 'white' }}>Hediyeyi Ayır</h2>
                             <p style={{ color: 'var(--primary)', fontSize: '0.9rem', fontWeight: '500' }}>{activeGift.name || 'Hediye Detayı'}</p>

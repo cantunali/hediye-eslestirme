@@ -6,7 +6,7 @@ const KVKK = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - KVKK Aydınlatma Metni</title>
+                <title>HediyeEşleştir - KVKK Aydınlatma Metni</title>
                 <meta name="description" content="6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca hazırlanan aydınlatma metni." />
             </Helmet>
 
@@ -28,7 +28,7 @@ const KVKK = () => {
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
                         6698 Sayılı Kişisel Verilerin Korunması Kanunu (“Kanun”) 7 Nisan 2016 tarihinde yürürlüğe girmiştir.
                         Kanun ile kişisel verinin tanımı yapılarak, bunların korunmasına ilişkin ilkeler ve bu verilerin işlenmesinde veri sorumlusu sıfatı taşıyanların uyacakları şartlara yer verilmiştir.
-                        <strong> HediyeEşle</strong> olarak Kanun’a uygunluğun sağlanması amacıyla, ilgili mevzuatta yer alan kişisel verilerin korunması ve işlenmesine ilişkin ilkeleri benimseyerek gerekli idari ve teknik tedbirleri almaktayız.
+                        <strong> HediyeEşleştir</strong> olarak Kanun’a uygunluğun sağlanması amacıyla, ilgili mevzuatta yer alan kişisel verilerin korunması ve işlenmesine ilişkin ilkeleri benimseyerek gerekli idari ve teknik tedbirleri almaktayız.
                     </p>
                 </div>
 
@@ -37,7 +37,7 @@ const KVKK = () => {
                     <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', marginTop: '1.5rem' }}>II.I. KİŞİSEL VERİLERİN İŞLENMESİNE İLİŞKİN İLKELER</h3>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
                         Anayasa’nın m. 20/III kişisel verilerin ancak kanunda öngörülen hallerde veya kişinin açık rızasıyla işlenebileceği belirtilerek kişisel verilerin korunması güvence altına alınmıştır.
-                        HediyeEşle kişisel verileri aşağıdaki ilkelere uygun işlemektedir:
+                        HediyeEşleştir kişisel verileri aşağıdaki ilkelere uygun işlemektedir:
                     </p>
                     <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', color: 'var(--text-muted)', lineHeight: '1.8', marginTop: '1rem' }}>
                         <li>Hukuka ve Dürüstlük Kuralına Uygun İşleme</li>

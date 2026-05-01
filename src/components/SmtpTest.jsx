@@ -24,11 +24,11 @@ const SmtpTest = () => {
         try {
             const { data, error } = await db.sendEmail({
                 to: testEmail,
-                subject: "HediyeEşle Dinamik SMTP Testi",
+                subject: "HediyeEşleştir Dinamik SMTP Testi",
                 html: `
                     <div style="font-family: sans-serif; padding: 20px; color: #333;">
                         <h2 style="color: #6366f1;">SMTP Test Başarılı!</h2>
-                        <p>Bu e-posta, HediyeEşle dinamik test aracından gönderilmiştir.</p>
+                        <p>Bu e-posta, HediyeEşleştir dinamik test aracından gönderilmiştir.</p>
                         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
                         <p style="font-size: 12px; color: #666;">Kullanılan Ayarlar: ${smtpConfig.hostname}:${smtpConfig.port}</p>
                     </div>

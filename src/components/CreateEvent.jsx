@@ -65,7 +65,7 @@ const CreateEvent = ({ onCreated }) => {
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Etkinlik Oluştur</title>
+                <title>HediyeEşleştir - Etkinlik Oluştur</title>
                 <meta name="description" content="Yeni bir hediye eşleşme etkinliği oluşturun. Düğün, doğum günü veya özel günleriniz için hediye listesi hazırlayın." />
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>

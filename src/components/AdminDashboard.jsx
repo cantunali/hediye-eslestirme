@@ -26,6 +26,12 @@ const AdminDashboard = () => {
     const [passSuccess, setPassSuccess] = useState('');
     const [isUpdatingPass, setIsUpdatingPass] = useState(false);
 
+    // User Password Reset state
+    const [userResetData, setUserResetData] = useState({ email: '', new: '', confirm: '' });
+    const [userResetError, setUserResetError] = useState('');
+    const [userResetSuccess, setUserResetSuccess] = useState('');
+    const [isResettingUserPass, setIsResettingUserPass] = useState(false);
+
     useEffect(() => {
         if (isAuthorized) {
             fetchAdminData();
@@ -93,6 +99,44 @@ const AdminDashboard = () => {
             setPassError('Şifre güncellenirken bir hata oluştu.');
         } finally {
             setIsUpdatingPass(false);
+        }
+    };
+
+    const handleResetUserPassword = async (e) => {
+        e.preventDefault();
+        setUserResetError('');
+        setUserResetSuccess('');
+
+        if (userResetData.new !== userResetData.confirm) {
+            setUserResetError('Şifreler uyuşmuyor.');
+            return;
+        }
+
+        if (userResetData.new.length < 6) {
+            setUserResetError('Yeni şifre en az 6 karakter olmalıdır.');
+            return;
+        }
+
+        setIsResettingUserPass(true);
+        try {
+            // First check if user exists
+            const { error: checkError } = await db.resetPassword(userResetData.email);
+            if (checkError) {
+                setUserResetError(checkError.message || 'Kullanıcı bulunamadı.');
+                return;
+            }
+
+            // Update user password
+            const { error } = await db.updatePasswordByEmail(userResetData.email, userResetData.new);
+            if (error) throw error;
+
+            setUserResetSuccess('Kullanıcı şifresi başarıyla güncellendi.');
+            setUserResetData({ email: '', new: '', confirm: '' });
+        } catch (err) {
+            console.error('Reset User Password Error:', err);
+            setUserResetError('Kullanıcı şifresi güncellenirken bir hata oluştu.');
+        } finally {
+            setIsResettingUserPass(false);
         }
     };
 
@@ -173,7 +217,19 @@ const AdminDashboard = () => {
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Şifre</label>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                <label style={{ fontSize: '0.875rem' }}>Şifre</label>
+                                <button
+                                    type="button"
+                                    onClick={() => alert("Admin şifrenizi unuttuysanız, lütfen Supabase veritabanındaki 'admin_config' tablosundan 'admin_password' alanını güncelleyiniz.")}
+                                    style={{
+                                        background: 'none', border: 'none', color: 'var(--primary)',
+                                        fontSize: '0.8rem', cursor: 'pointer', padding: 0, textDecoration: 'underline'
+                                    }}
+                                >
+                                    Şifremi Unuttum
+                                </button>
+                            </div>
                             <input
                                 type="password"
                                 className="glass"
@@ -224,7 +280,7 @@ const AdminDashboard = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '1.5rem 1rem' }}>
             <Helmet>
-                <title>HediyeEşle - Sistem Admin Paneli</title>
+                <title>HediyeEşleştir - Sistem Admin Paneli</title>
             </Helmet>
 
             <div className="admin-header" style={{
@@ -379,60 +435,119 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            {/* Admin Password Change Section */}
-            <div className="card shadow-soft" style={{ marginTop: '3rem', padding: '2rem', maxWidth: '600px', margin: '3rem auto 0' }}>
-                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
-                    <Shield size={20} style={{ color: 'var(--primary)' }} /> Yönetici Şifresini Değiştir
-                </h3>
-                <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+            {/* Setting Grids */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))', gap: '2rem', marginTop: '3rem' }}>
+                {/* Admin Password Change Section */}
+                <div className="card shadow-soft" style={{ padding: '2rem' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
+                        <Shield size={20} style={{ color: 'var(--primary)' }} /> Yönetici Şifresini Değiştir
+                    </h3>
+                    <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Mevcut Şifre</label>
+                                <input
+                                    type="password"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                    value={passwords.current}
+                                    onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre</label>
+                                <input
+                                    type="password"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                    value={passwords.new}
+                                    onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
+                                    required
+                                />
+                            </div>
+                        </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Mevcut Şifre</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre (Tekrar)</label>
                             <input
                                 type="password"
                                 className="glass"
                                 style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
-                                value={passwords.current}
-                                onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                                value={passwords.confirm}
+                                onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
                                 required
                             />
                         </div>
+
+                        {passError && <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>{passError}</div>}
+                        {passSuccess && <div style={{ color: '#4ade80', fontSize: '0.85rem' }}>{passSuccess}</div>}
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ alignSelf: 'flex-start', padding: '0.75rem 2rem' }}
+                            disabled={isUpdatingPass}
+                        >
+                            {isUpdatingPass ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}
+                        </button>
+                    </form>
+                </div>
+
+                {/* User Password Reset Section */}
+                <div className="card shadow-soft" style={{ padding: '2rem' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
+                        <Users size={20} style={{ color: 'var(--secondary)' }} /> Kullanıcı Şifresi Sıfırla
+                    </h3>
+                    <form onSubmit={handleResetUserPassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Kullanıcı E-posta</label>
                             <input
-                                type="password"
+                                type="email"
                                 className="glass"
                                 style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
-                                value={passwords.new}
-                                onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
+                                value={userResetData.email}
+                                onChange={(e) => setUserResetData({ ...userResetData, email: e.target.value })}
                                 required
                             />
                         </div>
-                    </div>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre (Tekrar)</label>
-                        <input
-                            type="password"
-                            className="glass"
-                            style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
-                            value={passwords.confirm}
-                            onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
-                            required
-                        />
-                    </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre</label>
+                                <input
+                                    type="password"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                    value={userResetData.new}
+                                    onChange={(e) => setUserResetData({ ...userResetData, new: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Yeni Şifre (Tekrar)</label>
+                                <input
+                                    type="password"
+                                    className="glass"
+                                    style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.9rem' }}
+                                    value={userResetData.confirm}
+                                    onChange={(e) => setUserResetData({ ...userResetData, confirm: e.target.value })}
+                                    required
+                                />
+                            </div>
+                        </div>
 
-                    {passError && <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>{passError}</div>}
-                    {passSuccess && <div style={{ color: '#4ade80', fontSize: '0.85rem' }}>{passSuccess}</div>}
+                        {userResetError && <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>{userResetError}</div>}
+                        {userResetSuccess && <div style={{ color: '#4ade80', fontSize: '0.85rem' }}>{userResetSuccess}</div>}
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        style={{ alignSelf: 'flex-start', padding: '0.75rem 2rem' }}
-                        disabled={isUpdatingPass}
-                    >
-                        {isUpdatingPass ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            className="btn btn-secondary"
+                            style={{ alignSelf: 'flex-start', padding: '0.75rem 2rem' }}
+                            disabled={isResettingUserPass}
+                        >
+                            {isResettingUserPass ? 'Sıfırlanıyor...' : 'Şifreyi Sıfırla'}
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     );

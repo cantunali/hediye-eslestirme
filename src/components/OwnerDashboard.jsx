@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText } from 'lucide-react';
+import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText, Loader2, UploadCloud } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
 import { db } from '../services/supabase';
@@ -68,12 +68,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
     const eventCategories = useMemo(() => getCategoriesByEventType(currentEvent?.event_type), [currentEvent?.event_type]);
 
-    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
+    const [newGift, setNewGift] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '', img_url: '' });
     const [newGuest, setNewGuest] = useState({ name: '', email: '' });
     const [isUpdatingBulk, setIsUpdatingBulk] = useState(false);
     const [bulkMessage, setBulkMessage] = useState('');
     const [editingGiftId, setEditingGiftId] = useState(null);
-    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
+    const [editFormData, setEditFormData] = useState({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '', img_url: '' });
     const [sortBy, setSortBy] = useState('name'); // 'name' or 'status'
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
@@ -106,7 +106,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             const { data, error } = await db.addGift(eventDetails.id, newGift);
             if (data) {
                 setGifts([...gifts, data]);
-                setNewGift({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '' });
+                setNewGift({ name: '', brand: '', model: '', category: eventCategories[0], hepsiburada_url: '', amazon_url: '', img_url: '' });
             }
         }
     };
@@ -142,8 +142,59 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
             model: gift.model,
             category: gift.category || 'Aksesuar',
             hepsiburada_url: gift.hepsiburada_url || '',
-            amazon_url: gift.amazon_url || ''
+            amazon_url: gift.amazon_url || '',
+            img_url: gift.img_url || ''
         });
+    };
+
+    const singleGiftFileInputRef = React.useRef(null);
+    const newGiftFileInputRef = React.useRef(null);
+    const [uploadingGiftId, setUploadingGiftId] = useState(null);
+    const [isUploadingNewGiftImage, setIsUploadingNewGiftImage] = useState(false);
+
+    const handleExistingGiftImageUploadClick = (giftId) => {
+        setUploadingGiftId(giftId);
+        if (singleGiftFileInputRef.current) singleGiftFileInputRef.current.click();
+    };
+
+    const handleExistingGiftFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file || !uploadingGiftId) return;
+
+        try {
+            setGifts(prev => prev.map(g => g.id === uploadingGiftId ? { ...g, isUploading: true } : g));
+            const { url, error } = await db.uploadGiftImage(file);
+            if (error) throw error;
+            if (url) {
+                await db.updateGiftImage(uploadingGiftId, url);
+                setGifts(prev => prev.map(g => g.id === uploadingGiftId ? { ...g, img_url: url, isUploading: false } : g));
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Görsel yüklenemedi: ' + error.message);
+            setGifts(prev => prev.map(g => g.id === uploadingGiftId ? { ...g, isUploading: false } : g));
+        } finally {
+            e.target.value = '';
+            setUploadingGiftId(null);
+        }
+    };
+
+    const handleNewGiftFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setIsUploadingNewGiftImage(true);
+            const { url, error } = await db.uploadGiftImage(file);
+            if (error) throw error;
+            if (url) setNewGift(prev => ({ ...prev, img_url: url }));
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Görsel yüklenemedi: ' + error.message);
+        } finally {
+            setIsUploadingNewGiftImage(false);
+            e.target.value = '';
+        }
     };
 
     const handleSaveEdit = async () => {
@@ -166,7 +217,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                 : 'belirlenmiş';
 
             const subject = `${currentEvent.title} - ${eventDate} - hediye listesi`;
-            const portalUrl = 'https://hediyeeslestir.netlify.app/davetli-girisi';
+            const portalUrl = 'https://hediyeeslestir.com/davetli-girisi';
 
             // Send to all guests
             const invitePromises = guests.map(guest =>
@@ -218,7 +269,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                 : 'belirlenmiş';
 
             const subject = `${currentEvent.title} - ${eventDate} - hediye listesi`;
-            const portalUrl = 'https://hediyeeslestir.netlify.app/davetli-girisi';
+            const portalUrl = 'https://hediyeeslestir.com/davetli-girisi';
             const message = `Sayın ${guest.name}, ${currentEvent.title}'ın ${eventDate} tarihindeki etkinliğine hediye almak isterseniz hediye listelerinden seçebilirsiniz. Giriş için: ${portalUrl}`;
 
             // Call Netlify function instead of Supabase
@@ -424,7 +475,8 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                         model: row[2] ? row[2].toString() : '',
                         hepsiburada_url: row[3] ? row[3].toString() : '',
                         amazon_url: row[4] ? row[4].toString() : '',
-                        category: row[5] ? row[5].toString() : 'Aksesuar'
+                        category: row[5] ? row[5].toString() : 'Aksesuar',
+                        img_url: row[6] ? row[6].toString() : null
                     }));
 
                 if (giftsToImport.length > 0) {
@@ -455,7 +507,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
     return (
         <div className="section container animate-fade-in">
             <Helmet>
-                <title>HediyeEşle - Etkinlik Yönetim Paneli</title>
+                <title>HediyeEşleştir - Etkinlik Yönetim Paneli</title>
                 <meta name="description" content="Etkinliğinizi yönetin, hediye listenizi düzenleyin ve davetli durumlarını takip edin." />
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
@@ -570,6 +622,9 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                 </div>
                             </div>
 
+                            <input type="file" ref={singleGiftFileInputRef} style={{ display: 'none' }} accept="image/*" onChange={handleExistingGiftFileChange} />
+                            <input type="file" ref={newGiftFileInputRef} style={{ display: 'none' }} accept="image/*" onChange={handleNewGiftFileChange} />
+
                             {/* Add Gift Form */}
                             {/* Add Gift Form */}
                             <div className="glass" style={{
@@ -643,6 +698,23 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         ))}
                                     </select>
                                 </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Hediye Görseli</label>
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                        <button
+                                            className="btn btn-outline"
+                                            style={{ flex: 1, padding: '0.75rem', borderColor: 'var(--border)', color: 'white', justifyContent: 'center' }}
+                                            onClick={() => newGiftFileInputRef.current?.click()}
+                                            disabled={isUploadingNewGiftImage}
+                                        >
+                                            {isUploadingNewGiftImage ? <Loader2 size={18} className="animate-spin" /> : <UploadCloud size={18} />}
+                                            <span style={{ marginLeft: '0.5rem' }}>{newGift.img_url ? 'Değiştir' : 'Yükle'}</span>
+                                        </button>
+                                        {newGift.img_url && (
+                                            <img src={newGift.img_url} alt="Preview" style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
+                                        )}
+                                    </div>
+                                </div>
                                 <button className="btn btn-primary" onClick={addGift}><Plus size={20} /></button>
                             </div>
 
@@ -660,7 +732,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                 <div>
                                     <h4 style={{ margin: '0 0 0.25rem 0' }}>Excel'den Hediye Yükle</h4>
                                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
-                                        Kolonlar: Hediye Adı | Marka | Model | Hepsiburada | Amazon | Kategori (İlk satırdan başlar)
+                                        Kolonlar: Hediye Adı | Marka | Model | Hepsiburada | Amazon | Kategori | Resim Linki (İlk satırdan başlar)
                                     </p>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem' }}>
@@ -694,7 +766,31 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                 scrollbarColor: 'var(--primary) transparent'
                             }}>
                                 {sortedGifts.map(gift => (
-                                    <div key={gift.id} className="glass" style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div key={gift.id} className="glass" style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                                        
+                                        <div style={{
+                                            width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(99, 102, 241, 0.1)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, position: 'relative'
+                                        }}>
+                                            {gift.isUploading ? (
+                                                <Loader2 size={24} className="animate-spin" style={{ color: 'var(--primary)' }} />
+                                            ) : gift.img_url ? (
+                                                <img src={gift.img_url} alt={gift.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <Gift size={24} style={{ color: 'var(--primary)' }} />
+                                            )}
+                                            <button
+                                                onClick={() => handleExistingGiftImageUploadClick(gift.id)}
+                                                style={{
+                                                    position: 'absolute', bottom: 0, right: 0, background: 'rgba(0,0,0,0.6)', color: 'white',
+                                                    border: 'none', padding: '0.2rem', cursor: 'pointer', borderTopLeftRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                }}
+                                                title="Görsel Değiştir/Yükle"
+                                            >
+                                                <UploadCloud size={14} />
+                                            </button>
+                                        </div>
+
                                         {editingGiftId === gift.id ? (
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr', gap: '0.5rem', flex: 1, marginRight: '1.5rem' }}>
                                                 <input

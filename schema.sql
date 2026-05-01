@@ -76,6 +76,7 @@ CREATE TABLE gifts (
   model TEXT,
   hepsiburada_url TEXT,
   amazon_url TEXT,
+  img_url TEXT,
   status TEXT DEFAULT 'available', -- 'available', 'reserved'
   category TEXT DEFAULT 'Diğer',
   reserved_by UUID,
@@ -115,12 +116,14 @@ CREATE TABLE activities (
 -- Featured gifts (Recommended products)
 CREATE TABLE featured_gifts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  image_id SERIAL,
   name TEXT NOT NULL,
   brand TEXT,
   model TEXT,
   hepsiburada_url TEXT,
   amazon_url TEXT,
   image_url TEXT,
+  img_url TEXT,
   category TEXT,
   event_type TEXT DEFAULT 'Evlilik - Ev Hediyesi',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

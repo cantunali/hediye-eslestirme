@@ -1,97 +1,119 @@
 import React from 'react';
-import { Gift, Users, List, Sparkles, ChevronRight, CheckCircle2 } from 'lucide-react';
-
+import { Gift, Users, List, Sparkles, ChevronRight, CheckCircle2, Search, MousePointer2, BellRing } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const FeaturesPage = ({ onStart }) => {
-    // ... (steps definition remains same) ...
-    const steps = [
+    const guestSteps = [
+        {
+            icon: <Search size={32} />,
+            title: "Etkinliği Bul",
+            description: "Etkinlik sahibinin paylaştığı etkinlik adını aratın veya size iletilen özel linke tıklayarak doğrudan listeye ulaşın.",
+            color: "var(--primary)"
+        },
+        {
+            icon: <Gift size={32} />,
+            title: "Hediye Seç",
+            description: "Hazırlanan hediye listesindeki ürünleri inceleyin, bütçenize ve zevkinize en uygun olanı belirleyin.",
+            color: "var(--secondary)"
+        },
+        {
+            icon: <MousePointer2 size={32} />,
+            title: "Hediyeyi Al ve Bitir",
+            description: "'Hediyeyi Al' butonuna tıklayarak ürünü rezerve edin. Varsa satın alma linkine giderek işleminizi tamamlayın.",
+            color: "#4ade80"
+        }
+    ];
+
+    const ownerSteps = [
         {
             icon: <Sparkles size={32} />,
             title: "Etkinlik Oluştur",
-            description: "Hediye alınacak özel günün için (Düğün, Doğum Günü vb.) saniyeler içinde etkinliğini oluştur ve bir şifre belirle.",
+            description: "Düğün, doğum günü veya yeni ev için saniyeler içinde etkinliğinizi oluşturun ve bir erişim şifresi belirleyin.",
             color: "var(--primary)"
         },
         {
             icon: <List size={32} />,
             title: "Hediye Listeni Yap",
-            description: "Alınmasını istediğin hediyeleri marka ve model detaylarıyla birlikte listene ekle.",
+            description: "Alınmasını istediğiniz hediyeleri marka, model ve görsel detaylarıyla birlikte listenize ekleyin.",
             color: "var(--secondary)"
         },
         {
             icon: <Users size={32} />,
-            title: "Davetlileri Belirle",
-            description: "Etkinliğine katılacak sevdiklerini davetli listesine ekle ve onlara özel erişim sağla.",
+            title: "Davetlileri Bilgilendir",
+            description: "Davetli listeni oluşturun ve özel linki sevdiklerinizle paylaşarak onların listeye erişmesini sağlayın.",
             color: "var(--accent)"
-        },
-        {
-            icon: <Gift size={32} />,
-            title: "Hediye ve Katkı",
-            description: "Davetliler hediyeleri rezerve edebilir veya pahalı ürünler için nakit katkıda bulunarak bütçeye ortak olabilirler.",
-            color: "#4ade80"
         }
     ];
 
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Nasıl Çalışır? Özellikler</title>
-                <meta name="description" content="Etkinlik oluşturma, hediye listesi yapma ve davetli yönetimi. HediyeEşle özelliklerini keşfedin." />
+                <title>HediyeEşleştir - Nasıl Çalışır? Özellikler</title>
+                <meta name="description" content="Hediye listesi oluşturma ve davetli yönetimi nasıl çalışır? HediyeEşleştir kullanım rehberi." />
             </Helmet>
+            
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <h1 className="animate-reveal stagger-1" style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Nasıl <span className="gradient-text">Çalışır?</span>
                 </h1>
                 <p className="animate-reveal stagger-2" style={{ color: 'var(--text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
-                    En özel günlerinizde hediye karmaşasına son veriyoruz. İşte HediyeEşle'nin kolay kullanım adımları:
+                    Hediye seçme ve verme sürecini her iki taraf için de kusursuz hale getiriyoruz.
                 </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2.5rem', marginBottom: '5rem' }}>
-                {steps.map((step, index) => (
-                    <div key={index} className={`card animate-reveal stagger-${index + 3}`} style={{ position: 'relative', overflow: 'hidden' }}>
-                        <div style={{
-                            width: '64px',
-                            height: '64px',
-                            background: `${step.color}20`,
-                            borderRadius: '16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: step.color,
-                            marginBottom: '2rem'
-                        }}>
-                            {step.icon}
-                        </div>
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{step.title}</h3>
-                        <p style={{ color: 'var(--text-muted)', lineHeight: '1.6' }}>{step.description}</p>
-                        <div style={{
-                            position: 'absolute',
-                            right: '-10px',
-                            bottom: '-10px',
-                            fontSize: '8rem',
-                            fontWeight: '900',
-                            opacity: '0.03',
-                            userSelect: 'none'
-                        }}>
-                            {index + 1}
-                        </div>
+            {/* Davetli Kısmı */}
+            <div style={{ marginBottom: '6rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+                    <div style={{ padding: '0.5rem 1rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '50px', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                        Adım 1: Davetliler İçin
                     </div>
-                ))}
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+                    {guestSteps.map((step, index) => (
+                        <div key={index} className={`card animate-reveal stagger-${index + 3}`} style={{ position: 'relative', overflow: 'hidden', padding: '2.5rem' }}>
+                            <div style={{ width: '56px', height: '56px', background: `${step.color}20`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: step.color, marginBottom: '1.5rem' }}>
+                                {step.icon}
+                            </div>
+                            <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>{step.title}</h3>
+                            <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.95rem' }}>{step.description}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
 
-            <div className="glass" style={{ padding: '3rem', textAlign: 'center', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1))' }}>
-                <h2 style={{ marginBottom: '1.5rem' }}>İşte Bu Kadar!</h2>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '3rem', fontSize: '1.125rem' }}>
-                    HediyeEşle ile her şey planlı, her şey yolunda. Artık mükemmel hediyelere kavuşmak çok kolay.
+            {/* Davet Sahibi Kısmı */}
+            <div style={{ marginBottom: '5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+                    <div style={{ padding: '0.5rem 1rem', background: 'rgba(168, 85, 247, 0.1)', borderRadius: '50px', color: 'var(--secondary)', fontWeight: 'bold', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                        Adım 2: Davet Sahipleri İçin
+                    </div>
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+                    {ownerSteps.map((step, index) => (
+                        <div key={index} className={`card animate-reveal stagger-${index + 6}`} style={{ position: 'relative', overflow: 'hidden', padding: '2.5rem' }}>
+                            <div style={{ width: '56px', height: '56px', background: `${step.color}20`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: step.color, marginBottom: '1.5rem' }}>
+                                {step.icon}
+                            </div>
+                            <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>{step.title}</h3>
+                            <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.95rem' }}>{step.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="glass" style={{ padding: '3rem', textAlign: 'center', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05))' }}>
+                <h2 style={{ marginBottom: '1rem' }}>Süreci Hemen Başlatın</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1.1rem' }}>
+                    İster davetli olun ister davet sahibi, HediyeEşleştir ile hediyeleşmek artık çok daha keyifli.
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
-                    <button className="btn btn-primary" onClick={() => onStart('create-event')}>
-                        Hemen Başla <ChevronRight size={20} />
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <button className="btn btn-primary" onClick={() => onStart ? onStart('create-event') : window.location.href = '/yonetim/olustur'}>
+                        Ücretsiz Başla <ChevronRight size={20} />
                     </button>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--secondary)', fontWeight: '600' }}>
-                        <CheckCircle2 size={24} /> %100 Ücretsiz
-                    </div>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight
 import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
-import { slugify } from '../utils/helpers';
+import { slugify, isEventExpired } from '../utils/helpers';
 
 const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     const { user } = useAuth();
@@ -21,7 +21,8 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                 const { data, error: fetchError } = await db.getUserEvents(user.id);
                 if (fetchError) throw fetchError;
                 if (data) {
-                    setUserEvents(data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+                    const filtered = data.filter(ev => !isEventExpired(ev.event_date));
+                    setUserEvents(filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
                 }
             } catch (err) {
                 console.error('Fetch error:', err);
@@ -91,7 +92,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto', padding: '2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Etkinliklerim</title>
+                <title>HediyeEşleştir - Etkinliklerim</title>
                 <meta name="description" content="Mevcut etkinliklerinizi yönetin veya yeni bir etkinlik oluşturun." />
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
@@ -173,7 +174,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                                                 className="btn-icon"
                                                 onClick={(e) => handleShare(e, 'share', event)}
                                                 title="Paylaş"
-                                                style={{ color: 'var(--primary)' }}
+                                                style={{ color: '#ffffff' }}
                                             >
                                                 <Share2 size={18} />
                                             </button>
@@ -182,8 +183,8 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                                             className="btn btn-outline"
                                             style={{
                                                 padding: '0.5rem 1rem',
-                                                borderColor: copiedId === event.id ? '#4ade80' : 'var(--border)',
-                                                color: copiedId === event.id ? '#4ade80' : 'var(--text)',
+                                                borderColor: copiedId === event.id ? '#4ade80' : 'rgba(255, 255, 255, 0.3)',
+                                                color: copiedId === event.id ? '#4ade80' : '#ffffff',
                                                 fontSize: '0.875rem'
                                             }}
                                             onClick={(e) => handleCopyLink(e, event)}

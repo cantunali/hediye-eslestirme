@@ -61,12 +61,12 @@ const Signup = () => {
         return (
             <div className="section container animate-fade-in" style={{ maxWidth: '450px', margin: '4rem auto' }}>
                 <div className="card" style={{ padding: '3rem 2.5rem', textAlign: 'center' }}>
-                    <div style={{ width: '64px', height: '64px', background: 'rgba(34, 197, 94, 0.1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                        <CheckCircle2 size={32} style={{ color: '#22c55e' }} />
+                    <div style={{ width: '64px', height: '64px', background: '#f6ffed', borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', border: '1px solid #b7eb8f' }}>
+                        <CheckCircle2 size={32} style={{ color: '#52c41a' }} />
                     </div>
                     <h2>Kayıt Başarılı!</h2>
-                    <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>E-posta adresinize bir onay linki gönderilmiş olabilir. Lütfen kontrol edin.</p>
-                    <p style={{ marginTop: '1.5rem', fontSize: '0.875rem' }}>Yönlendiriliyorsunuz...</p>
+                    <p style={{ color: 'var(--on-surface-variant)', marginTop: '0.5rem' }}>E-posta adresinize bir onay linki gönderilmiş olabilir. Lütfen kontrol edin.</p>
+                    <p style={{ marginTop: '1.5rem', fontSize: '0.875rem', fontWeight: '600', color: 'var(--primary)' }}>Yönlendiriliyorsunuz...</p>
                 </div>
             </div>
         );
@@ -74,24 +74,24 @@ const Signup = () => {
 
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '450px', margin: '2rem auto' }}>
-            <div className="card" style={{ padding: '2rem 1.5rem' }}>
+            <div className="card">
                 <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                    <div style={{ width: '64px', height: '64px', background: 'rgba(168, 85, 247, 0.1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                    <div style={{ width: '64px', height: '64px', background: 'var(--surface-container)', borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                         <UserPlus size={32} style={{ color: 'var(--secondary)' }} />
                     </div>
                     <h2>Hesap Oluştur</h2>
-                    <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Hediye paylaşımlarınızı merkezi olarak yönetin.</p>
+                    <p style={{ color: 'var(--on-surface-variant)', marginTop: '0.5rem' }}>Hediye paylaşımlarınızı merkezi olarak yönetin.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Tam Ad</label>
+                    <div className="form-group" style={{ marginBottom: '0' }}>
+                        <label className="form-label">Tam Ad</label>
                         <div style={{ position: 'relative' }}>
-                            <UserPlus size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <UserPlus size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--on-surface-variant)' }} />
                             <input
                                 type="text"
-                                className="glass"
-                                style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.75rem', color: 'white', borderRadius: '12px', outline: 'none' }}
+                                className="input"
+                                style={{ paddingLeft: '2.75rem' }}
                                 placeholder="Adınız Soyadınız"
                                 value={fullname}
                                 onChange={(e) => setFullname(e.target.value)}
@@ -100,14 +100,14 @@ const Signup = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>E-posta</label>
+                    <div className="form-group" style={{ marginBottom: '0' }}>
+                        <label className="form-label">E-posta</label>
                         <div style={{ position: 'relative' }}>
-                            <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--on-surface-variant)' }} />
                             <input
                                 type="email"
-                                className="glass"
-                                style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.75rem', color: 'white', borderRadius: '12px', outline: 'none' }}
+                                className="input"
+                                style={{ paddingLeft: '2.75rem' }}
                                 placeholder="ornek@mail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -116,13 +116,13 @@ const Signup = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Şifre</label>
+                    <div className="form-group" style={{ marginBottom: '0' }}>
+                        <label className="form-label">Şifre</label>
                         <div style={{ position: 'relative' }}>
                             <input
                                 type={showPassword ? "text" : "password"}
-                                className="glass"
-                                style={{ width: '100%', padding: '0.85rem 3rem 0.85rem 1rem', borderRadius: '12px', color: 'white', outline: 'none' }}
+                                className="input"
+                                style={{ paddingRight: '3rem' }}
                                 placeholder="En az 6 karakter"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -132,20 +132,20 @@ const Signup = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--on-surface-variant)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Şifre Tekrar</label>
+                    <div className="form-group" style={{ marginBottom: '0' }}>
+                        <label className="form-label">Şifre Tekrar</label>
                         <div style={{ position: 'relative' }}>
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
-                                className="glass"
-                                style={{ width: '100%', padding: '0.85rem 3rem 0.85rem 1rem', borderRadius: '12px', color: 'white', outline: 'none' }}
+                                className="input"
+                                style={{ paddingRight: '3rem' }}
                                 placeholder="••••••••"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -154,7 +154,7 @@ const Signup = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--on-surface-variant)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                             >
                                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -171,8 +171,8 @@ const Signup = () => {
                                 onChange={(e) => setTermsConsent(e.target.checked)}
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
-                            <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
+                            <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
 
@@ -184,8 +184,8 @@ const Signup = () => {
                                 onChange={(e) => setKvkkConsent(e.target.checked)}
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
-                            <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
+                            <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/kvkk" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
 
@@ -197,26 +197,26 @@ const Signup = () => {
                                 onChange={(e) => setMarketingConsent(e.target.checked)}
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
-                            <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
+                            <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
+                                <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
                     </div>
 
                     {error && (
-                        <div style={{ padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', fontSize: '0.875rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                        <div style={{ padding: '0.75rem', background: '#fff1f0', color: 'var(--error)', borderRadius: 'var(--radius-md)', fontSize: '0.875rem', textAlign: 'center', border: '1px solid #ffccc7' }}>
                             {error}
                         </div>
                     )}
 
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }} disabled={loading}>
+                    <button type="submit" className="btn btn-primary" style={{ width: '100%', height: '3.5rem', marginTop: '0.5rem' }} disabled={loading}>
                         {loading ? <Loader2 className="animate-spin" size={20} /> : 'Ücretsiz Hesap Oluştur'}
                         {!loading && <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />}
                     </button>
                 </form>
 
-                <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                    Zaten bir hesabınız var mı? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>Giriş Yap</Link>
+                <div style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.9rem', color: 'var(--on-surface-variant)' }}>
+                    Zaten bir hesabınız var mı? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Giriş Yap</Link>
                 </div>
             </div>
         </div>

@@ -1,4 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
+import bcrypt from 'bcryptjs';
+
+const SALT_ROUNDS = 10;
+
+const hashPassword = async (password) => {
+    if (!password) return '';
+    return await bcrypt.hash(password, SALT_ROUNDS);
+};
+
+const isHashed = (str) => {
+    if (!str) return false;
+    // Bcrypt hashes usually start with $2a$, $2b$, or $2y$ and are 60 chars long
+    return (str.startsWith('$2a$') || str.startsWith('$2b$') || str.startsWith('$2y$')) && str.length >= 50;
+};
+
+const comparePassword = async (password, hash) => {
+    // Lazy migration support: if hash doesn't look like a bcrypt hash, compare as plain text
+    if (!isHashed(hash)) {
+        return password === hash;
+    }
+    try {
+        return await bcrypt.compare(password, hash);
+    } catch (e) {
+        console.error('Bcrypt comparison error:', e);
+        return password === hash;
+    }
+};
+
+
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-url.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
@@ -12,26 +41,52 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const db = {
     // Auth Methods (Manual DB Auth)
     signUp: async (email, password, fullname) => {
+        const hashedPassword = await hashPassword(password);
         const { data, error } = await supabase
             .from('users')
-            .insert([{ email, password, fullname }])
+            .insert([{ email, password: hashedPassword, fullname }])
             .select()
             .single();
         return { data: { user: data }, error };
     },
     signIn: async (email, password) => {
-        const { data, error } = await supabase
+        // 1. Fetch user by email
+        const { data: user, error } = await supabase
             .from('users')
             .select('*')
             .eq('email', email)
-            .eq('password', password)
             .eq('is_active', true)
-            .single();
+            .maybeSingle();
 
-        if (error || !data) {
+        if (error || !user) {
             return { data: null, error: error || { message: 'Geçersiz bilgiler veya hesap pasif durumda.' } };
         }
-        return { data: { user: data }, error: null };
+
+        // 2. Compare password
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) {
+            return { data: null, error: { message: 'Geçersiz bilgiler veya hesap pasif durumda.' } };
+        }
+
+        // 3. Lazy Migration: If stored password was plain text, update it to hash
+        if (!isHashed(user.password)) {
+            try {
+                const hashedPassword = await hashPassword(password);
+                const { error: updateError } = await supabase.from('users').update({ password: hashedPassword }).eq('id', user.id);
+                if (!updateError) {
+                    user.password = hashedPassword; // Update the object in memory
+                } else {
+                    console.error('Lazy migration DB update failed:', updateError);
+                }
+            } catch (err) {
+                console.error('Lazy migration hashing failed:', err);
+            }
+        }
+
+        return { data: { user }, error: null };
+    },
+    checkPassword: async (password, hash) => {
+        return await comparePassword(password, hash);
     },
     signOut: async () => {
         // Handled in AuthContext (localStorage.removeItem)
@@ -54,16 +109,18 @@ export const db = {
         return { data: true, error: null };
     },
     updatePassword: async (newPassword, userId) => {
+        const hashedPassword = await hashPassword(newPassword);
         const { data, error } = await supabase
             .from('users')
-            .update({ password: newPassword })
+            .update({ password: hashedPassword })
             .eq('id', userId);
         return { data, error };
     },
     updatePasswordByEmail: async (email, newPassword) => {
+        const hashedPassword = await hashPassword(newPassword);
         const { data, error } = await supabase
             .from('users')
-            .update({ password: newPassword })
+            .update({ password: hashedPassword })
             .eq('email', email);
         return { data, error };
     },
@@ -218,13 +275,14 @@ export const db = {
         return { data, error };
     },
     createEvent: async ({ title, owner_name, owner_email, password, event_date, user_id, event_type = 'Evlilik - Ev Hediyesi' }) => {
+        const hashedPassword = await hashPassword(password);
         const { data: eventData, error: eventError } = await supabase
             .from('events')
             .insert([{
                 title,
                 owner_name,
                 owner_email,
-                password,
+                password: hashedPassword,
                 event_date,
                 user_id, // Link to the logged-in user
                 event_type // Categorization of the event
@@ -278,20 +336,40 @@ export const db = {
         return { success: true, guest, eventId: event.id, eventType: event.event_type };
     },
     verifyEventPassword: async (title, email, password) => {
-        const { data, error } = await supabase
+        // 1. Fetch event
+        const { data: event, error } = await supabase
             .from('events')
             .select('*')
             .eq('title', title)
             .eq('owner_email', email)
-            .eq('password', password)
             .maybeSingle();
 
-        return { success: !!data, event: data, error };
+        if (error || !event) return { success: false, event: null, error };
+
+        // 2. Compare password
+        const isMatch = await comparePassword(password, event.password);
+        if (!isMatch) return { success: false, event: null, error: null };
+
+        // 3. Lazy Migration
+        if (!isHashed(event.password)) {
+            try {
+                const hashedPassword = await hashPassword(password);
+                const { error: updateError } = await supabase.from('events').update({ password: hashedPassword }).eq('id', event.id);
+                if (!updateError) {
+                    event.password = hashedPassword;
+                }
+            } catch (err) {
+                console.error('Event lazy migration failed:', err);
+            }
+        }
+
+        return { success: true, event, error: null };
     },
     bulkUpdateGuestPasswords: async (eventId, newPassword) => {
+        const hashedPassword = await hashPassword(newPassword);
         const { data, error } = await supabase
             .from('guests')
-            .update({ password: newPassword })
+            .update({ password: hashedPassword })
             .eq('event_id', eventId);
         return { data, error };
     },
@@ -304,7 +382,8 @@ export const db = {
                 status: 'available',
                 category: gift.category || 'Diğer',
                 hepsiburada_url: gift.hepsiburada_url || '',
-                amazon_url: gift.amazon_url || ''
+                amazon_url: gift.amazon_url || '',
+                img_url: gift.img_url || null
             }])
             .select()
             .single();
@@ -325,6 +404,7 @@ export const db = {
             category: g.category || 'Diğer',
             hepsiburada_url: g.hepsiburada_url || '',
             amazon_url: g.amazon_url || '',
+            img_url: g.img_url || null,
             event_id: eventId,
             status: 'available'
         }));
@@ -343,7 +423,8 @@ export const db = {
                 model: updates.model,
                 category: updates.category,
                 hepsiburada_url: updates.hepsiburada_url,
-                amazon_url: updates.amazon_url
+                amazon_url: updates.amazon_url,
+                img_url: updates.img_url
             })
             .eq('id', giftId)
             .select()
@@ -358,12 +439,13 @@ export const db = {
         return { data, error };
     },
     addGuest: async (eventId, guest) => {
+        const defaultPassword = await hashPassword('123');
         const { data, error } = await supabase
             .from('guests')
             .insert([{
                 ...guest,
                 event_id: eventId,
-                password: '123' // Default password for new members
+                password: defaultPassword // Default password for new members
             }])
             .select()
             .single();
@@ -384,11 +466,12 @@ export const db = {
         return { data, error };
     },
     bulkAddGuests: async (eventId, guestsList) => {
+        const defaultPassword = await hashPassword('123');
         const formattedGuests = guestsList.map(g => ({
             name: g.name,
             email: g.email,
             event_id: eventId,
-            password: '123' // Default password
+            password: defaultPassword // Default password
         }));
         const { data, error } = await supabase
             .from('guests')
@@ -435,6 +518,7 @@ export const db = {
             category: g.category,
             hepsiburada_url: g.hepsiburada_url,
             amazon_url: g.amazon_url,
+            img_url: g.img_url || g.image_url || null,
             status: 'available'
         }));
 
@@ -443,6 +527,49 @@ export const db = {
             .insert(giftsToInsert)
             .select();
 
+        return { data, error };
+    },
+
+    uploadGiftImage: async (file) => {
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('gift_images')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage
+                .from('gift_images')
+                .getPublicUrl(filePath);
+
+            return { url: data.publicUrl, error: null };
+        } catch (error) {
+            console.error('Image upload error:', error.message);
+            return { url: null, error };
+        }
+    },
+
+    updateFeaturedGiftImage: async (giftId, imgUrl) => {
+        const { data, error } = await supabase
+            .from('featured_gifts')
+            .update({ img_url: imgUrl })
+            .eq('id', giftId)
+            .select()
+            .single();
+        return { data, error };
+    },
+
+    updateGiftImage: async (giftId, imgUrl) => {
+        const { data, error } = await supabase
+            .from('gifts')
+            .update({ img_url: imgUrl })
+            .eq('id', giftId)
+            .select()
+            .single();
         return { data, error };
     },
 
@@ -497,14 +624,35 @@ export const db = {
             .eq('key', 'admin_password')
             .single();
 
-        if (error) return { success: false, error };
-        return { success: data.value === password, error: null };
+        if (error || !data) return { success: false, error };
+
+        const isMatch = await comparePassword(password, data.value);
+        if (!isMatch) return { success: false, error: null };
+
+        // Lazy Migration for admin
+        if (!isHashed(data.value)) {
+            try {
+                const hashedPassword = await hashPassword(password);
+                const { error: updateError } = await db.updateAdminPassword(hashedPassword);
+                // No need to update local data.value as it's not returned to a persistent state here
+            } catch (err) {
+                console.error('Admin lazy migration failed:', err);
+            }
+        }
+
+        return { success: true, error: null };
     },
 
     updateAdminPassword: async (newPassword) => {
+        // Note: we assume newPassword might already be hashed if called from verifyAdminPassword lazy migration
+        // or it's a plain password from the UI.
+        const passwordToStore = (newPassword.startsWith('$2a$') || newPassword.startsWith('$2b$'))
+            ? newPassword
+            : await hashPassword(newPassword);
+
         const { data, error } = await supabase
             .from('admin_config')
-            .update({ value: newPassword, updated_at: new Date().toISOString() })
+            .update({ value: passwordToStore, updated_at: new Date().toISOString() })
             .eq('key', 'admin_password');
         return { data, error };
     }

@@ -6,7 +6,7 @@ const MarketingConsent = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Pazarlama İzni Metni</title>
+                <title>HediyeEşleştir - Pazarlama İzni Metni</title>
                 <meta name="description" content="Ticari elektronik ileti gönderimi ve pazarlama faaliyetleri hakkında aydınlatma ve rıza metni." />
             </Helmet>
 
@@ -30,7 +30,7 @@ const MarketingConsent = () => {
                     </div>
                     <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem' }}>Ticari Elektronik İleti Onayı</h2>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.1rem' }}>
-                        HediyeEşle platformu olarak, tarafınıza özel fırsatlar, yeni özellikler, güncellemeler ve hediye önerileri gibi konularda bilgilendirme yapmak isteriz.
+                        HediyeEşleştir platformu olarak, tarafınıza özel fırsatlar, yeni özellikler, güncellemeler ve hediye önerileri gibi konularda bilgilendirme yapmak isteriz.
                     </p>
                 </div>
 

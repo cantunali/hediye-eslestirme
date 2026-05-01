@@ -6,8 +6,8 @@ const TermsOfService = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Kullanım Koşulları</title>
-                <meta name="description" content="HediyeEşle platformu kullanıcı sözleşmesi, kullanıcı hakları ve sorumlulukları." />
+                <title>HediyeEşleştir - Kullanım Koşulları</title>
+                <meta name="description" content="HediyeEşleştir platformu kullanıcı sözleşmesi, kullanıcı hakları ve sorumlulukları." />
             </Helmet>
 
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
@@ -28,7 +28,7 @@ const TermsOfService = () => {
                         A- KİŞİSEL VERİLERİN İŞLENMESİNE DAİR BİLGİ VE ONAY
                     </h2>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
-                        HediyeEşle platformu olarak, talep ettiğiniz hizmetlerin sunulması kapsamında tarafınıza ait kişisel bilgileri (ad, soyad, e-posta, etkinlik tarihleri vb.) işlemekteyiz.
+                        HediyeEşleştir platformu olarak, talep ettiğiniz hizmetlerin sunulması kapsamında tarafınıza ait kişisel bilgileri (ad, soyad, e-posta, etkinlik tarihleri vb.) işlemekteyiz.
                         Platformumuzu kullanarak kampanya, özel indirim ve hizmetlerimizi anlatan bildirimler almayı kabul etmiş olursunuz.
                     </p>
                 </div>
@@ -38,7 +38,7 @@ const TermsOfService = () => {
                         B- KULLANICI SÖZLEŞMESİ
                     </h2>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', marginBottom: '1rem' }}>
-                        HediyeEşle, özel etkinlikleriniz için hediye listeleri oluşturmanızı sağlayan bir organizasyon platformudur.
+                        HediyeEşleştir, özel etkinlikleriniz için hediye listeleri oluşturmanızı sağlayan bir organizasyon platformudur.
                         Platformda yer alan üçüncü taraf ürünlerin (Amazon, Hepsiburada vb.) sahibi veya doğrudan satıcısı değiliz; yalnızca bir ticaret ve organizasyon platformu oluşturmaktayız.
                     </p>
                     <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', color: 'var(--text-muted)', lineHeight: '1.8' }}>

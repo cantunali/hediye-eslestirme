@@ -7,28 +7,28 @@ const FAQ = () => {
 
     const faqs = [
         {
-            question: "HediyeEşle ücretli mi?",
-            answer: "Hayır, HediyeEşle tamamen ücretsiz bir platformdur. Etkinlik oluşturmak, davetli eklemek ve hediye listesi oluşturmak için herhangi bir ücret ödemezsiniz."
+            question: "HediyeEşleştir ücretli mi?",
+            answer: "Hayır, HediyeEşleştir tamamen ücretsiz bir platformdur. Etkinlik oluşturmak, davetli eklemek ve hediye listesi oluşturmak için herhangi bir ücret ödemezsiniz."
         },
         {
-            question: "Davetlilerimin üye olması gerekiyor mu?",
-            answer: "Hayır, davetlilerinizin üye olmasına gerek yoktur. Sadece paylaştığınız etkinlik adı ve etkinlik için belirlediğiniz şifre ile anında sisteme giriş yapabilirler."
+            question: "Davetlilerimin üye olması veya uygulama indirmesi gerekiyor mu?",
+            answer: "Hayır, davetlilerinizin üye olmasına veya herhangi bir uygulama indirmesine gerek yoktur. Paylaştığınız etkinlik adını seçip bilgilerini girerek anında listenize ulaşabilirler."
         },
         {
             question: "Hediye listemi hangi sitelerden oluşturabilirim?",
-            answer: "HediyeEşle, Hepsiburada ve Amazon başta olmak üzere tüm e-ticaret sitelerinden ürün eklemenize olanak tanır. Linkleri manuel olarak ekleyerek listenizi zenginleştirebilirsiniz."
+            answer: "HediyeEşleştir; Hepsiburada, Amazon, Trendyol ve diğer tüm e-ticaret siteleriyle uyumludur. Ürün görselini ve linkini ekleyerek davetlilerinizi doğrudan ilgili siteye yönlendirebilirsiniz."
         },
         {
-            question: "Bir hediyeyi birden fazla kişi alabilir mi?",
-            answer: "Evet, 'Nakit Katıl' özelliği sayesinde pahalı hediyeler için birden fazla davetli nakit katkıda bulunabilir. Bu durumda hediye listede 'Mevcut' kalmaya devam eder, tam alım yapıldığında ise 'Alındı' olarak işaretlenir."
+            question: "Bir hediyenin rezerve edilmesi ne anlama gelir?",
+            answer: "Bir davetli hediyeyi seçip 'Hediyeyi Al' dediğinde, o ürün listede 'Alındı' olarak işaretlenir. Bu sayede aynı hediyenin mükerrer olarak alınması engellenmiş olur."
         },
         {
-            question: "Etkinlik bilgilerimi sonradan değiştirebilir mi?",
-            answer: "Evet, etkinlik yöneticisi olarak panelinize giriş yaptıktan sonra etkinlik tarihi, şifresi ve diğer detayları dilediğiniz zaman güncelleyebilirsiniz."
+            question: "Kişisel verilerim güvende mi?",
+            answer: "Evet, verileriniz Supabase altyapısıyla güvenli bir şekilde saklanmaktadır. Sadece belirlediğiniz şifreye sahip kişiler etkinliğinize erişebilir."
         },
         {
-            question: "Gizliliğim nasıl korunuyor?",
-            answer: "Verileriniz şifrelenerek saklanmaktadır. Etkinliğinize sadece belirlediğiniz şifreye sahip davetliler erişebilir. Detaylı bilgi için Gizlilik Politikamızı inceleyebilirsiniz."
+            question: "Hizmet şartları ve KVKK hakkında bilgi alabilir miyim?",
+            answer: "Sitemizin alt kısmında (footer) yer alan Kullanım Koşulları ve KVKK Aydınlatma Metni sayfalarından tüm detaylara ulaşabilirsiniz."
         }
     ];
 
@@ -39,8 +39,8 @@ const FAQ = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
             <Helmet>
-                <title>HediyeEşle - Sıkça Sorulan Sorular (SSS)</title>
-                <meta name="description" content="HediyeEşle kullanımı hakkında merak edilenler. Ücretlendirme, üyelik ve hediye işlemleri ile ilgili sıkça sorulan sorular." />
+                <title>HediyeEşleştir - Sıkça Sorulan Sorular (SSS)</title>
+                <meta name="description" content="HediyeEşleştir kullanımı hakkında merak edilenler. Ücretlendirme, üyelik ve hediye işlemleri ile ilgili sıkça sorulan sorular." />
             </Helmet>
 
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
@@ -64,8 +64,8 @@ const FAQ = () => {
                         onClick={() => toggleAccordion(index)}
                     >
                         <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', margin: 0 }}>{faq.question}</h3>
-                            {openIndex === index ? <ChevronUp size={20} color="var(--primary)" /> : <ChevronDown size={20} color="var(--text-muted)" />}
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', margin: 0, color: '#ffffff' }}>{faq.question}</h3>
+                            {openIndex === index ? <ChevronUp size={20} color="#ffffff" /> : <ChevronDown size={20} color="rgba(255,255,255,0.5)" />}
                         </div>
                         {openIndex === index && (
                             <div style={{ padding: '0 1.5rem 1.5rem 1.5rem', color: 'var(--text-muted)', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.05)' }}>

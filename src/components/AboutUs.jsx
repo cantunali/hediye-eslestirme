@@ -7,12 +7,12 @@ const AboutUs = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Hakkımızda</title>
-                <meta name="description" content="HediyeEşle, özel günlerinizde hediye seçimini kolaylaştıran, sevdiklerinizle aranızdaki bağı güçlendiren bir platformdur." />
+                <title>HediyeEşleştir - Hakkımızda</title>
+                <meta name="description" content="HediyeEşleştir, özel günlerinizde hediye seçimini kolaylaştıran, sevdiklerinizle aranızdaki bağı güçlendiren bir platformdur." />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
-                    Hakkımızda <span className="gradient-text">HediyeEşle</span>
+                    Hakkımızda <span className="gradient-text">HediyeEşleştir</span>
                 </h1>
                 <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto' }}>
                     Özel anlarınızı daha stressiz ve anlamlı hale getirmek için buradayız.
@@ -47,7 +47,7 @@ const AboutUs = () => {
                 <Sparkles size={48} style={{ color: 'var(--primary)', marginBottom: '2rem' }} />
                 <h2 style={{ marginBottom: '1.5rem' }}>Mutluluğu Paylaşmak İçin Tasarlandı</h2>
                 <p style={{ color: 'var(--text-muted)', maxWidth: '800px', margin: '0 auto', fontSize: '1.125rem', lineHeight: '1.8' }}>
-                    HediyeEşle, düğün hazırlığı sürecinde yaşanan hediye karmaşasından ilham alınarak doğdu. Bugün ise doğum günlerinden yeni ev ziyaretlerine kadar her türlü özel günde yüzlerce insanın hedeflerine ulaşmasına yardımcı oluyor.
+                    HediyeEşleştir, düğün hazırlığı sürecinde yaşanan hediye karmaşasından ilham alınarak doğdu. Bugün ise doğum günlerinden yeni ev ziyaretlerine kadar her türlü özel günde yüzlerce insanın hedeflerine ulaşmasına yardımcı oluyor.
                 </p>
             </div>
         </div>

@@ -7,8 +7,8 @@ const PrivacyPolicy = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Gizlilik Politikası</title>
-                <meta name="description" content="HediyeEşle gizlilik politikası ve veri güvenliği hakkında bilgiler." />
+                <title>HediyeEşleştir - Gizlilik Politikası</title>
+                <meta name="description" content="HediyeEşleştir gizlilik politikası ve veri güvenliği hakkında bilgiler." />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
                             <h2 style={{ fontSize: '1.75rem' }}>Veri Güvenliği</h2>
                         </div>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                            HediyeEşle olarak, paylaştığınız verileri güvenli sunucularda saklıyor ve gizliliğinizi korumak için güncel güvenlik önlemleri alıyoruz. Oluşturduğunuz etkinlikler ve kullanıcı bilgileriniz, yetkisiz erişime karşı korunan veritabanlarımızda barındırılmaktadır.
+                            HediyeEşleştir olarak, paylaştığınız verileri güvenli sunucularda saklıyor ve gizliliğinizi korumak için güncel güvenlik önlemleri alıyoruz. Oluşturduğunuz etkinlikler ve kullanıcı bilgileriniz, yetkisiz erişime karşı korunan veritabanlarımızda barındırılmaktadır.
                         </p>
                     </section>
 

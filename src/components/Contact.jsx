@@ -48,8 +48,8 @@ const Contact = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '2rem 1rem' }}>
             <Helmet>
-                <title>HediyeEşle - İletişim</title>
-                <meta name="description" content="Sorularınız, görüşleriniz veya işbirlikleri için bize ulaşın. HediyeEşle ekibi size yardımcı olmaktan mutluluk duyar." />
+                <title>HediyeEşleştir - İletişim</title>
+                <meta name="description" content="Sorularınız, görüşleriniz veya işbirlikleri için bize ulaşın. HediyeEşleştir ekibi size yardımcı olmaktan mutluluk duyar." />
             </Helmet>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h1 className="hero-title" style={{ marginBottom: '1rem' }}>

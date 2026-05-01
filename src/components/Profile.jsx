@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
-    const { user, updateProfile, updatePassword, deactivateAccount } = useAuth();
+    const { user, updateProfile, updatePassword, checkPassword, deactivateAccount } = useAuth();
     const navigate = useNavigate();
 
     const [fullname, setFullname] = useState(user?.fullname || '');
@@ -41,7 +41,8 @@ const Profile = () => {
         e.preventDefault();
 
         // Manual password check for this demo/manual auth setup
-        if (currentPassword !== user?.password) {
+        const isCurrentValid = await checkPassword(currentPassword);
+        if (!isCurrentValid) {
             setMessage({ type: 'error', text: 'Mevcut şifreniz hatalı.' });
             return;
         }
@@ -88,7 +89,7 @@ const Profile = () => {
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '2rem' }}>
             <Helmet>
-                <title>HediyeEşle - Profilim</title>
+                <title>HediyeEşleştir - Profilim</title>
             </Helmet>
 
             <button
