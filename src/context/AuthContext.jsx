@@ -3,6 +3,17 @@ import { supabase, db } from '../services/supabase';
 
 const AuthContext = createContext();
 
+// Google → 'name', email/password → 'fullname', bazı provider'lar → 'full_name'
+const mapUser = (authUser) => ({
+    ...authUser,
+    fullname:
+        authUser.user_metadata?.fullname ||
+        authUser.user_metadata?.name ||
+        authUser.user_metadata?.full_name ||
+        authUser.email?.split('@')[0] ||
+        'İsimsiz Kullanıcı'
+});
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -11,12 +22,7 @@ export const AuthProvider = ({ children }) => {
         // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session?.user) {
-                // Map user metadata for compatibility
-                const mappedUser = {
-                    ...session.user,
-                    fullname: session.user.user_metadata?.fullname || 'İsimsiz Kullanıcı'
-                };
-                setUser(mappedUser);
+                setUser(mapUser(session.user));
             }
             setLoading(false);
         });
@@ -24,11 +30,7 @@ export const AuthProvider = ({ children }) => {
         // Listen for changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (session?.user) {
-                const mappedUser = {
-                    ...session.user,
-                    fullname: session.user.user_metadata?.fullname || 'İsimsiz Kullanıcı'
-                };
-                setUser(mappedUser);
+                setUser(mapUser(session.user));
             } else {
                 setUser(null);
             }

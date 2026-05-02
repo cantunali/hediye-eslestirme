@@ -32,7 +32,13 @@ if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KE
     console.warn('Supabase credentials missing. App will run in limited mode.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+        detectSessionFromUrl: true,  // hash'teki #access_token ve ?code parametrelerini parse et
+        persistSession: true,
+        autoRefreshToken: true,
+    }
+});
 
 export const db = {
     // Auth Methods (Using Supabase Auth)

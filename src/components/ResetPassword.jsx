@@ -15,7 +15,8 @@ const ResetPassword = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Supabase parses the hash fragment and fires PASSWORD_RECOVERY when the link is valid
+        // PASSWORD_RECOVERY event'i AuthContext.getSession() tarafından zaten
+        // tüketilmiş olabilir — listener önce kurulur, sonra getSession() çağrılır.
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
             if (event === 'PASSWORD_RECOVERY') {
                 setSessionReady(true);
@@ -23,11 +24,20 @@ const ResetPassword = () => {
             }
         });
 
-        // No recovery token in hash → invalid link
-        const hash = window.location.hash;
-        if (!hash.includes('type=recovery')) {
-            setError('Geçersiz veya süresi dolmuş sıfırlama linki.');
-        }
+        // Supabase, hash'teki #access_token token'larını parse ettikten sonra
+        // window.history.replaceState ile URL'den temizler. Bu component mount
+        // olduğunda hash artık boş olduğundan hash kontrolü güvenilir değil.
+        //
+        // AuthContext !loading && children ile beklettiği için bu component
+        // mount olduğunda session zaten kurulmuş olur. getSession() direkt
+        // session'ı döner; session yoksa kullanıcı doğrudan sayfaya gitmiş demektir.
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setSessionReady(true);
+            } else {
+                setError('Geçersiz veya süresi dolmuş sıfırlama linki.');
+            }
+        });
 
         return () => subscription.unsubscribe();
     }, []);
@@ -102,7 +112,7 @@ const ResetPassword = () => {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     className="input"
-                                    style={{ paddingRight: '3rem' }}
+                                    style={{ paddingRight: '3rem', color: '#333' }}
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -112,7 +122,7 @@ const ResetPassword = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--on-surface-variant)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                    style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#333', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -125,7 +135,7 @@ const ResetPassword = () => {
                                 <input
                                     type={showConfirmPassword ? "text" : "password"}
                                     className="input"
-                                    style={{ paddingRight: '3rem' }}
+                                    style={{ paddingRight: '3rem', color: '#333' }}
                                     placeholder="••••••••"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -134,7 +144,7 @@ const ResetPassword = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--on-surface-variant)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                    style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#333', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                                 >
                                     {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
