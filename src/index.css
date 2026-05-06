@@ -147,7 +147,7 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
   background: var(--surface-container-lowest);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-md);
-  color: var(--on-surface);
+  color: #333;
   font-size: 1rem;
   transition: var(--transition);
   outline: none;

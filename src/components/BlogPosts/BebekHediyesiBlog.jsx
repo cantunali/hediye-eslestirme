@@ -6,8 +6,8 @@ import AdBanner from '../AdBanner';
 
 const BebekHediyesiBlog = () => {
     const slug = "bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026";
-    const title = "Bebek Hediyesi Ne Alınır? Akıllı Liste Rehberi 2026";
-    const description = "Yeni doğan bebek için doğru hediyeyi seçin. Online hediye listesi ile aynı ürün riskini azaltın, ihtiyaçları kolayca karşılayın.";
+    const title = "Bebek Hediyesi Ne Alınır? Bütçeye Göre Akıllı Liste Rehberi [2026]";
+    const description = "Bebek hediyesi ne alınır? Bütçeye göre 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi ile aynı ürün alma riskini sıfırlayın. 2026 güncel rehber.";
     const imageUrl = "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1200";
 
     const jsonLd = {
@@ -15,8 +15,8 @@ const BebekHediyesiBlog = () => {
         "@type": "BlogPosting",
         "headline": title,
         "image": [imageUrl],
-        "datePublished": "2026-02-15T08:00:00+03:00",
-        "dateModified": "2026-02-15T08:00:00+03:00",
+        "datePublished": "2026-02-15T10:00:00+03:00",
+        "dateModified": "2026-05-06T10:00:00+03:00",
         "author": [{
             "@type": "Organization",
             "name": "HediyeEşleştir",
@@ -29,12 +29,28 @@ const BebekHediyesiBlog = () => {
             <Helmet>
                 <title>{title}</title>
                 <meta name="description" content={description} />
+                <meta name="keywords" content="bebek hediyesi ne alınır, yenidoğan hediye, bebek hediye listesi, bebek görmeye giderken ne alınır, doğum hediyesi, hediye eşleştirme" />
+                <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
                 <link rel="canonical" href={`https://hediyeeslestir.com/blog/${slug}`} />
+                
                 <meta property="og:title" content={title} />
-                <meta property="og:description" content={description} />
-                <meta property="og:image" content={imageUrl} />
+                <meta property="og:description" content="Bebek hediyesi ne alınır? Bütçeye göre 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi ile aynı ürün alma riskini sıfırlayın." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content={`https://hediyeeslestir.com/blog/${slug}`} />
+                <meta property="og:image" content={imageUrl} />
+                <meta property="og:image:alt" content="Yenidoğan bebek hediye kutusu ve pastel renkli hediye paketleri" />
+                <meta property="og:site_name" content="HediyeEşleştir" />
+                <meta property="og:locale" content="tr_TR" />
+                <meta property="article:published_time" content="2026-02-15T10:00:00+03:00" />
+                <meta property="article:modified_time" content="2026-05-06T10:00:00+03:00" />
+                <meta property="article:section" content="Hediye Rehberi" />
+                <meta property="article:tag" content="bebek hediyesi" />
+                <meta property="article:tag" content="yenidoğan" />
+                <meta property="article:tag" content="hediye listesi" />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content="Bebek hediyesi ne alınır? 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi rehberi." />
                 <script type="application/ld+json">
                     {JSON.stringify(jsonLd)}
                 </script>
@@ -49,13 +65,13 @@ const BebekHediyesiBlog = () => {
 
                     <div style={{ maxWidth: '850px' }}>
                         <h1 className="hero-title" style={{ marginBottom: '1.5rem', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#ffffff' }}>
-                            👶 Bebek Hediyesi Seçmek Artık Çok Daha Kolay: <span className="gradient-text">İsteyene İstediği Hediye!</span>
+                            Bebek Hediyesi Ne Alınır? Bütçeye Göre Akıllı Liste Rehberi (2026)
                         </h1>
 
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem', marginBottom: '2rem' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={16} /> 15 Şubat 2026</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={16} /> 15 Şubat 2026 | Son güncelleme: 6 Mayıs 2026</span>
                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><User size={16} /> HediyeEşleştir Editör</span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} /> 4 Dakika Okuma</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} /> 8 Dakika Okuma</span>
                         </div>
                     </div>
                 </div>
@@ -67,112 +83,174 @@ const BebekHediyesiBlog = () => {
                     <div style={{ maxWidth: '850px', margin: '0 auto' }}>
                         <img
                             src={imageUrl}
-                            alt="Bebek Hediyesi Rehberi"
+                            alt="Pastel renkli hediye paketleri içinde yenidoğan bebek kıyafetleri ve oyuncaklar"
                             style={{ width: '100%', borderRadius: '24px', marginBottom: '3rem', boxShadow: '0 20px 40px rgba(187, 0, 39, 0.1)' }}
                         />
 
                         <div className="blog-content" style={{ lineHeight: '1.8', fontSize: '1.15rem', color: '#ffffff' }}>
                             <p style={{ marginBottom: '1.5rem' }}>
-                                Bebek haberi almak dünyadaki en güzel duygulardan biri 💛 Ama ardından gelen klasik soru hep aynı: <strong>“Acaba ne hediye alsak?”</strong>
+                                Yakın çevrenizden bebek haberi mi aldınız? İlk duygudan sonra aklınıza gelen soru büyük olasılıkla şudur: "Acaba ne hediye alsak?" Zıbın mı, battaniye mi, mama sandalyesi mi? Çoğu zaman sonuç hep aynıdır: aynı üründen dört tane, hiç kullanılmayan hediyeler ve boşa giden bütçe.
                             </p>
 
                             <p style={{ marginBottom: '1.5rem' }}>
-                                Zıbın mı? Battaniye mi? Mama sandalyesi mi? Ve çoğu zaman sonuç: Aynı üründen 4 tane, hiç kullanılmayan hediyeler ve boşa giden bütçe…
+                                Bu rehberde bebek hediyesi ne alınır sorusuna bütçeye göre sıralanmış önerilerle, kaçınılması gereken hatalarla ve modern bir çözüm olan online hediye listesi sistemiyle kapsamlı bir yanıt veriyoruz.
                             </p>
 
-                            <div className="card" style={{ padding: '2.5rem', borderRadius: '20px', marginBottom: '3rem', borderLeft: '6px solid var(--primary)' }}>
-                                <p style={{ margin: 0, fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.85)' }}>
-                                    İşte tam bu noktada devreye giren <strong>hediye eşleştirme uygulamaları</strong>, bebek bekleyen aileler için süreci hem planlı hem de zahmetsiz hale getiriyor.
-                                </p>
-                            </div>
-
-                            <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', marginTop: '3.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Baby size={32} /> 🍼 Bebek Sahipleri İçin Neden Hediye Listesi Şart?
+                            <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Bebek Hediyesi Seçerken Dikkat Edilmesi Gerekenler
                             </h2>
 
                             <p style={{ marginBottom: '1.5rem' }}>
-                                Yeni ebeveynler için ilk aylar hem heyecanlı hem de yoğun geçer. İhtiyaçlar net ama çevredekiler çoğu zaman tahmin yürütür.
+                                Bebek hediyesi almak sanıldığı kadar basit değildir. Yanlış beden, uygun olmayan mevsim veya bebeğe zararlı bir materyal seçimi hem hediyenin işe yaramamasına hem de ailenin zor durumda kalmasına neden olabilir. İşte hediye seçerken göz önünde bulundurmanız gereken temel noktalar:
                             </p>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
-                                {[
-                                    "Gerçekten ihtiyaç duyulan ürünler listeye eklenir",
-                                    "Davetliler listeden seçim yapar",
-                                    "Aynı ürünün birden fazla alınması engellenir",
-                                    "Gereksiz harcama ve iade süreci ortadan kalkar"
-                                ].map((item, index) => (
-                                    <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', padding: '1.25rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                        <CheckCircle2 size={22} style={{ color: 'var(--primary)', marginTop: '0.1rem', flexShrink: 0 }} />
-                                        <span style={{ fontWeight: '500', color: '#ffffff' }}>{item}</span>
-                                    </div>
-                                ))}
-                            </div>
+                            
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Doğru beden seçimi her şeyden önemlidir.</strong> En sık yapılan hata yenidoğan bedeni almaktır. Yenidoğan bedeni kıyafetler çok kısa süre giyilir; bazı bebekler doğduğunda zaten bu bedeni geçmiş olur. Bunun yerine 3-6 ay bedeni tercih etmek çok daha mantıklıdır. Bebek bu kıyafetleri daha uzun süre kullanır ve ebeveynler bu tercihi takdir eder.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Mevsimi mutlaka hesaplayın.</strong> Kışın doğan bir bebeğe 3-6 ay sonrasında giyeceği yazlık kıyafet almak daha faydalıdır. Doğum tarihine 3-6 ay ekleyerek hangi mevsimde olacağınızı hesaplayın ve kıyafetin mevsime uygunluğundan emin olun.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Güvenlik kriterlerini gözetin.</strong> Parfümlü ürünler bebek cildine zararlı olabilir. Çok küçük parçalı oyuncaklar boğulma riski taşır. Organik pamuklu, BPA içermeyen ve CE belgeli ürünleri tercih edin.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Büyük hediyelerden kaçının.</strong> Yürüteç, salıncak ve bebek arabası gibi büyük parçalar genellikle aile tarafından önceden alınmış olur. Sürpriz olarak bu tür hediyeleri almadan önce mutlaka aileye danışın.</li>
+                            </ul>
 
                             <AdBanner slot="blog_middle" />
 
-                            <h2 style={{ color: 'var(--secondary)', marginBottom: '1.5rem', marginTop: '3.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Sparkles size={32} /> 🎁 Bebek Hediyesi Uygulaması Nasıl Çalışır?
+                            <h2 style={{ color: 'var(--secondary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Bütçeye Göre Bebek Hediyesi Önerileri
                             </h2>
 
-                            <div style={{ marginBottom: '3rem' }}>
-                                <div style={{ marginBottom: '2rem' }}>
-                                    <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>1️⃣ Aile Liste Oluşturur</h3>
-                                    <ul style={{ listStyle: 'none', paddingLeft: '1rem' }}>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>İhtiyaç duyulan ürünler eklenir (bez, biberon seti, bebek arabası, uyku tulumu vb.)</span></li>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>İstenirse marka ve model belirtilebilir</span></li>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>Fiyat aralığı eklenebilir</span></li>
-                                    </ul>
-                                </div>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ffffff', marginTop: '2rem' }}>100-300 TL Arası Hediye Fikirleri</h3>
+                            <p style={{ marginBottom: '1.5rem' }}>Bu bütçe aralığı, düşünceli ve kullanışlı bir hediye vermek için oldukça yeterlidir. İş arkadaşları, komşular veya uzak akrabalar için idealdir.</p>
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Organik pamuklu body/zıbın seti:</strong> 3-6 ay bedeni, mevsime uygun. Her bebeğin en çok ihtiyaç duyduğu temel parçalardandır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Müslin örtü seti:</strong> Emzirme, örtünme ve kundaklama gibi pek çok amaçla kullanılır. Pratik ve uzun ömürlüdür.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Bebek bakım seti:</strong> Tırnak makası, burun aspiratörü, termometre içeren setler ebeveynlerin işini çok kolaylaştırır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Diş kaşıyıcı ve çıngırak seti:</strong> Doğal ahşap veya silikon malzemeden üretilmiş olanlar hem güvenli hem de eğlencelidir.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Anı defteri veya bebek günlüğü:</strong> Ailenin en güzel anlarını kayıt altına almasını sağlayan uzun ömürlü bir hediye.</li>
+                            </ul>
 
-                                <div style={{ marginBottom: '2rem' }}>
-                                    <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>2️⃣ Liste Paylaşılır</h3>
-                                    <ul style={{ listStyle: 'none', paddingLeft: '1rem' }}>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>Özel bir link ile aile ve arkadaşlara gönderilir</span></li>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>WhatsApp, Instagram veya e-posta ile kolayca paylaşılır</span></li>
-                                    </ul>
-                                </div>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ffffff', marginTop: '2rem' }}>300-700 TL Arası Hediye Fikirleri</h3>
+                            <p style={{ marginBottom: '1.5rem' }}>Yakın arkadaşlar ve aile üyeleri için uygun bir bütçe dilimi. Bu aralıkta hem kaliteli hem işlevsel ürünler bulmak mümkündür.</p>
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Bebek battaniyesi:</strong> Yüzde yüz pamuklu, dört mevsim kullanılabilir modeller. İsim işlemeli olanlar ayrıca anı değeri taşır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Biberon ve emzik seti:</strong> Kaliteli markalardan kolik önleyici biberon setleri ebeveynlerin hayatını kurtarır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Bebek telsizi:</strong> Sesli veya görüntülü modeller, ebeveynler için güvenlik açısından çok değerli bir hediyedir.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Uyku tulumu:</strong> Bebeğin güvenli uyuması için battaniye yerine tercih edilen modern bir ürün.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Hediye sepeti:</strong> Kıyafet, bakım ürünü ve oyuncak içeren karma setler hem görsel olarak etkileyici hem de kullanışlıdır.</li>
+                            </ul>
 
-                                <div style={{ marginBottom: '2rem' }}>
-                                    <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>3️⃣ Davetliler Seçim Yapar</h3>
-                                    <ul style={{ listStyle: 'none', paddingLeft: '1rem' }}>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>Listedeki ürünlerden birini rezerve eder</span></li>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>Böylece çakışma olmaz</span></li>
-                                        <li style={{ marginBottom: '0.75rem', display: 'flex', gap: '0.5rem' }}>• <span>Herkes bütçesine uygun hediyeyi seçebilir</span></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ffffff', marginTop: '2rem' }}>700 TL ve Üzeri Hediye Fikirleri</h3>
+                            <p style={{ marginBottom: '1.5rem' }}>Çok yakın aile üyeleri veya grup hediyesi organizasyonları için uygundur.</p>
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Bebek arabası aksesuarları:</strong> Puset organizer, yağmurluk seti, uyku pedi gibi ürünler.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Yenidoğan fotoğraf çekimi hediyesi:</strong> Profesyonel bir fotoğraf çekimi, ailenin ömür boyu saklayacağı anılar üretir.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Elektronik beşik veya sallanır ana kucağı:</strong> Mutlaka aileye danışarak alın.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Hediye kartı:</strong> Ebeveynlerin ihtiyaçlarına göre kendi seçimlerini yapmasını sağlayan pratik bir alternatif.</li>
+                            </ul>
 
-                            <h2 style={{ color: 'var(--tertiary)', marginBottom: '2rem', marginTop: '3.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Lightbulb size={32} /> 💡 Neden Bu Sistem Daha Mantıklı?
+
+                            <h2 style={{ color: 'var(--tertiary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Bebek Görmeye Giderken Ne Hediye Alınır?
                             </h2>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                Hastaneye bebek görmeye gitmek ayrı bir incelik gerektirir. Odanın küçük olduğunu ve ailenin yoğun bir dönemden geçtiğini göz önünde bulundurun.
+                            </p>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                <strong>Hastane ziyareti için en uygun hediyeler:</strong> küçük ve taşıması kolay ürünlerdir. Bebek nazar iğnesi, altın takı (bilezik, iğne), organik kıyafet seti ve hediyelik çikolata kutusu en klasik ve en çok takdir edilen seçenekler arasındadır.
+                            </p>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                <strong>Kaçınmanız gerekenler:</strong> Yer kaplayan büyük hediyeler, kokulu çiçekler (yoğun bakımda yasak olabilir) ve plastik ambalajlı hediyelikler.
+                            </p>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                <strong>Bir ipucu:</strong> Hastane ziyaretinizi kısa tutun, hediyenizi bırakın ve ailenin dinlenmesine izin verin. Uzun ziyaretler yeni doğum yapmış bir anne için yorucu olabilir.
+                            </p>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
-                                <div className="card" style={{ padding: '2rem' }}>
-                                    <h4 style={{ color: 'var(--primary)', marginBottom: '0.75rem', fontSize: '1.2rem' }}>🎯 Gerçek İhtiyaç Odaklı</h4>
-                                    <p style={{ fontSize: '1rem', margin: 0, color: 'rgba(255, 255, 255, 0.85)' }}>Yeni doğan bir bebeğin ihtiyaçları spesifiktir. Rastgele hediye yerine, gerçekten kullanılacak ürünler alınır.</p>
-                                </div>
-                                <div className="card" style={{ padding: '2rem' }}>
-                                    <h4 style={{ color: 'var(--secondary)', marginBottom: '0.75rem', fontSize: '1.2rem' }}>💸 Bütçe Dostu</h4>
-                                    <p style={{ fontSize: '1rem', margin: 0, color: 'rgba(255, 255, 255, 0.85)' }}>Davetliler fiyat aralığını görebilir. Kimse kendini zor durumda hissetmez.</p>
-                                </div>
-                                <div className="card" style={{ padding: '2rem' }}>
-                                    <h4 style={{ color: 'var(--tertiary)', marginBottom: '0.75rem', fontSize: '1.2rem' }}>📦 Karmaşayı Azaltır</h4>
-                                    <p style={{ fontSize: '1rem', margin: 0, color: 'rgba(255, 255, 255, 0.85)' }}>4 tane aynı battaniye yerine 4 farklı ihtiyaç karşılanır.</p>
-                                </div>
-                                <div className="card" style={{ padding: '2rem' }}>
-                                    <h4 style={{ color: 'var(--error)', marginBottom: '0.75rem', fontSize: '1.2rem' }}>🤍 Duygusal Değer Artar</h4>
-                                    <p style={{ fontSize: '1rem', margin: 0, color: 'rgba(255, 255, 255, 0.85)' }}>Hediye alan kişi, gerçekten işe yarayan bir ürün verdiğini bilir.</p>
-                                </div>
+                            <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Aynı Hediyeyi Alma Sorununa Modern Çözüm: Online Hediye Listesi
+                            </h2>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                Bebek hediyesi almayı zorlaştıran en büyük problem aynı üründen birden fazla alınmasıdır. Araştırmalar, yeni ebeveynlerin aldıkları hediyelerin yaklaşık yüzde 30'unu ya değiştirmek ya da hiç kullanmadan kaldırmak zorunda kaldığını göstermektedir.
+                            </p>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                İşte bu noktada online hediye eşleştirme sistemi devreye giriyor.
+                            </p>
+
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ffffff', marginTop: '2rem' }}>Hediye Listesi Nasıl Çalışır?</h3>
+                            <p style={{ marginBottom: '1.5rem' }}>Sistem üç basit adımdan oluşur:</p>
+                            <ul style={{ listStyle: 'none', paddingLeft: '0', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '1rem' }}><strong>Adım 1: Aile ihtiyaç listesini oluşturur.</strong> Bebek bezi, biberon seti, bebek arabası, uyku tulumu gibi gerçekten ihtiyaç duyulan ürünler listeye eklenir. İsteğe bağlı olarak marka, model ve fiyat aralığı da belirtilebilir.</li>
+                                <li style={{ marginBottom: '1rem' }}><strong>Adım 2: Liste paylaşılır.</strong> Özel bir bağlantı (link) oluşturulur ve bu link WhatsApp, Instagram, e-posta veya SMS ile aile ve arkadaşlara gönderilir. Herhangi bir uygulama indirmeye gerek yoktur.</li>
+                                <li style={{ marginBottom: '1rem' }}><strong>Adım 3: Davetliler seçim yapar.</strong> Listeye giren kişiler bütçelerine uygun bir ürünü seçip rezerve eder. Başka biri aynı ürünü göremez; böylece çakışma tamamen önlenir.</li>
+                            </ul>
+
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ffffff', marginTop: '2rem' }}>Online Hediye Listesinin Avantajları</h3>
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Gerçek ihtiyaçlar karşılanır.</strong> Yenidoğanın ihtiyaçları çok spesifiktir. Rastgele seçilen bir hediye yerine gerçekten kullanılacak ürünler alınır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Bütçe dostu bir sistemdir.</strong> Davetliler fiyat aralığını görebildiği için kimse kendini baskı altında hissetmez. 100 TL ile de 1.000 TL ile de listeden anlamlı bir hediye seçmek mümkündür.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Hediye çakışması ortadan kalkar.</strong> Dört tane aynı battaniye yerine dört farklı ihtiyaç karşılanır. Hem hediye veren memnun olur hem de aile gerçekten işe yarayan ürünler alır.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Duygusal değer artar.</strong> Hediye veren kişi, seçtiği ürünün gerçekten kullanılacağını ve işe yarayacağını bilir. Bu da hediyenin anlamını artırır.</li>
+                            </ul>
+
+                            <h2 style={{ color: 'var(--secondary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Kız Bebek ve Erkek Bebek İçin Hediye Farkları
+                            </h2>
+                            <p style={{ marginBottom: '1.5rem' }}>
+                                Bebek hediyesinde cinsiyet belirleyici bir etken olabilir, ancak günümüzde unisex hediyeler de çok popülerdir.
+                            </p>
+                            <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '2rem' }}>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Kız bebeğe hediye alırken</strong> pembe tonları, çiçekli ve fiyonklu tasarımlar klasik tercihler arasındadır. Saç bantları, elbise setleri ve pelüş oyuncaklar sıkça tercih edilir.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Erkek bebeğe hediye seçerken</strong> mavi tonları, hayvan figürlü tasarımlar ve arabalı motifler öne çıkar. Tulum setleri, şapkalar ve figürlü emzik zincirleri popüler seçeneklerdendir.</li>
+                                <li style={{ marginBottom: '0.75rem' }}><strong>Cinsiyetten bağımsız hediyeler ise</strong> her durumda işe yarar: müslin örtüler, bebek battaniyeleri, bakım setleri, biberon setleri ve hediye kartları her bebek için uygun evrensel seçeneklerdir.</li>
+                            </ul>
+
+                            <h2 style={{ color: 'var(--tertiary)', marginBottom: '1.5rem', marginTop: '3.5rem', fontSize: '2rem' }}>
+                                Sıkça Sorulan Sorular (SSS)
+                            </h2>
+                            <div style={{ marginBottom: '2rem' }}>
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Bebek hediyesi olarak ne alınır?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>En çok tercih edilen ve işe yarayan bebek hediyeleri organik pamuklu kıyafet setleri (3-6 ay beden), müslin örtü seti, bebek bakım seti, biberon seti, bebek battaniyesi ve anı defteridir. Bütçeye göre 100-500 TL arasında kaliteli seçenekler bulmak mümkündür. En önemli kural: bebeğin yaşına, mevsime ve gerçek ihtiyaçlarına uygun bir ürün seçmektir.</p>
+                                
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Bebek görmeye giderken ne hediye alınır?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>Hastaneye bebek görmeye giderken küçük, taşıması kolay hediyeler tercih edilmelidir. Bebek nazar iğnesi, altın takı, organik kıyafet seti ve hediyelik çikolata en uygun seçeneklerdir. Büyük ve yer kaplayan hediyelerden ve kokulu çiçeklerden kaçınılmalıdır.</p>
+                                
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Bebek hediyesinde hangi beden alınmalı?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>En sık yapılan hata yenidoğan bedeni almaktır. Yenidoğan bedeni çok kısa süre giyilir. Bunun yerine 3-6 ay bedeni alın ve bebeğin doğum tarihine göre mevsim hesaplaması yapın. Kışın doğan bir bebeğe 3-6 ay sonrasında giyeceği yazlık kıyafet almak çok daha faydalıdır.</p>
+                                
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Online bebek hediye listesi nasıl çalışır?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>Aile ihtiyaç duyduğu ürünleri bir listeye ekler ve bu listeyi özel bir link ile paylaşır. Davetliler listeden bütçelerine uygun bir ürünü seçip rezerve eder. Böylece aynı hediyeden birden fazla alınması engellenir ve gerçek ihtiyaçlar karşılanır. HediyeEşleştir ile birkaç dakikada ücretsiz liste oluşturabilirsiniz.</p>
+                                
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Bebek hediyesi için ne kadar bütçe ayırmalıyım?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>Bütçe yakınlık derecesine göre değişir. Yakın arkadaş veya aile için 300-1000 TL, iş arkadaşı veya tanıdık için 100-300 TL makul bir aralıktır. Önemli olan fiyat değil, düşünceli ve ihtiyaca yönelik bir seçim yapmaktır.</p>
+                                
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#ffffff' }}>Bebek hediyesinde hangi ürünlerden kaçınılmalı?</h4>
+                                <p style={{ marginBottom: '1.5rem' }}>Parfümlü ürünler (bebek cildine zararlı), çok küçük parçalı oyuncaklar (boğulma riski), yenidoğan bedeni kıyafetler (çok kısa süre giyilir) ve büyük mobilya türü hediyeler (aile zaten almış olabilir) kaçınılması gereken başlıca hediyelerdir.</p>
                             </div>
 
                             <div className="card" style={{ padding: '3rem', borderRadius: '32px', textAlign: 'center' }}>
-                                <h2 className="gradient-text" style={{ marginBottom: '1.5rem' }}>👶 Sonuç: Hem Pratik Hem Modern Bir Çözüm</h2>
+                                <h2 className="gradient-text" style={{ marginBottom: '1.5rem' }}>Sonuç: Hediye Seçmek Artık Daha Kolay</h2>
+                                <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>
+                                    Bebek hediyesi seçmek sevgi dolu bir jesttir. Ancak bu jestin gerçekten faydalı olması çok daha değerlidir. Doğru beden, doğru mevsim ve gerçek ihtiyaçlara yönelik bir seçim yaptığınızda hem hediyeniz anlam kazanır hem de aileyi mutlu edersiniz.
+                                </p>
                                 <p style={{ marginBottom: '2.5rem', fontSize: '1.2rem' }}>
-                                    Bebek hediyesi seçmek sevgi dolu bir jesttir. Ama bu jestin gerçekten faydalı olması çok daha değerlidir. Hediye eşleştirme uygulamaları sayesinde gereksiz hediyeler azalır, gerçek ihtiyaçlar karşılanır ve herkes mutlu olur.
+                                    Hediye eşleştirme sistemiyle gereksiz hediyeler azalır, gerçek ihtiyaçlar karşılanır ve herkes mutlu olur. Birkaç dakikada ücretsiz hediye listenizi oluşturabilir ve sevdiklerinizle paylaşabilirsiniz.
                                 </p>
                                 <Link to="/yonetim/olustur" className="btn btn-primary" style={{ height: '3.5rem', padding: '0 2.5rem', fontSize: '1.1rem' }}>
-                                    Hemen Listenizi Oluşturun
+                                    Hemen Ücretsiz Listenizi Oluşturun →
                                 </Link>
+                            </div>
+
+                            <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ffffff' }}>İlgili Yazılar:</h3>
+                                <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
+                                    <li style={{ marginBottom: '1rem' }}>
+                                        <Link to="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi-2026" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                            Hediye Eşleştirme Uygulaması: Akıllı Hediye Listesi Rehberi (2026)
+                                        </Link>
+                                    </li>
+                                    <li style={{ marginBottom: '1rem' }}>
+                                        <Link to="/blog/dugun-hediyesi-ne-alinir-akilli-liste-rehberi" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                            Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi
+                                        </Link>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

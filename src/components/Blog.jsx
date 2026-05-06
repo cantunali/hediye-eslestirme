@@ -2,40 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { blogPosts as posts } from '../data/blogPosts';
 
 const Blog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 6;
-
-    const posts = [
-        {
-            id: 1,
-            title: "Bebek Hediyesi Ne Alınır? Akıllı Liste Rehberi 2026",
-            excerpt: "Yeni doğan bebek için doğru hediyeyi seçin. Online hediye listesi ile aynı ürün riskini azaltın, ihtiyaçları kolayca karşılayın.",
-            date: "15 Şubat 2026",
-            author: "HediyeEşleştir Editör",
-            slug: "bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026",
-            image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800"
-        },
-        {
-            id: 2,
-            title: "Hediye Eşleştirme Uygulaması: Akıllı Hediye Listesi Rehberi",
-            excerpt: "Hediye seçme stresine son! HediyeEşleştir ile etkinlikleriniz için akıllı listeler oluşturun, sevdiklerinizin ihtiyaçlarını kolayca karşılayın.",
-            date: "15 Şubat 2026",
-            author: "HediyeEşleştir Editör",
-            slug: "hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi",
-            image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=800"
-        },
-        {
-            id: 3,
-            title: "Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi",
-            excerpt: "Yeni ev kurarken gereksiz hediyelerle uğraşmayın. Düğün hediye listesi oluşturun, ihtiyaçlarınız doğru karşılansın.",
-            date: "15 Şubat 2026",
-            author: "HediyeEşleştir Editör",
-            slug: "dugun-hediyesi-karmasasina-son-akilli-liste-sistemi",
-            image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800"
-        }
-    ];
 
     // Pagination Logic
     const indexOfLastPost = currentPage * postsPerPage;
