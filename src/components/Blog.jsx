@@ -1,18 +1,21 @@
+"use client";
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
-import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { blogPosts as posts } from '../data/blogPosts';
+import Link from 'next/link';
+import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { blogPostsMeta as posts } from '../data/blogPostsMeta';
 
 const Blog = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 6;
+    const postsPerPage = 24;
+
+    // Sort posts by dateIso descending (newest first)
+    const sortedPosts = [...posts].sort((a, b) => b.dateIso.localeCompare(a.dateIso));
 
     // Pagination Logic
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-    const totalPages = Math.ceil(posts.length / postsPerPage);
+    const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -21,16 +24,7 @@ const Blog = () => {
 
     return (
         <div className="animate-fade-in">
-            <Helmet>
-                <title>Blog - HediyeEşleştir | Hediye Rehberi ve İpuçları</title>
-                <meta name="description" content="Hediye seçimi, etkinlik planlama ve hediye listesi oluşturma konularında en güncel ipuçları ve rehberler." />
-                <link rel="canonical" href="https://hediyeeslestir.com/blog" />
-                <meta property="og:title" content="HediyeEşleştir Blog | Hediye Rehberleri" />
-                <meta property="og:description" content="Hediyeleşme sanatına dair ipuçları, rehberler ve ilham verici içerikler." />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://hediyeeslestir.com/blog" />
-            </Helmet>
-
+            
             <section className="section" style={{ textAlign: 'center', paddingBottom: '3rem' }}>
                 <div className="container">
                     <h1 className="hero-title gradient-text">Hediye Rehberi Blog</h1>
@@ -46,7 +40,7 @@ const Blog = () => {
                         {currentPosts.map((post) => (
                             <Link
                                 key={post.id}
-                                to={`/blog/${post.slug}`}
+                                href={`/blog/${post.slug}`}
                                 className="card animate-reveal"
                                 style={{
                                     textDecoration: 'none',
@@ -66,12 +60,13 @@ const Blog = () => {
                                         className="blog-image"
                                     />
                                     <div style={{ position: 'absolute', top: '1rem', left: '1rem', background: 'var(--primary)', color: 'white', padding: '0.4rem 1rem', borderRadius: '2rem', fontSize: '0.75rem', fontWeight: '700' }}>
-                                        Rehber
+                                        {post.category || 'Rehber'}
                                     </div>
                                 </div>
                                 <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                                    <div style={{ display: 'flex', gap: '1rem', color: 'var(--on-surface-variant)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', color: 'var(--on-surface-variant)', fontSize: '0.85rem', marginBottom: '1rem' }}>
                                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={14} /> {post.date}</span>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={14} /> {post.readingTime || '5 dk'}</span>
                                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><User size={14} /> {post.author}</span>
                                     </div>
                                     <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem', lineHeight: '1.3', color: 'var(--on-surface)' }}>{post.title}</h3>

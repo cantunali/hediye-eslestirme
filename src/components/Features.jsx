@@ -1,6 +1,5 @@
 import React from 'react';
 import { Gift, Users, List, Sparkles, ChevronRight, CheckCircle2, Search, MousePointer2, BellRing } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const FeaturesPage = ({ onStart }) => {
     const guestSteps = [
@@ -47,11 +46,7 @@ const FeaturesPage = ({ onStart }) => {
 
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Nasıl Çalışır? Özellikler</title>
-                <meta name="description" content="Hediye listesi oluşturma ve davetli yönetimi nasıl çalışır? HediyeEşleştir kullanım rehberi." />
-            </Helmet>
-            
+                        
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <h1 className="animate-reveal stagger-1" style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>
                     Nasıl <span className="gradient-text">Çalışır?</span>

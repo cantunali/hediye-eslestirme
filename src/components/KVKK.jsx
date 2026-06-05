@@ -1,15 +1,10 @@
 import React from 'react';
 import { ShieldCheck, FileText, Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const KVKK = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - KVKK Aydınlatma Metni</title>
-                <meta name="description" content="6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca hazırlanan aydınlatma metni." />
-            </Helmet>
-
+            
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
                     <ShieldCheck size={64} />
@@ -72,7 +67,7 @@ const KVKK = () => {
                         <li>Kanun ve ilgili diğer kanun hükümlerine uygun olarak işlenmiş olmasına rağmen, işlenmesini gerektiren sebeplerin ortadan kalkması hâlinde kişisel verilerin silinmesini veya yok edilmesini isteme</li>
                     </ul>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', marginTop: '1rem' }}>
-                        haklarına sahipsiniz. Başvurularınızı <strong>kvkk@hediyeesle.com</strong> adresi üzerinden bize iletebilirsiniz.
+                        haklarına sahipsiniz. Başvurularınızı <strong>bilgi@hediyeeslestir.com</strong> adresi üzerinden bize iletebilirsiniz.
                     </p>
                 </div>
 

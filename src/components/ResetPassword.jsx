@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { supabase } from '../services/supabase';
 import { Lock, ArrowRight, Loader2, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
@@ -12,34 +13,53 @@ const ResetPassword = () => {
     const [sessionReady, setSessionReady] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     useEffect(() => {
-        // PASSWORD_RECOVERY event'i AuthContext.getSession() tarafından zaten
-        // tüketilmiş olabilir — listener önce kurulur, sonra getSession() çağrılır.
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-            if (event === 'PASSWORD_RECOVERY') {
+        console.log('ResetPassword Component Mounted. Current URL:', window.location.href);
+        console.log('Current Hash:', window.location.hash);
+
+        // Listen to auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log('onAuthStateChange fired in ResetPassword:', event, !!session);
+            if (event === 'PASSWORD_RECOVERY' || (session && event === 'SIGNED_IN')) {
+                console.log('Recovery session detected via auth state change.');
                 setSessionReady(true);
                 setError('');
             }
         });
 
-        // Supabase, hash'teki #access_token token'larını parse ettikten sonra
-        // window.history.replaceState ile URL'den temizler. Bu component mount
-        // olduğunda hash artık boş olduğundan hash kontrolü güvenilir değil.
-        //
-        // AuthContext !loading && children ile beklettiği için bu component
-        // mount olduğunda session zaten kurulmuş olur. getSession() direkt
-        // session'ı döner; session yoksa kullanıcı doğrudan sayfaya gitmiş demektir.
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                setSessionReady(true);
-            } else {
-                setError('Geçersiz veya süresi dolmuş sıfırlama linki.');
-            }
-        });
+        // Check if there is an active session right away
+        supabase.auth.getSession()
+            .then(({ data, error: sessionError }) => {
+                console.log('getSession resolved in ResetPassword. Data:', data, 'Error:', sessionError);
+                if (sessionError) {
+                    setError('Sıfırlama linki doğrulanırken hata oluştu: ' + sessionError.message);
+                } else if (data && data.session) {
+                    console.log('Session exists in getSession, setting ready.');
+                    setSessionReady(true);
+                    setError('');
+                } else {
+                    // Let's also check if we have recovery parameters in the URL hash before showing invalid link error
+                    const hash = window.location.hash || '';
+                    if (hash.includes('access_token=') && (hash.includes('type=recovery') || hash.includes('type=signup'))) {
+                        console.log('Hash contains access token and type recovery/signup. Waiting for onAuthStateChange to parse it.');
+                        // Do not show error yet, wait a bit for Supabase to process it
+                    } else {
+                        console.log('No session and no recovery parameters in hash.');
+                        setError('Geçersiz veya süresi dolmuş sıfırlama linki.');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('getSession rejected in ResetPassword:', err);
+                setError('Sıfırlama linki doğrulanırken beklenmeyen bir hata oluştu.');
+            });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            console.log('ResetPassword Component Unmounted.');
+            subscription.unsubscribe();
+        };
     }, []);
 
     const handleSubmit = async (e) => {
@@ -61,7 +81,7 @@ const ResetPassword = () => {
             const { error: updateError } = await supabase.auth.updateUser({ password });
             if (updateError) throw updateError;
             setSuccess(true);
-            setTimeout(() => navigate('/login'), 3000);
+            setTimeout(() => router.push('/login'), 3000);
         } catch (err) {
             setError('Şifre güncelleme başarısız: ' + (err.message || 'Lütfen tekrar deneyin.'));
         } finally {

@@ -1,10 +1,7 @@
 import React from 'react';
-import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { HelpCircle, ChevronDown } from 'lucide-react';
 
 const FAQ = () => {
-    const [openIndex, setOpenIndex] = React.useState(null);
-
     const faqs = [
         {
             question: "HediyeEşleştir ücretli mi?",
@@ -32,17 +29,9 @@ const FAQ = () => {
         }
     ];
 
-    const toggleAccordion = (index) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Sıkça Sorulan Sorular (SSS)</title>
-                <meta name="description" content="HediyeEşleştir kullanımı hakkında merak edilenler. Ücretlendirme, üyelik ve hediye işlemleri ile ilgili sıkça sorulan sorular." />
-            </Helmet>
-
+            
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
                     <HelpCircle size={64} />
@@ -57,24 +46,21 @@ const FAQ = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {faqs.map((faq, index) => (
-                    <div
+                    <details
                         key={index}
-                        className="glass"
-                        style={{ padding: '0', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.3s ease' }}
-                        onClick={() => toggleAccordion(index)}
+                        className="faq-item glass"
+                        style={{ padding: '0', overflow: 'hidden', transition: 'all 0.3s ease' }}
                     >
-                        <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', margin: 0, color: '#ffffff' }}>{faq.question}</h3>
-                            {openIndex === index ? <ChevronUp size={20} color="#ffffff" /> : <ChevronDown size={20} color="rgba(255,255,255,0.5)" />}
+                        <summary className="faq-summary">
+                            <h3 className="faq-question">{faq.question}</h3>
+                            <span className="faq-icon">
+                                <ChevronDown size={20} />
+                            </span>
+                        </summary>
+                        <div className="faq-content">
+                            {faq.answer}
                         </div>
-                        {openIndex === index && (
-                            <div style={{ padding: '0 1.5rem 1.5rem 1.5rem', color: 'var(--text-muted)', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                                <div style={{ paddingTop: '1rem' }}>
-                                    {faq.answer}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    </details>
                 ))}
             </div>
 
@@ -83,6 +69,56 @@ const FAQ = () => {
                     Başka bir sorunuz mu var? <a href="/iletisim" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '500' }}>Bize ulaşın</a>
                 </p>
             </div>
+
+            <style>{`
+                .faq-item summary::-webkit-details-marker {
+                    display: none;
+                }
+                .faq-summary {
+                    list-style: none;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1.5rem;
+                    cursor: pointer;
+                    user-select: none;
+                    outline: none;
+                }
+                .faq-question {
+                    font-size: 1.1rem;
+                    fontWeight: 600;
+                    margin: 0;
+                    color: #ffffff;
+                }
+                .faq-icon {
+                    transition: transform 0.25s ease;
+                    display: flex;
+                    align-items: center;
+                    color: rgba(255, 255, 255, 0.5);
+                }
+                .faq-item:hover .faq-icon {
+                    color: #ffffff;
+                }
+                .faq-item[open] .faq-icon {
+                    transform: rotate(180deg);
+                    color: #ffffff;
+                }
+                .faq-content {
+                    padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+                    color: var(--on-surface-variant);
+                    opacity: 0.9;
+                    line-height: 1.6;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                }
+                .faq-item {
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: var(--radius-lg);
+                }
+                .faq-item:hover {
+                    background: rgba(255, 255, 255, 0.07);
+                    border-color: rgba(255, 255, 255, 0.15);
+                }
+            `}</style>
         </div>
     );
 };

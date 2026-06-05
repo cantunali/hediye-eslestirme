@@ -1,6 +1,6 @@
+"use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, Trash2, Users, Gift, LayoutDashboard, Send, ChevronRight, ShieldCheck, Calendar, Pencil, Check, X as CloseIcon, FileSpreadsheet, Upload, ShoppingCart, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Download, FileText, Loader2, UploadCloud, Activity, Share2, ClipboardList } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
 import { db } from '../services/supabase';
 import FeaturedGifts from './FeaturedGifts';
@@ -18,6 +18,22 @@ const getCategoriesByEventType = (type) => {
 };
 
 const OwnerDashboard = ({ eventDetails, initialGuests }) => {
+    const [isTablet, setIsTablet] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [origin, setOrigin] = useState('');
+
+    useEffect(() => {
+        setIsTablet(window.innerWidth < 1024);
+        setIsMobile(window.innerWidth < 768);
+        setOrigin(window.location.origin);
+        const handleResize = () => {
+            setIsTablet(window.innerWidth < 1024);
+            setIsMobile(window.innerWidth < 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const [activeTab, setActiveTab] = useState('summary');
     const [currentEvent, setCurrentEvent] = useState(eventDetails);
     const [gifts, setGifts] = useState([]);
@@ -506,12 +522,7 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
     return (
         <div className="section container animate-fade-in">
-            <Helmet>
-                <title>HediyeEşleştir - Etkinlik Yönetim Paneli</title>
-                <meta name="description" content="Etkinliğinizi yönetin, hediye listenizi düzenleyin ve davetli durumlarını takip edin." />
-                <meta name="robots" content="noindex, nofollow" />
-            </Helmet>
-
+            
             {/* Mobile Warning Banner */}
             <div className="mobile-only card" style={{
                 marginBottom: '1.5rem',
@@ -545,59 +556,59 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
 
             <div style={{
                 display: 'flex',
-                flexDirection: window.innerWidth < 1024 ? 'column' : 'row',
+                flexDirection: isTablet ? 'column' : 'row',
                 gap: '1.5rem',
                 alignItems: 'flex-start'
             }}>
                 {/* Sidebar */}
                 <aside className="card" style={{
                     padding: '1.25rem',
-                    width: window.innerWidth < 1024 ? '100%' : '280px',
-                    position: window.innerWidth < 1024 ? 'static' : 'sticky',
+                    width: isTablet ? '100%' : '280px',
+                    position: isTablet ? 'static' : 'sticky',
                     top: '6rem'
                 }}>
                     <h3 style={{ marginBottom: '1.5rem', padding: '0 0.5rem', fontSize: '1.1rem' }}>Yönetim</h3>
                     <nav style={{
                         display: 'flex',
-                        flexDirection: window.innerWidth < 1024 ? 'row' : 'column',
+                        flexDirection: isTablet ? 'row' : 'column',
                         gap: '0.5rem',
-                        overflowX: window.innerWidth < 1024 ? 'auto' : 'visible',
-                        paddingBottom: window.innerWidth < 1024 ? '0.5rem' : '0'
+                        overflowX: isTablet ? 'auto' : 'visible',
+                        paddingBottom: isTablet ? '0.5rem' : '0'
                     }} className="no-scrollbar">
                         <button
                             className={`btn ${activeTab === 'summary' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            style={{ width: isTablet ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('summary')}
                         >
-                            <LayoutDashboard size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Özet</span>
+                            <LayoutDashboard size={18} /> <span className={isTablet ? 'mobile-text-small' : ''}>Özet</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'recommendations' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            style={{ width: isTablet ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('recommendations')}
                         >
-                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Önerilen Ürünler</span>
+                            <Gift size={18} /> <span className={isTablet ? 'mobile-text-small' : ''}>Önerilen Ürünler</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'inventory' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            style={{ width: isTablet ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('inventory')}
                         >
-                            <Gift size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Hediye Listesi</span>
+                            <Gift size={18} /> <span className={isTablet ? 'mobile-text-small' : ''}>Hediye Listesi</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'guests' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            style={{ width: isTablet ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('guests')}
                         >
-                            <Users size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Davetliler</span>
+                            <Users size={18} /> <span className={isTablet ? 'mobile-text-small' : ''}>Davetliler</span>
                         </button>
                         <button
                             className={`btn ${activeTab === 'admin' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ width: window.innerWidth < 1024 ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
+                            style={{ width: isTablet ? 'auto' : '100%', justifyContent: 'flex-start', whiteSpace: 'nowrap', padding: '0.75rem 1rem' }}
                             onClick={() => setActiveTab('admin')}
                         >
-                            <Activity size={18} /> <span className={window.innerWidth < 1024 ? 'mobile-text-small' : ''}>Olaylar</span>
+                            <Activity size={18} /> <span className={isTablet ? 'mobile-text-small' : ''}>Olaylar</span>
                         </button>
                     </nav>
                 </aside>
@@ -648,12 +659,12 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                         readOnly 
                                         className="glass" 
                                         style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.875rem' }}
-                                        value={`${window.location.origin}/davetli-girisi`}
+                                        value={`${origin}/davetli-girisi`}
                                     />
                                     <button 
                                         className="btn btn-primary"
                                         onClick={() => {
-                                            navigator.clipboard.writeText(`${window.location.origin}/davetli-girisi`);
+                                            navigator.clipboard.writeText(`${origin}/davetli-girisi`);
                                             alert('Bağlantı kopyalandı!');
                                         }}
                                     >
@@ -830,9 +841,9 @@ const OwnerDashboard = ({ eventDetails, initialGuests }) => {
                                 marginBottom: '2rem',
                                 border: '1px solid var(--border)',
                                 display: 'flex',
-                                flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                                flexDirection: isMobile ? 'column' : 'row',
                                 justifyContent: 'space-between',
-                                alignItems: window.innerWidth < 768 ? 'stretch' : 'center',
+                                alignItems: isMobile ? 'stretch' : 'center',
                                 gap: '1.5rem'
                             }}>
                                 <div>

@@ -1,0 +1,210 @@
+import React from 'react';
+import { Calendar, User, Clock, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import AdBanner from '../AdBanner';
+
+const MezuniyetHediyesiBlog = () => {
+    const slug = "mezuniyet-hediyesi-ne-alinir-2026-anlamli-secenekler";
+    const title = "Mezuniyet Hediyesi Ne Alınır? 2026 Anlamlı Seçenekler";
+    const description = "Mezuniyet hediyesi ne alınır? Üniversite, lise ve ilkokul mezunları için bütçeye göre en anlamlı 2026 hediye önerileri ve trendleri bu rehberde.";
+    const imageUrl = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200";
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "keywords": "mezuniyet hediyesi ne alınır, üniversite mezuniyet hediyesi, lise mezuniyet hediyesi, ilkokul mezuniyet hediyesi, mezuniyet hediyesi önerileri 2026",
+        "image": [imageUrl],
+        "datePublished": "2026-06-04T10:00:00+03:00",
+        "author": [{
+            "@type": "Organization",
+            "name": "HediyeEşleştir",
+            "url": "https://hediyeeslestir.com"
+        }]
+    };
+
+    const blogContent = `
+<p>Türkiye'de her yıl 900 binin üzerinde öğrenci yükseköğretim kurumlarından mezun oluyor. İlkokul ve lise mezunlarını da eklediğinizde, mezuniyet hediyesi aramak milyonlarca kişinin gündemine giren bir konu haline geliyor. Peki doğru hediyeyi seçmek neden bu kadar zor? Cevap basit: herkesin yaşı, hayalleri, ihtiyaçları ve bütçesi farklı.</p>
+
+<p>Bu rehberde üniversite, lise ve ilkokul mezunları için bütçeye göre ayrılmış hediye önerilerini, 2026'nın öne çıkan hediye trendlerini ve sıkça yapılan hataları bir arada bulacaksınız. Hediye seçerken artık "ne alsam?" stresinden kurtulmanın zamanı geldi.</p>
+
+<h2 id="table-of-contents">İçindekiler</h2>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 2.5rem;">
+  <li><a href="#mezuniyet-hediyesi-secerken-nelere-dikkat-etmelisiniz" style="color: var(--primary); text-decoration: none;">Mezuniyet Hediyesi Seçerken Nelere Dikkat Etmelisiniz?</a></li>
+  <li><a href="#universite-mezuniyeti-icin-en-anlamli-hediye-onerileri" style="color: var(--primary); text-decoration: none;">Üniversite Mezuniyeti İçin En Anlamlı Hediye Önerileri</a></li>
+  <li><a href="#lise-mezuniyeti-icin-hediye-fikirleri" style="color: var(--primary); text-decoration: none;">Lise Mezuniyeti İçin Hediye Fikirleri</a></li>
+  <li><a href="#ilkokul-mezuniyeti-icin-yasa-uygun-hediyeler" style="color: var(--primary); text-decoration: none;">İlkokul Mezuniyeti İçin Yaşa Uygun Hediyeler</a></li>
+  <li><a href="#2026nin-one-cikan-mezuniyet-hediyesi-trendleri" style="color: var(--primary); text-decoration: none;">2026'nın Öne Çıkan Mezuniyet Hediyesi Trendleri</a></li>
+  <li><a href="#mezuniyet-hediyesi-alirken-sikca-yapilan-hatalar" style="color: var(--primary); text-decoration: none;">Mezuniyet Hediyesi Alırken Sıkça Yapılan Hatalar</a></li>
+  <li><a href="#faq" style="color: var(--primary); text-decoration: none;">Sıkça Sorulan Sorular</a></li>
+</ul>
+
+<h2 id="mezuniyet-hediyesi-secerken-nelere-dikkat-etmelisiniz" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Mezuniyet Hediyesi Seçerken Nelere Dikkat Etmelisiniz?</h2>
+<p>Hediye seçiminde en büyük tuzak, kendi zevklerinize göre karar vermektir. Oysa doğru bir mezuniyet hediyesi, mezunun dünyasına uygun olmalıdır. Karar verirken şu dört kriteri göz önünde bulundurun:</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Mezunun yaşı ve eğitim seviyesi:</strong> İlkokul mezununa PlayStation almak ile üniversite mezununa oyuncak almak arasındaki fark açıktır. Yaş grubuna uygun seçim, hediyenin değerini doğrudan etkiler.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>İlgi alanları ve gelecek planları:</strong> Teknoloji meraklısı bir gence akıllı saat, sanat tutkunu birine atölye katılım bileti, iş hayatına atılacak bir mezuna profesyonel aksesuar çok daha anlamlı olacaktır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Bütçeniz:</strong> Pahalı bir hediye her zaman daha iyi anlamına gelmez. Önemli olan düşünülmüş ve kişiye özel bir seçim yapmaktır. Bütçenizi önceden belirlemek, alışveriş sürecini kolaylaştırır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Yakınlık derecesi:</strong> Kardeşinize aldığınız hediyeyle iş arkadaşınızın çocuğuna aldığınız hediye arasında hem bütçe hem de anlam açısından fark olması doğaldır.</li>
+</ul>
+<p>TÜİK'in 2025 verilerine göre Türkiye'de 25-34 yaş grubunda yükseköğretim mezun oranı %45,6'ya ulaştı. Bu oran 2008 yılında yalnızca %13,5 seviyesindeydi. Yani her iki gençten biri artık üniversite diplomasına sahip; bu da mezuniyet hediyesi talebinin yıldan yıla artmaya devam ettiğini gösteriyor.</p>
+
+<h2 id="universite-mezuniyeti-icin-en-anlamli-hediye-onerileri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Üniversite Mezuniyeti İçin En Anlamlı Hediye Önerileri</h2>
+<p>Üniversiteden mezun olan biri için hayat yepyeni bir sayfa açıyor: iş başvuruları, ilk maaş, belki yeni bir şehir. Bu dönemde hem kullanışlı hem de sembolik değeri yüksek hediyeler öne çıkıyor.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Ekonomik Seçenekler (0–500 TL)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Kişiye özel kupa veya termos:</strong> İsim veya mezuniyet tarihi baskılı bir termos, hem ofiste hem günlük hayatta kullanılır. Kişiselleştirilmiş ürünler, seri üretim hediyelere göre çok daha kalıcı bir izlenim bırakır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Kişisel gelişim kitapları:</strong> Kariyer planlaması, finansal okuryazarlık veya motivasyon temalı kitaplar, yeni mezunlar için ilham kaynağı olabilir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>İsimli deri kartlık veya kalem:</strong> İş hayatına atılacak biri için şık ve pratik bir hediyedir. Gravür işlemi ile kişiselleştirilebilir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Fotoğraf çerçevesi veya anı defteri:</strong> Mezuniyet gününün fotoğraflarıyla birlikte sunulduğunda duygusal değeri çok yüksek olur.</li>
+</ul>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Orta Bütçe Seçenekleri (500–2.000 TL)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Kaliteli kulaklık veya hoparlör:</strong> Gürültü önleyici kulaklıklar, uzaktan çalışma çağında iş hayatının en popüler aksesuarlarından biri haline geldi.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Akıllı bileklik veya fitness takip cihazı:</strong> Sağlık ve spor bilincini destekleyen pratik bir hediye. Özellikle aktif yaşam seven mezunlar için ideal.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Şık bir saat:</strong> Klasikleşmiş bir mezuniyet hediyesi olmaya devam ediyor. Kol saati, yıllarca kullanılacak anlamlı bir hatıra niteliği taşır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Deneyim hediyesi:</strong> Bir yemek workshopu, şehir turu veya konser bileti gibi deneyimler, nesne yerine anı biriktirmeyi tercih edenler için mükemmel.</li>
+</ul>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Premium Seçenekler (2.000 TL ve Üzeri)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Tablet veya dizüstü bilgisayar:</strong> Özellikle lisansüstü eğitime devam edecek veya yeni işe başlayacak mezunlar için en işlevsel hediye.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Altın kolye, bilezik veya yüzük:</strong> Geleneksel olarak Türkiye'de üniversite mezuniyetinde sıkça tercih edilen bir seçenek. Hem yatırım değeri hem de anı değeri taşır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Seyahat hediyesi:</strong> Kabin boy valiz seti, uçak bileti veya otel konaklama gibi deneyim odaklı bir hediye paketi, yeni mezunun ufkunu genişletir.</li>
+</ul>
+
+<h2 id="lise-mezuniyeti-icin-hediye-fikirleri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Lise Mezuniyeti İçin Hediye Fikirleri</h2>
+<p>Lise mezuniyeti, gençlerin hayatındaki en kritik geçiş noktalarından biridir. Üniversite sınavı stresi, yeni şehir heyecanı ya da iş hayatına ilk adım... Bu dönemde vereceğiniz hediye, gencin motivasyonunu doğrudan etkiler.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Ekonomik Seçenekler (0–500 TL)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Motivasyon temalı ajanda veya planlayıcı:</strong> Üniversite hayatını organize etmek için harika bir başlangıç aracı.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Şık bir sırt çantası:</strong> Yeni dönem için hem kullanışlı hem de stilini yansıtan bir aksesuar.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Bluetooth kulaklık:</strong> Ders çalışırken ya da yolculuklarda müzik dinlemek için bütçe dostu modeller mevcut.</li>
+</ul>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Orta Bütçe Seçenekleri (500–2.000 TL)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Akıllı saat:</strong> Genç nesil için teknolojik bir hediye her zaman heyecan yaratır. Bildirim takibi, sağlık verileri ve kişiselleştirme seçenekleri bu hediyeyi cazip kılar.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>E-kitap okuyucu:</strong> Hem kitap okuma alışkanlığını destekler hem de üniversitede ders kitaplarını dijital ortamda taşımak için pratiktir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Online kurs veya eğitim paketi:</strong> Yabancı dil, kodlama veya tasarım gibi alanlarda bir online kurs aboneliği, gencin kariyerine yatırım anlamına gelir.</li>
+</ul>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Premium Seçenekler (2.000 TL ve Üzeri)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Dizüstü bilgisayar veya tablet:</strong> Üniversite hayatı boyunca kullanacağı en işlevsel hediye.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Cep telefonu:</strong> Lise mezunları için en çok talep edilen hediye kategorilerinden biri. Günlük iletişim, ders çalışma ve sosyal hayat için vazgeçilmez.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Çeyrek altın veya altın bilezik:</strong> Geleneksel bir yatırım hediyesi olarak hem aileler hem de akrabalar tarafından sıkça tercih edilir.</li>
+</ul>
+
+<h2 id="ilkokul-mezuniyeti-icin-yasa-uygun-hediyeler" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">İlkokul Mezuniyeti İçin Yaşa Uygun Hediyeler</h2>
+<p>İlkokul mezuniyeti, çocukların eğitim serüvenindeki ilk büyük adımdır. Bu yaş grubunda hediyeler eğlenceli, eğitici ve yaşa uygun olmalıdır.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Eğlenceli ve Eğitici Öneriler (100–500 TL)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Lego veya yapı setleri:</strong> Yaratıcılığı geliştiren, saatlerce keyif veren bir klasik.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Bisiklet, scooter veya paten:</strong> Aktif zaman geçirmeyi seven çocuklar için harika bir sürpriz.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Sanat seti:</strong> Boya kalemleri, tuval ve fırça seti ile geleceğin sanatçısına ilham verin.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Zeka ve strateji oyunları:</strong> Katamino, Abalone gibi oyunlar hem eğlenceli hem de zihinsel gelişimi destekler.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Kişiye özel tişört veya çanta:</strong> Üzerinde çocuğun adı ya da mezuniyet yılı yazılı bir ürün, anı değeri yüksek ve bütçe dostu bir tercih.</li>
+</ul>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Daha Büyük Sürprizler (500 TL ve Üzeri)</h3>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Tablet (çocuklara özel modeller):</strong> Eğitim uygulamaları ve e-kitaplarla desteklendiğinde hem eğlence hem de öğrenme aracı olur.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Teleskop veya mikroskop:</strong> Meraklı çocuklar için bilim dünyasının kapısını aralayan hediyeler.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Eğlence parkı veya tatil deneyimi:</strong> Nesne yerine birlikte yaşanacak bir anı hediye etmek, çocuk için unutulmaz olur.</li>
+</ul>
+
+<h2 id="2026nin-one-cikan-mezuniyet-hediyesi-trendleri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">2026'nın Öne Çıkan Mezuniyet Hediyesi Trendleri</h2>
+<p>Küresel hediye perakendeciliği pazarı 2025 yılında 491 milyar doları aştı ve yıllık %3,6 büyüme oranıyla genişlemeye devam ediyor (Fortune Business Insights, 2026). Türkiye'de de hediye alışverişi kültürü hızla değişiyor. İşte 2026'nın en belirgin trendleri:</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Kişiselleştirilmiş hediyeler zirveye oynuyor:</strong> İsme özel gravür, fotoğraf baskı ve özel tasarım ürünler artık seri üretim alternatiflerin çok önünde. Lazer kazımadan UV baskıya, kişiselleştirme seçenekleri her geçen yıl çeşitleniyor.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Deneyim hediyeleri yükselişte:</strong> Araştırmalar, insanların nesne yerine "anı" biriktirmeyi tercih ettiğini gösteriyor. Yemek workshopları, şehir turları, konser biletleri ve atölye katılımları mezuniyet hediyesi olarak giderek daha fazla tercih ediliyor.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Teknoloji ve wellness iç içe:</strong> Akıllı saatler, uyku takibi yapan cihazlar ve meditasyon uygulamalarının premium üyelikleri, sağlığı hediye etmenin modern yolu olarak öne çıkıyor.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Sürdürülebilir ürünler fark yaratıyor:</strong> Bambu kaplamalı termoslar, geri dönüştürülmüş malzemeden üretilen defterler ve organik pamuklu tekstil ürünleri, çevre bilincini yansıtan hediye seçenekleri arasında yer alıyor.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Online hediye listeleri yaygınlaşıyor:</strong> Özellikle büyük organizasyonlarda "ne alsam?" karmaşasına son veren dijital hediye listeleri popülerlik kazanıyor. HediyeEşleştir gibi platformlar sayesinde mezunlar ihtiyaç listelerini oluşturup sevdikleriyle paylaşabiliyor; böylece mükerrer hediye riski ortadan kalkıyor.</li>
+</ul>
+
+<h2 id="mezuniyet-hediyesi-alirken-sikca-yapilan-hatalar" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Mezuniyet Hediyesi Alırken Sıkça Yapılan Hatalar</h2>
+<p>Doğru hediyeyi bulmak kadar, yanlış hediyeden kaçınmak da önemlidir. İşte en sık yapılan hatalar ve bunlardan kaçınmanın yolları:</p>
+<p><strong>Jenerik hediye seçmek:</strong> "Herkes alıyor" diye klasik bir çiçek buketi veya çikolata kutusu almak kolay görünse de kişiye özel olmadığında etkisi kısa sürer. Mezunun ilgi alanlarını ve ihtiyaçlarını düşünerek seçim yapmak çok daha doğrudur.</p>
+<p><strong>Son dakikaya bırakmak:</strong> Kişiselleştirilmiş ürünlerde hazırlık süresi en az 5–7 gündür. Son dakika siparişleri hem daha pahalıya mal olur hem de seçenekleri kısıtlar. Tören tarihinden en az bir hafta önce hediyenizi planlamaya başlayın.</p>
+<p><strong>Bütçeyi aşmak veya küçümsemek:</strong> En pahalı hediye her zaman en iyi hediye değildir. Öte yandan çok düşük bütçeli, düşüncesiz bir hediye de ters etki yaratabilir. Önemli olan bütçeniz dahilinde en kişisel ve anlamlı seçimi yapmanızdır.</p>
+<p><strong>Mezunun gerçek ihtiyacını görmezden gelmek:</strong> Yeni mezun olan biri belki bir bilgisayara, belki profesyonel bir çantaya, belki de sadece moral desteğine ihtiyaç duyuyor olabilir. Hediye almadan önce dolaylı yollardan ihtiyaçlarını öğrenmek büyük fark yaratır.</p>
+<p><em>İpucu: Mezunun tam olarak neye ihtiyacı olduğunu bilmiyorsanız, HediyeEşleştir üzerinden bir hediye listesi oluşturmasını önerebilirsiniz. Bu sayede hem sürpriz etkisi korunur hem de alınan hediye gerçekten işe yarar.</em></p>
+
+<h2 id="sonuc" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Sonuç</h2>
+<p>Mezuniyet hediyesi seçmek, düşünülmüş ve sevgiyle yapıldığında hem veren hem alan için unutulmaz bir deneyime dönüşür. Bu rehberden çıkarmanız gereken dört temel nokta şudur:</p>
+<ol style="list-style: decimal; padding-left: 1.5rem; margin-bottom: 2rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Yaş ve eğitim seviyesine göre hediye seçin:</strong> Üniversite, lise ve ilkokul mezunlarının beklentileri tamamen farklıdır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Bütçenizi önceden belirleyin:</strong> Her bütçeye uygun anlamlı seçenekler mutlaka vardır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>2026 trendlerini takip edin:</strong> Kişiselleştirilmiş ürünler, deneyim hediyeleri ve teknolojik aksesuarlar bu yılın öne çıkan seçenekleri.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Hediye listesi kullanın:</strong> Mükerrer hediye riskini ortadan kaldırmak ve mezunun gerçek ihtiyaçlarını karşılamak için dijital hediye listesi platformlarından yararlanın.</li>
+</ol>
+<p>Sevdiklerinizin mezuniyetini en anlamlı şekilde kutlamak için şimdi HediyeEşleştir üzerinden bir etkinlik oluşturabilir ve hediye listenizi paylaşmaya başlayabilirsiniz.</p>
+
+<h2 id="faq" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Sıkça Sorulan Sorular (FAQ)</h2>
+<h3 id="mezuniyet-hediyesi-olarak-nakit-mi-vermek-daha-mi-dogru" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Mezuniyet hediyesi olarak nakit mi vermek daha mı doğru?</h3>
+<p style="margin-bottom: 1.5rem;">Mezunun belirli bir ihtiyacını bilmiyorsanız nakit veya hediye kartı pratik bir seçenektir. Ancak kişiye özel, düşünülmüş bir hediye duygusal olarak çok daha kalıcı bir etki bırakır. İdeal olan, küçük ama anlamlı bir hediyeyi nakitle birlikte sunmaktır.</p>
+
+<h3 id="mezuniyet-hediyesi-icin-ne-kadar-butce-ayirmaliyim" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Mezuniyet hediyesi için ne kadar bütçe ayırmalıyım?</h3>
+<p style="margin-bottom: 1.5rem;">Bütçe, yakınlık derecesine ve mezuniyet seviyesine göre değişir. Genel bir çerçeve olarak ilkokul mezunları için 100–500 TL, lise mezunları için 300–2.000 TL, üniversite mezunları için 500–5.000 TL aralıkları yaygın tercih edilen bütçe bantlarıdır.</p>
+
+<h3 id="mezuniyet-hediyesi-ne-zaman-alinmali" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Mezuniyet hediyesi ne zaman alınmalı?</h3>
+<p style="margin-bottom: 1.5rem;">Kişiselleştirilmiş ürünlerde sipariş ve üretim süresi en az 5–7 iş günü sürebilir. Standart hediyelerde ise tören tarihinden 2–3 gün önce hazırlığınızı tamamlamanız yeterlidir. Erken planlamak hem daha uygun fiyatlı hem de daha geniş seçenek sunar.</p>
+
+<h3 id="erkek-mezuna-ne-hediye-alinir" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Erkek mezuna ne hediye alınır?</h3>
+<p style="margin-bottom: 1.5rem;">Erkek mezunlar için akıllı saat, kaliteli kulaklık, deri cüzdan veya kartlık, kişisel gelişim kitabı ve ofis aksesuarları en çok tercih edilen seçeneklerdir. Teknoloji tutkunları için oyun konsolu aksesuarları veya dijital abonelikler de düşünülebilir.</p>
+
+<h3 id="ogretmene-mezuniyet-hediyesi-olarak-ne-alinir" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Öğretmene mezuniyet hediyesi olarak ne alınır?</h3>
+<p style="margin-bottom: 1.5rem;">Öğretmeninize teşekkür etmek için kişiye özel bir kupa, isimli kalem seti, çiçek aranjmanı veya el yazısıyla hazırlanmış bir teşekkür kartı anlamlı ve zarif bir jest olacaktır. Sınıf arkadaşlarınızla ortak hediye toplayarak daha kapsamlı bir sürpriz de yapabilirsiniz.</p>
+    `;
+
+    return (
+        <div className="animate-fade-in">
+            <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
+                <div className="container">
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                        <ChevronLeft size={18} /> Blog'a Geri Dön
+                    </Link>
+
+                    <div style={{ maxWidth: '850px' }}>
+                        <h1 className="hero-title" style={{ marginBottom: '1.5rem', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#ffffff' }}>
+                            {title}
+                        </h1>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem', marginBottom: '2rem' }}>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={16} /> 4 Haziran 2026</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><User size={16} /> HediyeEşleştir Editör</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} /> 6 Dakika Okuma</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section">
+                <div className="container">
+                    <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+                        <img
+                            src={imageUrl}
+                            alt="Mezuniyet kepleri ve diploma rulosu mezuniyet töreni kutlaması"
+                            style={{ width: '100%', borderRadius: '24px', marginBottom: '3rem', boxShadow: '0 20px 40px rgba(187, 0, 39, 0.1)' }}
+                        />
+
+                        <div 
+                            className="blog-content" 
+                            style={{ lineHeight: '1.8', fontSize: '1.15rem', color: '#ffffff' }}
+                            dangerouslySetInnerHTML={{ __html: blogContent }}
+                        />
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default MezuniyetHediyesiBlog;

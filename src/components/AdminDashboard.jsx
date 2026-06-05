@@ -1,13 +1,13 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { db } from '../services/supabase';
 import { Users, Calendar, Gift, Activity, ArrowLeft, Shield, ExternalLink, Clock, FileSpreadsheet } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useRouter } from 'next/navigation';
 import { slugify } from '../utils/helpers';
 import * as XLSX from 'xlsx';
 
 const AdminDashboard = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [stats, setStats] = useState({ users: 0, events: 0, gifts: 0, guests: 0 });
     const [events, setEvents] = useState([]);
     const [activities, setActivities] = useState([]);
@@ -259,7 +259,7 @@ const AdminDashboard = () => {
                     <button
                         className="btn btn-outline"
                         style={{ width: '100%', marginTop: '1rem', justifyContent: 'center' }}
-                        onClick={() => navigate('/')}
+                        onClick={() => router.push('/')}
                     >
                         Siteye Dön
                     </button>
@@ -279,10 +279,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="section container animate-fade-in" style={{ padding: '1.5rem 1rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Sistem Admin Paneli</title>
-            </Helmet>
-
+            
             <div className="admin-header" style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -301,7 +298,7 @@ const AdminDashboard = () => {
                     <button className="btn btn-outline" style={{ flex: 1, padding: '0.75rem' }} onClick={() => setIsAuthorized(false)}>
                         Güvenli Çıkış
                     </button>
-                    <button className="btn btn-outline" style={{ flex: 1, padding: '0.75rem' }} onClick={() => navigate('/')}>
+                    <button className="btn btn-outline" style={{ flex: 1, padding: '0.75rem' }} onClick={() => router.push('/')}>
                         <ArrowLeft size={18} /> Siteye Dön
                     </button>
                 </div>

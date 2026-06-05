@@ -1,7 +1,6 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Calendar, User, Clock, ChevronLeft, CheckCircle2, Lightbulb, Sparkles, Baby } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import AdBanner from '../AdBanner';
 
 const BebekHediyesiBlog = () => {
@@ -26,40 +25,11 @@ const BebekHediyesiBlog = () => {
 
     return (
         <div className="animate-fade-in">
-            <Helmet>
-                <title>{title}</title>
-                <meta name="description" content={description} />
-                <meta name="keywords" content="bebek hediyesi ne alınır, yenidoğan hediye, bebek hediye listesi, bebek görmeye giderken ne alınır, doğum hediyesi, hediye eşleştirme" />
-                <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-                <link rel="canonical" href={`https://hediyeeslestir.com/blog/${slug}`} />
-                
-                <meta property="og:title" content={title} />
-                <meta property="og:description" content="Bebek hediyesi ne alınır? Bütçeye göre 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi ile aynı ürün alma riskini sıfırlayın." />
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content={`https://hediyeeslestir.com/blog/${slug}`} />
-                <meta property="og:image" content={imageUrl} />
-                <meta property="og:image:alt" content="Yenidoğan bebek hediye kutusu ve pastel renkli hediye paketleri" />
-                <meta property="og:site_name" content="HediyeEşleştir" />
-                <meta property="og:locale" content="tr_TR" />
-                <meta property="article:published_time" content="2026-02-15T10:00:00+03:00" />
-                <meta property="article:modified_time" content="2026-05-06T10:00:00+03:00" />
-                <meta property="article:section" content="Hediye Rehberi" />
-                <meta property="article:tag" content="bebek hediyesi" />
-                <meta property="article:tag" content="yenidoğan" />
-                <meta property="article:tag" content="hediye listesi" />
-
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={title} />
-                <meta name="twitter:description" content="Bebek hediyesi ne alınır? 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi rehberi." />
-                <script type="application/ld+json">
-                    {JSON.stringify(jsonLd)}
-                </script>
-            </Helmet>
-
+            
             {/* Hero Section */}
             <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
                 <div className="container">
-                    <Link to="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
                         <ChevronLeft size={18} /> Blog'a Geri Dön
                     </Link>
 
@@ -232,7 +202,7 @@ const BebekHediyesiBlog = () => {
                                 <p style={{ marginBottom: '2.5rem', fontSize: '1.2rem' }}>
                                     Hediye eşleştirme sistemiyle gereksiz hediyeler azalır, gerçek ihtiyaçlar karşılanır ve herkes mutlu olur. Birkaç dakikada ücretsiz hediye listenizi oluşturabilir ve sevdiklerinizle paylaşabilirsiniz.
                                 </p>
-                                <Link to="/yonetim/olustur" className="btn btn-primary" style={{ height: '3.5rem', padding: '0 2.5rem', fontSize: '1.1rem' }}>
+                                <Link href="/yonetim/olustur" className="btn btn-primary" style={{ height: '3.5rem', padding: '0 2.5rem', fontSize: '1.1rem' }}>
                                     Hemen Ücretsiz Listenizi Oluşturun →
                                 </Link>
                             </div>
@@ -241,12 +211,12 @@ const BebekHediyesiBlog = () => {
                                 <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ffffff' }}>İlgili Yazılar:</h3>
                                 <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
                                     <li style={{ marginBottom: '1rem' }}>
-                                        <Link to="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi-2026" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                        <Link href="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi-2026" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
                                             Hediye Eşleştirme Uygulaması: Akıllı Hediye Listesi Rehberi (2026)
                                         </Link>
                                     </li>
                                     <li style={{ marginBottom: '1rem' }}>
-                                        <Link to="/blog/dugun-hediyesi-ne-alinir-akilli-liste-rehberi" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                        <Link href="/blog/dugun-hediyesi-ne-alinir-akilli-liste-rehberi" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
                                             Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi
                                         </Link>
                                     </li>

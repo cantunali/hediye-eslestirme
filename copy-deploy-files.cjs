@@ -1,6 +1,38 @@
 const fs = require('fs');
 const path = require('path');
 
+function copyDirRecursive(src, dest) {
+    if (!fs.existsSync(src)) return;
+    if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest, { recursive: true });
+    }
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+    for (const entry of entries) {
+        const srcPath = path.join(src, entry.name);
+        const destPath = path.join(dest, entry.name);
+        if (entry.isDirectory()) {
+            copyDirRecursive(srcPath, destPath);
+        } else {
+            fs.copyFileSync(srcPath, destPath);
+        }
+    }
+}
+
+// Clean and recreate dist
+if (fs.existsSync('dist')) {
+    fs.rmSync('dist', { recursive: true, force: true });
+}
+fs.mkdirSync('dist');
+
+// Copy out contents to dist
+console.log('Copying static export from out/ to dist/...');
+copyDirRecursive('out', 'dist');
+
+// Copy netlify functions
+console.log('Copying Netlify functions...');
+copyDirRecursive('netlify/functions', 'dist/functions');
+
+// Copy config files
 const filesToCopy = [
     { src: 'netlify-deploy.toml', dest: 'dist/netlify.toml' },
     { src: 'package.json', dest: 'dist/package.json' },
@@ -8,31 +40,11 @@ const filesToCopy = [
     { src: '.npmrc', dest: 'dist/.npmrc' },
 ];
 
-const foldersToCopy = [
-    { src: 'netlify/functions', dest: 'dist/functions' }
-];
-
-// Ensure dist exists
-if (!fs.existsSync('dist')) {
-    fs.mkdirSync('dist');
-}
-
 filesToCopy.forEach(file => {
     if (fs.existsSync(file.src)) {
-        fs.copyFileSync(file.src, file.src.replace(file.src, file.dest));
+        fs.copyFileSync(file.src, file.dest);
         console.log(`Copied ${file.src} to ${file.dest}`);
     }
 });
 
-foldersToCopy.forEach(folder => {
-    if (fs.existsSync(folder.src)) {
-        if (!fs.existsSync(folder.dest)) {
-            fs.mkdirSync(folder.dest, { recursive: true });
-        }
-        const files = fs.readdirSync(folder.src);
-        files.forEach(file => {
-            fs.copyFileSync(path.join(folder.src, file), path.join(folder.dest, file));
-            console.log(`Copied ${file} to ${folder.dest}`);
-        });
-    }
-});
+console.log('Deploy folder dist/ successfully prepared!');

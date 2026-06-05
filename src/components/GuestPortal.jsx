@@ -1,8 +1,9 @@
+"use client";
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { Gift, Users, ShieldCheck, Lock, X, CheckCircle2, ChevronDown, ExternalLink, ShoppingCart, Search, PlusCircle, UserPlus, Pencil, LayoutDashboard, ArrowRight } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import AdBanner from './AdBanner';
 import { slugify, isEventExpired } from '../utils/helpers';
@@ -22,7 +23,14 @@ const getCategoriesByEventType = (type) => {
 const STANDARD_CATEGORIES = ['Hepsi', 'Aksesuar', 'Elektronik', 'Ev Gereçleri', 'Mutfak', 'Tekstil', 'Züccaciye'];
 
 const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
-    const { urlSlug } = useParams();
+    const params = useParams();
+    let urlSlug = params?.urlSlug;
+    if (!urlSlug && typeof window !== 'undefined') {
+        const parts = window.location.pathname.split('/');
+        if (parts.length > 2 && parts[1] === 'davetli-girisi') {
+            urlSlug = decodeURIComponent(parts[2]);
+        }
+    }
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loginData, setLoginData] = useState({ title: '', email: '', fullname: '' });
     const [currentGuest, setCurrentGuest] = useState(null);
@@ -297,12 +305,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
     if (!isLoggedIn) {
         return (
             <div className="section container animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto', padding: '2rem' }}>
-                <Helmet>
-                    <title>HediyeEşleştir - Davetli Girişi</title>
-                    <meta name="description" content="HediyeEşleştir davetli paneline giriş yapın ve sevdiklerinizin hediye listesine ulaşın." />
-                    <meta name="robots" content="noindex, nofollow" />
-                </Helmet>
-                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                     <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '1rem' }}>Davetli Girişi</h1>
                     <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>Etkinliğe girmek için seçiminizi yapın ve bilgilerinizi girin.</p>
                 </div>
@@ -436,10 +439,10 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         disabled={isAutoConsented}
                                     />
                                     <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                        <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
+                                        <Link href="/kullanim-kosullari" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
                                     </label>
                                 </div>
-
+ 
                                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                                     <input
                                         type="checkbox"
@@ -450,10 +453,10 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         disabled={isAutoConsented}
                                     />
                                     <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                        <Link to="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
+                                        <Link href="/kvkk" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
                                     </label>
                                 </div>
-
+ 
                                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                                     <input
                                         type="checkbox"
@@ -464,7 +467,7 @@ const GuestPortal = ({ gifts, guests, onSelectGift, onCreateGroup }) => {
                                         disabled={isAutoConsented}
                                     />
                                     <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                        <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
+                                        <Link href="/pazarlama-izni" target="_blank" style={{ color: 'var(--text)', textDecoration: 'underline' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
                                     </label>
                                 </div>
                             </div>

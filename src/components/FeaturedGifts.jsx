@@ -1,7 +1,7 @@
+"use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import { db } from '../services/supabase';
 import { Gift, Plus, ShoppingCart, ExternalLink, CheckCircle2, Loader2, UploadCloud } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
     const [featuredGifts, setFeaturedGifts] = useState([]);
@@ -159,11 +159,7 @@ const FeaturedGifts = ({ eventId, eventType, onGiftsAdded }) => {
 
     return (
         <div className="section container animate-fade-in">
-            <Helmet>
-                <title>HediyeEşleştir - Hediye Önerileri</title>
-                <meta name="description" content="Özenle seçilmiş hediye önerileri. Sevdikleriniz için en güzel hediye fikirleri." />
-            </Helmet>
-
+            
             <input
                 type="file"
                 ref={fileInputRef}

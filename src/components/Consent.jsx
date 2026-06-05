@@ -1,5 +1,7 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 
@@ -10,13 +12,13 @@ const Consent = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { user, loading: authLoading, recordConsents } = useAuth();
-    const navigate = useNavigate();
+    const router = useRouter();
 
     useEffect(() => {
         if (!authLoading && !user) {
-            navigate('/login', { replace: true });
+            router.replace('/login');
         }
-    }, [user, authLoading, navigate]);
+    }, [user, authLoading, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,7 +37,7 @@ const Consent = () => {
                 marketing: true
             });
             if (consentError) throw consentError;
-            navigate('/yonetim', { replace: true });
+            router.replace('/yonetim');
         } catch (err) {
             setError('Onaylar kaydedilemedi: ' + (err.message || 'Lütfen tekrar deneyin.'));
         } finally {
@@ -110,7 +112,7 @@ const Consent = () => {
                                 />
                                 <span style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)', lineHeight: '1.5' }}>
                                     <Link
-                                        to={item.linkTo}
+                                        href={item.linkTo}
                                         target="_blank"
                                         onClick={(e) => e.stopPropagation()}
                                         style={{ color: 'var(--on-surface)', fontWeight: '700', textDecoration: 'underline', textUnderlineOffset: '3px' }}

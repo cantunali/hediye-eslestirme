@@ -1,0 +1,245 @@
+import React from 'react';
+import { Calendar, User, Clock, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import AdBanner from '../AdBanner';
+
+const EvTasinmaHediyesiBlog = () => {
+    const slug = "yeni-eve-tasinanlara-ne-hediye-alinir-ev-hediye-listesi-rehberi";
+    const title = "Yeni Eve Taşınanlara Ne Hediye Alınır? 2026 Trend Rehberi";
+    const description = "Yeni eve taşınan sevdiklerinize en uygun hediye ne alınır? 2026 ev hediyesi trendleri, bütçe dostu fikirler ve akıllı hediye listesi rehberimizde.";
+    const imageUrl = "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1200";
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "keywords": "yeni eve taşınanlara ne hediye alınır, ev hediyesi ne alınır, yeni ev hediyesi fikirleri, ev görme hediyesi, akıllı hediye listesi",
+        "image": [imageUrl],
+        "datePublished": "2026-05-17T12:00:00+03:00",
+        "author": [{
+            "@type": "Organization",
+            "name": "HediyeEşleştir",
+            "url": "https://hediyeeslestir.com"
+        }]
+    };
+
+    const blogContentPart1 = `
+<p>Yeni bir eve taşınmak heyecan verici, tazeleyici ancak bir o kadar da yorucu bir süreçtir. Sevdikleriniz yeni yuvalarına adım atarken, onların bu mutluluğuna ortak olmak ve yeni başlangıçlarını kutlamak için <strong>ev hediyesi seçmek</strong> harika bir gelenektir. Ancak "Yeni eve taşınanlara ne hediye alınır?" sorusu, hediye alacak kişilerin zihnini en çok meşgul eden konulardan biridir. </p>
+<p>Sıradan, toz toplayacak dekoratif objeler yerine, ev sahibinin hayatını kolaylaştıracak pratik mutfak aletleri mi almalısınız? Yoksa yeni evin atmosferini ısıtacak şık ve minimalist detaylara mı yönelmelisiniz?</p>
+<p>2026 yılının modern ev hediyesi trendleri, değişen yaşam alanları ve gelişen teknolojiler doğrultusunda şekillenmektedir. Artık gereksiz tüketimden kaçınan, işlevsel, estetik ve sürdürülebilir hediyeler ön plana çıkmaktadır. Bu rehberde, bütçeniz ve yakınlık dereceniz ne olursa olsun sevdiklerinizi mutlu edecek en trend ev hediyesi fikirlerini sizler için derledik.</p>
+<h2 id="i-cindekiler" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">İçindekiler</h2>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 2.5rem;">
+<li><a href="#2026-turkiye-konut-ve-tasinma-dinamikleri-neden-dogru-hediye-cok-onemli" style="color: var(--primary); text-decoration: none;">2026 Türkiye Konut ve Taşınma Dinamikleri: Neden Doğru Hediye Çok Önemli?</a></li>
+<li><a href="#yakinlik-derecesine-gore-ev-gorme-hediyesi-secimi" style="color: var(--primary); text-decoration: none;">Yakınlık Derecesine Göre Ev Görme Hediyesi Seçimi</a></li>
+<li><a href="#2026-nin-en-populer-ev-hediyesi-trendleri" style="color: var(--primary); text-decoration: none;">2026'nın En Popüler Ev Hediyesi Trendleri</a></li>
+<li><a href="#surdurulebilirlik-ve-yesil-ev-trendi-salon-bitkileri" style="color: var(--primary); text-decoration: none;">Sürdürülebilirlik ve Yeşil Ev Trendi: Salon Bitkileri</a></li>
+<li><a href="#klasiklesmis-hatalar-ev-hediyesi-secerken-nelerden-kacinmali" style="color: var(--primary); text-decoration: none;">Klasikleşmiş Hatalar: Ev Hediyesi Seçerken Nelerden Kaçınmalı?</a></li>
+<li><a href="#hediye-cakismalarina-ve-borcam-sendromuna-son-hediyeeslestir" style="color: var(--primary); text-decoration: none;">Hediye Çakışmalarına ve Borcam Sendromuna Son: HediyeEşleştir</a></li>
+<li><a href="#sikca-sorulan-sorular-faq" style="color: var(--primary); text-decoration: none;">Sıkça Sorulan Sorular (FAQ)</a></li>
+</ul>
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="2026-turkiye-konut-ve-tasinma-dinamikleri-neden-dogru-hediye-cok-onemli" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">2026 Türkiye Konut ve Taşınma Dinamikleri: Neden Doğru Hediye Çok Önemli?</h2>
+<p>Ev taşımak günümüzde sadece fiziksel bir yer değiştirme değil, aynı zamanda ciddi bir finansal ve operasyonel yönetim sürecidir. Türkiye genelinde son yıllarda yaşanan ekonomik gelişmeler, ev kurma ve taşınma maliyetlerini doğrudan etkilemiştir. </p>
+<p>2026 yılı güncel verilerine göre, Türkiye'de şehir içi evden eve nakliyat fiyatları dahi <strong>15.500 TL ile 90.000 TL</strong> arasında değişmektedir. Paketleme, montaj, asansör kiralama ve depozito gibi ek kalemler de eklendiğinde, yeni eve taşınan bireyler taşınmanın ilk aylarında ciddi bir bütçe baskısı altında kalmaktadır.</p>
+<p>Bunun yanı sıra, demografik yapıda da önemli değişimler gözlenmektedir. Türkiye İstatistik Kurumu (TÜİK) verilerine göre hanehalkı büyüklüğü <strong>3,08</strong> seviyesine gerilemiştir. Bu durum, 1+1 ve 2+1 gibi daha kompakt ve minimalist konutlara olan talebi artırmıştır. 2010 yılında yaklaşık 122 metrekare olan ortalama konut büyüklüğü, günümüzde <strong>101,9 metrekareye</strong> kadar gerilemiştir. </p>
+<p>Evlerin küçülmesi ve taşınma maliyetlerinin bu derece yükselmesi, ev hediyesi seçerken iki temel kuralı beraberinde getiriyor:</p>
+<ol style="list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Fonksiyonellik:</strong> Ev sahibinin bütçe kısıtından dolayı ertelemek zorunda kaldığı gerçek ve pratik ihtiyaçlara odaklanmak.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Boyut ve Minimalizm:</strong> Daralan yaşam alanlarında gereksiz yer kaplamayacak, estetik açıdan kalabalık yaratmayacak işlevsel parçalar seçmek.</li>
+</ol>
+<p>Dolayısıyla, sevdiklerinize alacağınız doğru bir ev hediyesi, onları hem maddi bir yükten kurtarabilir hem de yeni evlerinde gerçekten kullanabilecekleri değerli bir anıya dönüşebilir.</p>
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="yakinlik-derecesine-gore-ev-gorme-hediyesi-secimi" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Yakınlık Derecesine Göre Ev Görme Hediyesi Seçimi</h2>
+<p>Hediye alacağınız kişiyle olan sosyal bağınız, hediye kategorinizi ve bütçenizi belirlemede en önemli etkendir. Doğru hediye seçimi, aranızdaki ilişkinin samimiyetini yansıtır. Bu sosyal ayrım, yeni eve taşınanlara ne hediye alınır konusundaki kararsızlığınızı da büyük ölçüde giderecektir.</p>
+<h3 id="aile-ve-cok-yakin-arkadaslar-i-cin-buyuk-i-htiyaclari-karsilayin" style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">Aile ve Çok Yakın Arkadaşlar İçin: Büyük İhtiyaçları Karşılayın</h3>
+<p>Eğer taşınan kişi kardeşiniz, en yakın arkadaşınız veya çok yakın bir akrabanızsa, doğrudan ihtiyaç odaklı gitmek en doğrusudur. Hatta samimiyetinize dayanarak evde neyin eksik olduğunu sormak oldukça takdir edilecektir.</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Pratik Mutfak Teknolojileri:</strong> Akıllı <strong>Airfryer</strong> (sıcak hava fritözü), elektrikli dikey şarjlı süpürgeler veya tam otomatik espresso makineleri yakın çevrenin birleşerek de alabileceği mükemmel yatırımlardır.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Premium Ev Tekstili:</strong> Yüksek iplik sayılı pamuk-saten nevresim takımları, çift kişilik yün veya bambu yorganlar, kaliteli bornoz setleri her evin temel ama pahalı ihtiyaçları arasındadır.</li>
+</ul>
+<h3 id="i-s-arkadaslari-ve-sosyal-cevre-i-cin-sik-ve-guvenli-limanlar" style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">İş Arkadaşları ve Sosyal Çevre İçin: Şık ve Güvenli Limanlar</h3>
+<p>Çok yakın olmadığınız ama evine davet edildiğiniz bir iş arkadaşınız veya komşunuz için hediye seçerken daha genel, estetik ve işlevsel alternatiflere yönelmelisiniz.</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Tasarım Fincan ve Kupa Takımları:</strong> El yapımı seramik ikili Türk kahvesi fincanları veya modern geometrik desenli şık kupalar her zaman popülerliğini korur.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Gurme Lezzet Paketleri:</strong> Özel tasarım ahşap bir kutuda sunulan kaliteli filtre kahve çekirdekleri, yöresel çaylar ve şık bir cam bitki çayı demliği (French press) hem zarif hem de keyifli bir deneyim sunar.</li>
+</ul>
+`;
+
+    const blogContentPart2 = `
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="2026-nin-en-populer-ev-hediyesi-trendleri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">2026'nın En Popüler Ev Hediyesi Trendleri</h2>
+<p>Teknolojinin evlere daha fazla entegre olması ve estetik algısının dijitalleşmesi, ev hediyesi trendlerini de baştan yazıyor. İşte 2026 yılında en çok tercih edilen popüler ev hediyeleri:</p>
+<h3 id="1-akilli-ev-asistanlari-ve-aydinlatma-sistemleri" style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">1. Akıllı Ev Asistanları ve Aydınlatma Sistemleri</h3>
+<p>Modern evlerde konfor ve teknoloji bir arada sunuluyor. Akıllı cihazlar, özellikle yeni nesil ev sahipleri için harika bir hediye alternatifidir.</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Sesle Kontrol Edilen Hoparlörler:</strong> Evin her köşesinden müzik dinleme, hava durumunu sorgulama veya evdeki diğer akıllı cihazları yönetme imkanı sunan sesli asistanlar.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Akıllı Aydınlatma Setleri:</strong> Mobil uygulama ile renk ve parlaklık ayarı yapılabilen akıllı ampuller, yeni salonların atmosferini tek bir dokunuşla değiştirebilir.</li>
+</ul>
+<h3 id="2-koku-ve-atmosfer-tamamlayicilar" style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">2. Koku ve Atmosfer Tamamlayıcılar</h3>
+<p>Yeni bir eve girildiğinde hissedilen o "boşluk" havasını kırmanın en hızlı yolu, evi sıcak kokularla doldurmaktır.</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Buhurdanlık ve Aromaterapi Setleri:</strong> Şık seramik veya mermer tasarımlı buhurdanlıkların yanında hediye edeceğiniz lavanta, nane, okaliptüs gibi esansiyel yağlar, taşınma yorgunluğunu atmak isteyen ev sahiplerine huzur verecektir.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Dekoratif Soya Mumları:</strong> Sürdürülebilir, doğa dostu soya mumları hem şık birer masaüstü aksesuarıdır hem de evin enerjisini anında yükseltir.</li>
+</ul>
+
+<div style="overflow-x: auto; margin: 2rem 0; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
+<table style="width: 100%; border-collapse: collapse; text-align: left;">
+<thead>
+<tr style="border-bottom: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.02);">
+<th style="padding: 1rem 1.5rem; color: var(--primary); font-weight: 700;">Hediye Kategorisi</th>
+<th style="padding: 1rem 1.5rem; color: var(--primary); font-weight: 700;">Avantajı</th>
+<th style="padding: 1rem 1.5rem; color: var(--primary); font-weight: 700;">Örnek Ürünler</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+<td style="padding: 1rem 1.5rem; font-weight: 700; color: #ffffff;">Teknoloji</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">Hayatı kolaylaştırır, modern ve prestijlidir.</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">Akıllı priz, sesli asistan, dikey süpürge</td>
+</tr>
+<tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+<td style="padding: 1rem 1.5rem; font-weight: 700; color: #ffffff;">Atmosfer</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">Evin sıcaklığını artırır, bütçe dostudur.</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">Buhurdanlık seti, soya mumu, bambu oda kokusu</td>
+</tr>
+<tr>
+<td style="padding: 1rem 1.5rem; font-weight: 700; color: #ffffff;">Mutfak</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">Günlük kullanım değeri yüksektir, kalıcıdır.</td>
+<td style="padding: 1rem 1.5rem; color: rgba(255,255,255,0.8);">El yapımı seramik fincan, döküm tencere, moka pot</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="surdurulebilirlik-ve-yesil-ev-trendi-salon-bitkileri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Sürdürülebilirlik ve Yeşil Ev Trendi: Salon Bitkileri</h2>
+<p>2026 dekorasyon trendlerinde doğallık ve biyofilik tasarım (doğayı yaşam alanlarına entegre etme) zirvede yer alıyor. Eğer yeni eve taşınanlara ne hediye alınır diye düşünüyor ve sıradanlıktan uzaklaşmak istiyorsanız, yaşayan saksı bitkileri harika bir seçenektir.</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Pachira (Para Ağacı):</strong> Feng Shui felsefesine göre yeni eve bolluk, bereket ve şans getirdiğine inanılan, örgü gövdeli bu bitki, taşınma tebrikleri için en anlamlı sembollerden biridir.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Zamyokülkas (Zeze Çiçeği):</strong> Neredeyse hiç bakım istemeyen, susuzluğa ve gölgeye son derece dayanıklı olan bu bitki, yoğun çalışan veya bitki bakımı konusunda deneyimsiz olan sevdikleriniz için harika bir "yeşil dost" olacaktır.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Şık Seramik Saksılar:</strong> Bitkiyi sunarken plastik saksısı yerine evin genel dekorasyon renklerine (örneğin toprak tonları veya antrasit) uygun, el yapımı şık bir seramik saksı içinde hediye etmek hediyenin değerini ve estetiğini katlayacaktır.</li>
+</ul>
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="klasiklesmis-hatalar-ev-hediyesi-secerken-nelerden-kacinmali" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Klasikleşmiş Hatalar: Ev Hediyesi Seçerken Nelerden Kaçınmalı?</h2>
+<p>Bazen iyi niyetle seçilen bir hediye, ev sahibinin yaşam alanında bir yük haline gelebilir. Bu klasik hatalardan kaçınarak, yeni eve taşınanlara ne hediye alınır sorusuna en doğru ve kalıcı cevabı kolayca verebilirsiniz:</p>
+<ol style="list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Büyük Boyutlu Tablo ve Duvar Saatleri:</strong> Duvar dekorasyonu tamamen kişisel bir zevktir. Ev sahibinin tarzını, duvar renklerini veya mobilya uyumunu tam olarak bilmeden alınan büyük tablolar genellikle kullanılmaz ve depolara kaldırılır.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Aşırı Gösterişli veya Avangart Objeler:</strong> Minimalist döşenmiş modern bir 2+1 daireye altın varaklı, devasa bir vazo götürmek ev sahibini dekoratif açıdan zor durumda bırakabilir.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Hassas Bakım İsteyen Evcil Hayvanlar:</strong> Ev sahibinin rızası ve bilgisi olmadan hediye olarak akvaryum balığı, kuş veya başka bir canlı hayvan götürmek son derece sakıncalıdır. Evcil hayvan sahiplenmek kişisel bir sorumluluk kararıdır.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Hediye Çakışmaları (Borcam Sendromu):</strong> Bir eve ev görmesi için giden 10 farklı misafirin de benzer kahve fincan takımları veya borcamlar alması, hediyelerin işlevselliğini yitirmesine neden olur.</li>
+</ol>
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;">
+<h2 id="hediye-cakismalarina-ve-borcam-sendromuna-son-hediyeeslestir" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Hediye Çakışmalarına ve Borcam Sendromuna Son: HediyeEşleştir</h2>
+<p>Taşınma sürecinde yaşanan en büyük karmaşalardan biri, onlarca misafirin benzer hediyeler getirmesidir. Ev sahipleri kendilerine gelen 3 adet tost makinesini veya 5 takım kahve fincanını ne yapacaklarını şaşırırken, hediye alan kişiler de bütçelerinin boşa gittiğini hissedebilirler.</p>
+<p>İşte tam bu noktada, <a href="https://hediyeeslestir.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: bold; text-decoration: underline;">hediyeeslestir.com</a> (HediyeEşleştir) hayat kurtarıcı bir dijital çözüm sunuyor! </p>
+<h3 id="hediyeeslestir-nedir-ve-nasil-calisir" style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">HediyeEşleştir Nedir ve Nasıl Çalışır?</h3>
+<p>HediyeEşleştir, yeni eve taşınanların, evlenenlerin veya bebek bekleyenlerin tamamen <strong>ücretsiz</strong> bir şekilde dijital ihtiyaç listesi oluşturmasını sağlayan yenilikçi bir platformdur. Süreç son derece basit ve zarif bir şekilde işler:</p>
+<ol style="list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+<li style="margin-bottom: 0.5rem;"><strong>Listenizi Oluşturun:</strong> Yeni eve taşınan kişi, platforma girerek gerçekten ihtiyaç duyduğu ürünleri (kahve makinesinden banyo paspasına kadar) listesine ekler.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Paylaşın:</strong> Oluşturduğu listenin linkini, "Ev hediyesi ne alalım?" diye soran arkadaşlarına ve ailesine gönderir.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Eşleştirin ve Rezerve Edin:</strong> Hediye almak isteyen misafirler linke tıklayarak listeyi görür. Kendi bütçelerine uygun olan bir ürünü seçip "Rezerve Et" butonuna basarlar. Böylece o ürün listeden kaldırılır ve bir başkasının aynı hediyeyi alması tamamen engellenir.</li>
+</ol>
+<p>Bu sayede hem ev sahibi tam olarak hayal ettiği ve ihtiyaç duyduğu eksiklerini tamamlar hem de hediye verenler "Acaba bunu beğenir mi?" veya "Evde aynısı var mıdır?" stresinden kurtulur. Hediyeleşmek, her iki taraf için de tamamen stressiz ve maksimum fayda sağlayan bir deneyime dönüşür.</p>
+<p>Siz de yeni evinize taşınırken mükerrer hediyelerin önüne geçmek, sevdiklerinize en doğru yönlendirmeyi yapmak veya bir etkinlik planlamak istiyorsanız, HediyeEşleştir'in pratik dünyasıyla hemen tanışabilirsiniz. Daha fazla bilgi ve hediye fikirleri için <a href="https://hediyeeslestir.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: bold; text-decoration: underline;">hediyeeslestir.com</a> adresini ziyaret edebilirsiniz.</p>
+`;
+
+    return (
+        <div className="animate-fade-in">
+            
+            <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
+                <div className="container">
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                        <ChevronLeft size={18} /> Blog'a Geri Dön
+                    </Link>
+
+                    <div style={{ maxWidth: '850px' }}>
+                        <h1 className="hero-title" style={{ marginBottom: '1.5rem', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#ffffff' }}>
+                            {title}
+                        </h1>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem', marginBottom: '2rem' }}>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={16} /> 17 Mayıs 2026</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><User size={16} /> HediyeEşleştir Editör</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} /> 6 Dakika Okuma</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section">
+                <div className="container">
+                    <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+                        <img
+                            src={imageUrl}
+                            alt="Taşınma kutuları arasında mutlu bir çift"
+                            style={{ width: '100%', borderRadius: '24px', marginBottom: '3rem', boxShadow: '0 20px 40px rgba(187, 0, 39, 0.1)' }}
+                        />
+
+                        <div className="blog-content" style={{ lineHeight: '1.8', fontSize: '1.15rem', color: '#ffffff' }}>
+                            <div dangerouslySetInnerHTML={{ __html: blogContentPart1 }} />
+                            
+                            <AdBanner slot="blog_middle" />
+                            
+                            <div dangerouslySetInnerHTML={{ __html: blogContentPart2 }} />
+
+                            <div className="card" style={{ padding: '3rem', borderRadius: '32px', textAlign: 'center', marginTop: '3rem' }}>
+                                <h2 className="gradient-text" style={{ marginBottom: '1.5rem', fontSize: '2rem' }}>🏠 Sonuç: Yeni Evinizi Doğru Hediyelerle Donatın</h2>
+                                <p style={{ marginBottom: '2.5rem', fontSize: '1.2rem', color: 'rgba(255,255,255,0.9)' }}>
+                                    Yeni eve taşınmak, yepyeni ve temiz bir başlangıçtır. Bu başlangıcın en güzel yanlarından biri de sevdiklerinizin desteğini yanınızda hissetmektir. HediyeEşleştir ile ev hediye listenizi oluşturun, ihtiyaçlarınızı kolayca paylaşın ve yeni evinizi sadece sevdiğiniz ve kullanacağınız hediyelerle sevgiyle doldurun.
+                                </p>
+                                <Link href="/yonetim/olustur" className="btn btn-primary" style={{ height: '3.5rem', padding: '0 2.5rem', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+                                    Hemen Listenizi Oluşturun →
+                                </Link>
+                            </div>
+
+                            <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.1)', margin: '3rem 0 2rem 0' }} />
+                            <h2 id="sikca-sorulan-sorular-faq" style={{ color: 'var(--primary)', marginBottom: '1.5rem', marginTop: '1rem' }}>Sıkça Sorulan Sorular (FAQ)</h2>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
+                                <div>
+                                    <h3 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Ev hediyesi ne zaman götürülür?</h3>
+                                    <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Ev görme ziyareti genellikle ev sahibi taşındıktan ve evdeki temel yerleşme düzenini (kutuların açılması, mobilyaların yerleşmesi) tamamladıktan sonra yapılır. Bu süre genellikle taşınmayı takip eden ilk 1 ila 3 ay arasındadır. Ziyaret öncesinde mutlaka ev sahibinden uygun olduğu bir zaman için randevu alınmalıdır.</p>
+                                </div>
+                                <div>
+                                    <h3 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Yeni taşınan birine ne hediye alınır?</h3>
+                                    <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Yeni taşınan kişinin yakınlık derecesine göre; kahve makinesi, tost makinesi veya dikey süpürge gibi küçük ev aletleri alınabileceği gibi; daha bütçe dostu seçenekler olarak el yapımı seramik fincanlar, kokulu mumlar, buhurdanlık setleri veya yaşayan salon bitkileri tercih edilebilir. Yeni eve taşınanlara ne hediye alınır sorusunun en garanti cevabı ise her zaman bir ihtiyaç listesidir.</p>
+                                </div>
+                                <div>
+                                    <h3 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Kullanışlı ev hediyesi fikirleri nelerdir?</h3>
+                                    <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Günlük hayatta sıkça kullanılan ve ev sahibinin hayatını kolaylaştıran ürünler en kullanışlı olanlardır. Kaliteli bir bıçak seti, döküm tencere, mikrodalga fırın, şık kesme tahtaları, nevresim takımları veya akıllı ev prizleri kullanışlı ev hediyelerine harika örneklerdir.</p>
+                                </div>
+                                <div>
+                                    <h3 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Hediye listesi oluşturmak ücretli mi?</h3>
+                                    <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Hayır, HediyeEşleştir (hediyeeslestir.com) üzerinde profil oluşturmak, ev hediyesi veya düğün hediye listesi hazırlamak ve bunu sevdiklerinizle paylaşmak tamamen ücretsizdir.</p>
+                                </div>
+                                <div>
+                                    <h3 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Ev görmeye giderken çiçek mi çikolata mı?</h3>
+                                    <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Çikolata veya butik tatlılar, oturup birlikte kahve içerken tüketilebileceği için her zaman tatlı unlu mamuller iyi bir ikramdır. Çiçek tercih edilecekse, kesme çiçekler yerine şık bir saksıda sunulan uzun ömürlü bir salon bitkisi (para ağacı veya sukulent gibi) kalıcılığı açısından çok daha fazla tercih edilmektedir.</p>
+                                </div>
+                            </div>
+
+                            <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ffffff' }}>İlgili Yazılar:</h3>
+                                <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
+                                    <li style={{ marginBottom: '1rem' }}>
+                                        <Link href="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                            Hediye Eşleştirme Uygulaması: Akıllı Hediye Listesi Rehberi
+                                        </Link>
+                                    </li>
+                                    <li style={{ marginBottom: '1rem' }}>
+                                        <Link href="/blog/dugun-hediyesi-ne-alinir-2026-trendleri" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem' }}>
+                                            Düğün Hediyesi Ne Alınır? 2026'nın En Trend Seçenekleri
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default EvTasinmaHediyesiBlog;

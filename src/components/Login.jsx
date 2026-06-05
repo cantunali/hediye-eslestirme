@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 
@@ -11,7 +13,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { signIn, signInWithGoogle } = useAuth();
     const [googleLoading, setGoogleLoading] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const handleGoogleSignIn = async () => {
         setError('');
@@ -34,7 +36,7 @@ const Login = () => {
         try {
             const { error } = await signIn(email, password);
             if (error) throw error;
-            navigate('/yonetim');
+            router.push('/yonetim');
         } catch (err) {
             setError('Giriş başarısız: ' + (err.message || 'Lütfen bilgilerinizi kontrol edin.'));
         } finally {
@@ -103,7 +105,7 @@ const Login = () => {
                     <div className="form-group" style={{ marginBottom: '0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                             <label className="form-label" style={{ marginBottom: '0' }}>Şifre</label>
-                            <Link to="/forgot-password" style={{ fontSize: '0.75rem', color: '#ffffff', textDecoration: 'none', fontWeight: '600', opacity: '0.9' }}>Şifremi Unuttum</Link>
+                            <Link href="/forgot-password" style={{ fontSize: '0.75rem', color: '#ffffff', textDecoration: 'none', fontWeight: '600', opacity: '0.9' }}>Şifremi Unuttum</Link>
                         </div>
                         <div style={{ position: 'relative' }}>
                             <input
@@ -138,7 +140,7 @@ const Login = () => {
                 </form>
 
                 <div style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.9rem', color: 'var(--on-surface-variant)' }}>
-                    Henüz bir hesabınız yok mu? <Link to="/signup" style={{ color: '#ffffff', fontWeight: '700', textDecoration: 'none' }}>Hemen Kayıt Ol</Link>
+                    Henüz bir hesabınız yok mu? <Link href="/signup" style={{ color: '#ffffff', fontWeight: '700', textDecoration: 'none' }}>Hemen Kayıt Ol</Link>
                 </div>
             </div>
         </div>

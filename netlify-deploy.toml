@@ -3,7 +3,6 @@
   publish = "."
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/davetli-girisi/*"
+  to = "/davetli-girisi/index.html"
   status = 200
-  force = false

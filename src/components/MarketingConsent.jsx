@@ -1,15 +1,10 @@
 import React from 'react';
 import { Mail, Bell, Send, CheckCircle } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const MarketingConsent = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Pazarlama İzni Metni</title>
-                <meta name="description" content="Ticari elektronik ileti gönderimi ve pazarlama faaliyetleri hakkında aydınlatma ve rıza metni." />
-            </Helmet>
-
+            
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
                     <Bell size={64} />
@@ -51,7 +46,7 @@ const MarketingConsent = () => {
 
                 <div className="glass" style={{ marginTop: '5rem', padding: '2rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                        Son güncelleme: 12 Şubat 2026. Sorularınız için <strong style={{ color: 'var(--text)' }}>bilgi@hediyeesle.com</strong> adresinden bize ulaşabilirsiniz.
+                        Son güncelleme: 12 Şubat 2026. Sorularınız için <strong style={{ color: 'var(--text)' }}>bilgi@hediyeeslestir.com</strong> adresinden bize ulaşabilirsiniz.
                     </p>
                 </div>
             </div>

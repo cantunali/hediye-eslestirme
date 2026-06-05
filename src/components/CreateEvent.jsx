@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Calendar, User, Lock, ArrowRight, Sparkles, AlertCircle, Eye, EyeOff, ChevronDown } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
 
@@ -64,12 +63,7 @@ const CreateEvent = ({ onCreated }) => {
 
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Etkinlik Oluştur</title>
-                <meta name="description" content="Yeni bir hediye eşleşme etkinliği oluşturun. Düğün, doğum günü veya özel günleriniz için hediye listesi hazırlayın." />
-                <meta name="robots" content="noindex, nofollow" />
-            </Helmet>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <div style={{
                     width: '80px',
                     height: '80px',
@@ -132,6 +126,8 @@ const CreateEvent = ({ onCreated }) => {
                             disabled={isChecking}
                         >
                             <option value="Evlilik - Ev Hediyesi" style={{ color: '#333' }}>Evlilik - Ev Hediyesi</option>
+                            <option value="Nişan Hediyesi" style={{ color: '#333' }}>Nişan Hediyesi</option>
+                            <option value="Yeni Ev Hediyesi" style={{ color: '#333' }}>Yeni Ev Hediyesi</option>
                             <option value="Kız Bebek Hediyesi" style={{ color: '#333' }}>Kız Bebek Hediyesi</option>
                             <option value="Erkek Bebek Hediyesi" style={{ color: '#333' }}>Erkek Bebek Hediyesi</option>
                             <option value="Doğum Günü Hediyesi" style={{ color: '#333' }}>Doğum Günü Hediyesi</option>

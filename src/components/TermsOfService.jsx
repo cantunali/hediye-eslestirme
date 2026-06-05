@@ -1,15 +1,10 @@
 import React from 'react';
 import { FileText, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const TermsOfService = () => {
     return (
         <div className="section container animate-fade-in" style={{ padding: '4rem 2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Kullanım Koşulları</title>
-                <meta name="description" content="HediyeEşleştir platformu kullanıcı sözleşmesi, kullanıcı hakları ve sorumlulukları." />
-            </Helmet>
-
+            
             <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
                     <FileText size={64} />
@@ -52,7 +47,7 @@ const TermsOfService = () => {
                     <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem' }}>HAKLAR VE SORUMLULUKLAR</h2>
                     <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
                         Her zaman kendinizle ilgili kişisel verilerin işlenip işlenmediğini öğrenme, yanlış verilerin düzeltilmesini isteme ve silinmesini talep etme hakkına sahipsiniz.
-                        Bu haklarınızı <strong>destek@hediyeesle.com</strong> üzerinden bize ulaşarak kullanabilirsiniz.
+                        Bu haklarınızı <strong>bilgi@hediyeeslestir.com</strong> üzerinden bize ulaşarak kullanabilirsiniz.
                     </p>
                 </div>
             </div>

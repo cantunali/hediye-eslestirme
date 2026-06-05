@@ -1,0 +1,249 @@
+import React from 'react';
+import { Calendar, User, Clock, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+
+const IsYerindeHediyelesmeBlog = () => {
+    const slug = "is-yerinde-hediyelesme-rehberi-patrona-calisana-ne-alinir";
+    const title = "İş Yerinde Hediyeleşme Rehberi: Patrona, Çalışana Ne Alınır?";
+    const description = "İş yerinde hediyeleşme rehberi: Patrona, çalışana ve takım arkadaşına ne alınır? Bütçe, etiket ve grup hediyesi ipuçları.";
+    const imageUrl = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200";
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "keywords": "iş yerinde hediyeleşme, patrona hediye ne alınır, iş arkadaşına hediye, kurumsal hediye rehberi, ofiste grup hediyesi organize etme",
+        "image": [imageUrl],
+        "datePublished": "2026-06-05T10:00:00+03:00",
+        "author": [{
+            "@type": "Organization",
+            "name": "HediyeEşleştir",
+            "url": "https://hediyeeslestir.com"
+        }]
+    };
+
+    const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Patrona hediye almak zorunlu mu?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Zorunlu değildir ancak özel günlerde küçük ve düşünceli bir jest, profesyonel ilişkiyi güçlendirir. Önemli olan hediyenin samimi ve abartısız olmasıdır."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Ofiste hediye için ne kadar bütçe ayırmalıyım?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Türkiye'de bireysel ofis hediyeleri için 200–600 TL arası yaygın bir aralıktır. Grup hediyelerinde kişi başı 50–150 TL toplanarak daha değerli bir hediye alınabilir."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Grup hediyesi organize ederken para toplamak ayıp mı?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Hayır, iş yerinde grup hediyesi kültürü oldukça yaygındır. Önemli olan gönüllülük esasına dayalı olması ve kimsenin baskı altında hissetmemesidir."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "İş arkadaşıma kişisel hediye vermek uygun mu?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yakın çalışma arkadaşınıza kişisel bir hediye verebilirsiniz, ancak çok özel veya romantik çağrışım yapabilecek hediyelerden kaçınmanız gerekir."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "İşten ayrılan birine ne hediye alınır?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Anı değeri taşıyan hediyeler idealdir: kişiye özel bir plaket, fotoğraf albümü veya ekipten mesajlar içeren bir kart en çok tercih edilen seçeneklerdir."
+                }
+            }
+        ]
+    };
+
+    const blogContent = `
+<p>Snappy'nin 2026 yılında 1.500 tam zamanlı çalışanla gerçekleştirdiği araştırmaya göre, iş yıl dönümünde hediye alan çalışanların %72'si şirkette kalmaya daha istekli olduğunu belirtiyor. Bu rakam tek başına iş yerinde hediyeleşmenin ne kadar güçlü bir bağlılık aracı olduğunu ortaya koyuyor.</p>
+
+<p>Ancak Türkiye'de kurumsal hediyeleşme denince akla çoğunlukla yılbaşı paketleri veya promosyon ürünleri geliyor. Peki ya patronunuzun doğum günü geldiğinde ne alacaksınız? Terfi eden takım arkadaşınızı nasıl tebrik edeceksiniz? İşten ayrılan bir meslektaşınıza nasıl güzel bir veda sürprizi hazırlayacaksınız?</p>
+
+<p>Bu rehberde iş yerinde hediyeleşmenin tüm boyutlarını ele alıyoruz: kime, ne zaman, hangi bütçeyle hediye alınır; profesyonel sınırlar nerede başlar; grup hediyesi nasıl organize edilir. Hediye seçiminde kararsız kaldığınız her an başvurabileceğiniz kapsamlı bir kaynak hazırladık.</p>
+
+<h2 id="table-of-contents">İçindekiler</h2>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 2.5rem;">
+  <li><a href="#is-yerinde-hediyelesme-neden-onemli" style="color: var(--primary); text-decoration: none;">İş Yerinde Hediyeleşme Neden Önemli?</a></li>
+  <li><a href="#kime-ne-zaman-hediye-alinir" style="color: var(--primary); text-decoration: none;">Kime, Ne Zaman Hediye Alınır?</a></li>
+  <li><a href="#patrona-ve-yoneticiye-hediye-secme-rehberi" style="color: var(--primary); text-decoration: none;">Patrona ve Yöneticiye Hediye Seçme Rehberi</a></li>
+  <li><a href="#takim-arkadasina-ve-calisana-hediye-fikirleri" style="color: var(--primary); text-decoration: none;">Takım Arkadaşına ve Çalışana Hediye Fikirleri</a></li>
+  <li><a href="#ofiste-uygun-butce-araliklari" style="color: var(--primary); text-decoration: none;">Ofiste Uygun Bütçe Aralıkları</a></li>
+  <li><a href="#grup-hediyesi-nasil-organize-edilir" style="color: var(--primary); text-decoration: none;">Grup Hediyesi Nasıl Organize Edilir?</a></li>
+  <li><a href="#is-yerinde-hediyelesmenin-yazili-olmayan-kurallari" style="color: var(--primary); text-decoration: none;">İş Yerinde Hediyeleşmenin Yazılı Olmayan Kuralları</a></li>
+  <li><a href="#sonuc" style="color: var(--primary); text-decoration: none;">Sonuç</a></li>
+  <li><a href="#faq" style="color: var(--primary); text-decoration: none;">Sıkça Sorulan Sorular</a></li>
+</ul>
+
+<h2 id="is-yerinde-hediyelesme-neden-onemli" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">İş Yerinde Hediyeleşme Neden Önemli?</h2>
+<p>Hediyeleşme, iş dünyasında sadece bir "güzel jest" değil; çalışan motivasyonu, takım ruhu ve kurumsal aidiyet duygusunu doğrudan etkileyen stratejik bir araçtır. Günümüzde küresel kurumsal hediye pazarının 2026 itibarıyla 1 trilyon doları aşması bekleniyor ve bu harcamanın yaklaşık %55-60'ı çalışan tanıma programlarına ayrılıyor (Artmellows, 2026).</p>
+
+<p>Rakamlar yalnızca büyük şirketleri değil, küçük ofisleri de ilgilendiriyor. Yapılandırılmış hediye programları uygulayan şirketlerde çalışan memnuniyetinin %12-15 oranında arttığı ve işten ayrılma oranlarının %8-10 düştüğü raporlanıyor (Ridgegap, 2025). Üstelik çalışanların %80'i kurumsal hediyelere değer verdiğini ifade ediyor.</p>
+
+<p>Türkiye özelinde düşündüğümüzde, ofis kültüründe hediyeleşme zaten güçlü bir gelenek. Doğum günü pastaları, bayram öncesi ikramlar ve yılbaşı çekilişleri birçok iş yerinin rutininde yer alıyor. Ancak bu gelenekleri bilinçli ve planlı bir şekilde yönetmek, hem bütçeyi kontrol altında tutar hem de herkesin kendini değerli hissetmesini sağlar.</p>
+
+<h2 id="kime-ne-zaman-hediye-alinir" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Kime, Ne Zaman Hediye Alınır?</h2>
+<p>İş yerinde hediyeleşmenin en kafa karıştıran yanı zamanlama ve kapsam konusudur. Aşağıda Türk ofis kültüründe en yaygın hediyeleşme durumlarını ve her biri için kısa ipuçlarını bulabilirsiniz.</p>
+
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Doğum Günü:</strong> Ofislerde en sık hediye verilen gündür. Bireysel bir hediye verebileceğiniz gibi, ekip olarak ortak bir sürpriz भी hazırlayabilirsiniz. Kişinin ilgi alanlarını biliyorsanız buna uygun seçimler yapmak jestinizi çok daha anlamlı hale getirir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Terfi veya Yeni Pozisyon:</strong> Terfi alan bir meslektaşınızı tebrik etmek, hem profesyonel saygınızı gösterir hem de ekip içi dayanışmayı güçlendirir. Bu durumda hediyenin yeni rolüyle ilgili olması özellikle takdir görür; örneğin şık bir ajanda, kaliteli bir kalem seti veya motivasyon kitabı gibi.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Yeni İşe Başlama (Hoş Geldin):</strong> Ekibe yeni katılan bir çalışana küçük bir "hoş geldin" hediyesi vermek, ilk günden aidiyet duygusu yaratır. Bir kahve kupası, masaüstü bitki veya şirket logolu bir not defteri bile yeterlidir. Kuruca Bahçesi gibi markalar, 2026'da yeni çalışanlara özel "enerji kutuları" hazırlayarak bu trende öncülük ediyor.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>İşten Ayrılma ve Emeklilik:</strong> Vedalar duygusal anlardır ve doğru bir hediye, yılların emeğine saygı gösterir. Kişiye özel bir plaket, ekipten mesajlar içeren bir kart veya birlikte geçirilen zamanları anlatan bir fotoğraf albümü en sık tercih edilen seçeneklerdir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Yılbaşı ve Bayramlar:</strong> Türkiye'de yılbaşı ve Ramazan/Kurban bayramları kurumsal hediyeleşmenin zirve yaptığı dönemlerdir. Bu dönemlerde genellikle şirket genelinde standart hediye paketleri dağıtılır. Ancak kişiselleştirilmiş küçük dokunuşlar eklemek, standart paketi bile özel hale getirebilir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Özel Durumlar:</strong> Evlilik, bebek haberi, hastalıktan dönüş veya büyük bir proje başarısı gibi anlarda yapılan küçük jestler, iş ilişkilerini derinleştirir. Bu tür durumlarda genellikle ekip olarak hareket etmek daha uygun ve etkilidir.</li>
+</ul>
+
+<h2 id="patrona-ve-yoneticiye-hediye-secme-rehberi" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Patrona ve Yöneticiye Hediye Seçme Rehberi</h2>
+<p>Patrona hediye almak, iş yerindeki en hassas hediyeleşme durumlarından biridir. Hediyenin hem profesyonel sınırları aşmaması hem de düşünceli olduğunun hissedilmesi gerekir. Bu dengeyi kurmak için birkaç temel ilkeyi bilmek yeterlidir.</p>
+
+<p><strong>Hiyerarşiyi göz önünde bulundurun:</strong> İş kültürü uzmanlarına göre, iş yerinde hediye seçerken organizasyon içindeki hiyerarşi mutlaka dikkate alınmalıdır. Aşırı pahalı bir hediye yanlış mesaj verebilir; çok ucuz bir hediye ise özensiz görünebilir. Orta yolun bulunması şarttır.</p>
+
+<p><strong>Kişisel değil, profesyonel olun:</strong> Patronunuzun hobilerini veya ilgi alanlarını biliyorsanız buna uygun ama yine de profesyonel çerçevede kalan hediyeler tercih edin. Örneğin kahve tutkunu bir yöneticiye özel harman kahve seti, kitap sever birine güncel bir iş dünyası kitabı uygun seçimlerdir.</p>
+
+<p><strong>Önerilen hediye türleri:</strong> Kaliteli kalem setleri, deri ajandalar, masaüstü dekoratif objeler, özel tasarım kartvizitlikler, şık termos veya kahve setleri ve deneyim hediyeleri (yemek, etkinlik) patrona hediye olarak öne çıkan kategorilerdir.</p>
+
+<p><strong>Kaçınılması gerekenler:</strong> Çok kişisel hediyeler (parfüm, giyim), espri veya şaka amaçlı ürünler, nakit veya hediye çekleri (rüşvet algısı yaratabilir) ve herhangi bir dini ya da politik sembol içeren hediyeler profesyonel ortamda uygun değildir.</p>
+
+<h2 id="takim-arkadasina-ve-calisana-hediye-fikirleri" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Takım Arkadaşına ve Çalışana Hediye Fikirleri</h2>
+<p>Takım arkadaşlarına hediye seçmek, patrona göre daha rahat bir süreçtir; ancak burada da dikkat edilmesi gereken noktalar vardır. Özellikle yakınlık dereceniz ve hediyenin verilme ortamı seçiminizi doğrudan etkiler.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Yakın Çalışma Arkadaşına</h3>
+<p>Birlikte uzun saatler geçirdiğiniz, kişisel hayatını tanıdığınız arkadaşlarınıza daha kişisel hediyeler verebilirsiniz. Onun favori kahve markasından bir paket, sevdiği bir yazarın son kitabı veya masasını güzelleştirecek bir sukulent bu kategoride iyi örneklerdir. Hediye kutusu konseptleri de son yıllarda oldukça popüler hale geldi; birden fazla küçük hediyeyi şık bir kutuda bir araya getirmek hem estetik hem de etkili bir seçimdir.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Daha Az Tanıdığınız İş Arkadaşına</h3>
+<p>Herkesin rahatlıkla kullanabileceği, evrensel çekiciliğe sahip hediyeler tercih edin. Kaliteli çikolata veya kuruyemiş setleri, şık kupa bardaklar, masaüstü organizer setleri veya bitki çayı koleksiyonları güvenli seçimlerdir. Araştırmalara göre şirketlerin %62'si artık kişiselleştirilmiş hediyelere öncelik veriyor; bu nedenle üzerine isim yazdırılmış küçük bir hediye bile fark yaratır.</p>
+
+<h3 style="color: var(--secondary); margin-top: 1.8rem; margin-bottom: 1rem; font-size: 1.4rem;">Çalışana Yönetici Obrasak Hediye Verme</h3>
+<p>Eğer siz bir yönetici pozisyonundaysanız, ekip üyelerinize hediye verirken eşitlik ilkesine dikkat etmeniz kritiktir. Aynı seviyedeki çalışanlar arasında hediye değerinde belirgin fark olmamalıdır. Aksi takdirde adaletsizlik algısı oluşabilir ve bu durum motivasyonu olumsuz etkiler.</p>
+
+<h2 id="ofiste-uygun-butce-araliklari" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Ofiste Uygun Bütçe Aralıkları</h2>
+<p>Bütçe, iş yerinde hediyeleşmenin en hassas konularından biridir. Çok az harcamak özensiz görünebilirken, çok fazla harcamak karşı tarafı rahatsız edebilir veya yanlış anlaşılmalara yol açabilir. Türkiye'deki ofis kültürüne uygun genel bütçe aralıklarını aşağıda bulabilirsiniz.</p>
+
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Takım arkadaşına bireysel hediye:</strong> 150–500 TL aralığı çoğu ofis ortamında uygun kabul edilir. Yakın arkadaşlık düzeyine göre bu miktar yukarı çekilebilir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Patrona veya yöneticiye bireysel hediye:</strong> 300–800 TL arası makul bir aralıktır. Hediyenin kaliteli ve şık olması, fiyatından daha önemlidir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Grup hediyesinde kişi başı katkı:</strong> 50–200 TL toplanarak bireysel bütçelerle ulaşılamayacak daha anlamlı bir hediye alınabilir. Örneğin 10 kişilik bir ekipte kişi başı 100 TL ile 1.000 TL'lik şık ve kalıcı bir hediye seçmek mümkündür.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Hoş geldin hediyesi (şirket tarafından):</strong> 100–300 TL aralığında sembolik ama düşünceli ürünler tercih edilir.</li>
+</ul>
+<p><em>Önemli bir not: Bu rakamlar 2026 itibarıyla Türkiye'deki genel ofis kültürünü yansıtmaktadır. Sektöre, şirket büyüklüğüne ve kurumsal politikalara göre farklılık gösterebilir. Asıl önemli olan hediyenin fiyatı değil, arkasındaki düşüncedir.</em></p>
+
+<h2 id="grup-hediyesi-nasil-organize-edilir" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Grup Hediyesi Nasıl Organize Edilir?</h2>
+<p>Ofiste en sık karşılaşılan senaryolardan biri de grup hediyesi organizasyonudur. Doğum günü, düğün, bebek haberi veya işten ayrılma gibi durumlarda ekip olarak ortak bir hediye almak hem bütçe açısından akıllıca hem de daha etkili bir jest olabilir. Ancak bu süreç düzgün yönetilmezse kimin ne kadar verdiği, paranın nasıl toplandığı gibi konularda gerginlikler yaşanabilir.</p>
+<p>İşte sorunsuz bir grup hediyesi organizasyonu için adım adım rehber:</p>
+<ol style="list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>1. Adım: Bir organizatör belirleyin:</strong> Genellikle hediyeyi alacak kişiyle en yakın olan veya gönüllü olan biri bu rolü üstlenir. Organizatör, süreci başlatır, iletişimi yürütür ve hediyeyi satın alır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>2. Adım: Bütçeyi ve katkı miktarını netleştirin:</strong> Herkese açık bir mesajla (e-posta, WhatsApp grubu veya şirket içi mesajlaşma platformu) durumu açıklayın ve önerilen kişi başı katkı miktarını belirtin. Katılımın tamamen gönüllü olduğunu vurgulayın; kimse baskı altında hissetmemelidir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>3. Adım: Para toplama yöntemini seçin:</strong> Nakit toplama en geleneksel yöntemdir, ancak dijital alternatifleri de değerlendirin. Banka havalesi, mobil ödeme uygulamaları veya GrupHediye gibi Türkiye'de hizmet veren platformlar süreci kolaylaştırır. GrupHediye platformunda arkadaşlarınız için bir grup oluşturup, e-posta veya sosyal medya üzerinden davet göndererek online ortamda bütçe toplayabilirsiniz.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>4. Adım: Hediye seçimini yapın:</strong> Mümkünse hediye alınacak kişinin yakın arkadaşlarından fikir alın. Hediyeeslestir.com gibi platformlarda kişiye ve duruma özel hediye önerileri bulabilirsiniz. Hediyenin herkesin katkısını temsil etmesi için kartın üzerine tüm katılımcıların isimlerini yazmayı unutmayın.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>5. Adım: Sunum ve zamanlama:</strong> Hediyeyi özel bir anda verin; herkesin bir arada olduğu bir toplantı sonrası veya öğle yemeği sırasında yapılan sürprizler genellikle en iyi etkiyi yaratır.</li>
+</ol>
+
+<h2 id="is-yerinde-hediyelesmenin-yazili-olmayan-kurallari" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">İş Yerinde Hediyeleşmenin Yazılı Olmayan Kuralları</h2>
+<p>Her ofiste hediyeleşmeyle ilgili yazılı olmayan ama herkesin bilmesi gereken kurallar vardır. Bu kuralları bilmek, iyi niyetle verilen bir hediyenin yanlış anlaşılmasını önler.</p>
+
+<p><strong>Rüşvet Algısından Kaçının:</strong> Özellikle kurumsallaşmış şirketlerde hediye kabul etme ve verme politikaları bulunur. Dünya Gazetesi'nin aktardığına göre, birçok uluslararası şirkette belirli bir tutarın üzerindeki hediyeleri kabul etmek yasaklanmıştır. Türkiye'deki kurumsallaşmış firmalarda da benzer politikalar uygulanmaktadır. Hediye vermeden önce karşı tarafın şirket politikasını bilmek sizi zor durumda kalmaktan korur.</p>
+
+<p><strong>Cinsiyet ve Kültürel Hassasiyet:</strong> Farklı cinsiyetten bir iş arkadaşınıza hediye verirken özellikle dikkatli olun. Parfüm, iç giyim veya çok kişisel aksesuarlar yanlış yorumlanabilir. İş kültürü uzmanları, profesyonel sınırların korunması adına nötr ve herkesin rahatlıkla kabul edebileceği hediyeler seçilmesini önerir.</p>
+
+<p><strong>Eşitlik İlkesi:</strong> Aynı ekipte çalışan insanlara farklı değerlerde hediyeler vermek ciddi sorunlara yol açabilir. Hediye verilen durumda ya herkese eşit değerde hediye alın ya da grup hediyesi formatını tercih edin. Özellikle yöneticiler için bu kural daha da kritiktir.</p>
+
+<p><strong>Sunum ve Paketleme:</strong> Hediye ambalajı, hediyenin kendisi kadar önemlidir. Özenli bir paketleme ve içine el yazısıyla yazılmış kısa bir not, hediyenin algılanan değerini katbekat artırır. Dünya Gazetesi'nin raporuna göre, hediyenin seçimi kadar paketlenmesi ve içine iliştirilen notun da karşı tarafta büyük etki bıraktığı vurgulanıyor.</p>
+
+<p><strong>Şaka ve Espri Amaçlı Hediyelerden Kaçının:</strong> İş yerinde mizahi hediyeler eğlenceli görünse de risk taşır. Farklı kültürel ve kişisel anlayışlar nedeniyle yanlış anlaşılmalara yol açabilir. Profesyonel ortamda güvenli ve zarif hediyeler her zaman daha doğru bir tercihtir.</p>
+
+<h2 id="sonuc" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Sonuç</h2>
+<p>İş yerinde hediyeleşme, doğru yapıldığında takım ruhunu güçlendiren, motivasyonu artıran ve profesyonel ilişkileri derinleştiren güçlü bir araçtır. Bu rehberden çıkarabileceğiniz dört temel sonuç şunlardır:</p>
+<ul style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li style="margin-bottom: 0.5rem;"><strong>Zamanlama ve durum önemlidir:</strong> Doğum günü, terfi, hoş geldin ve veda gibi anları kaçırmamak, küçük bir jestin bile büyük etkiler yaratmasını sağlar.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Bütçe değil, düşünce ön plandadır:</strong> 200 TL'lik ama kişiye özel bir hediye, 2.000 TL'lik rastgele bir üründen çok daha değerlidir.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Profesyonel sınırlara saygı gösterin:</strong> Hiyerarşi, cinsiyet hassasiyeti ve şirket politikaları hediye seçiminde her zaman belirleyici olmalıdır.</li>
+  <li style="margin-bottom: 0.5rem;"><strong>Grup hediyelerini organize edin:</strong> Ekip olarak hareket etmek hem bütçeyi verimli kullanmanızı sağlar hem de hediyeyi daha anlamlı hale getirir.</li>
+</ul>
+<p>Hediye seçiminde kararsız kaldığınızda Hediyeeslestir.com üzerinden kişiye ve duruma özel öneriler alabilir, iş yerindeki özel anları unutulmaz hale getirebilirsiniz.</p>
+
+<h2 id="faq" style="color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.5rem;">Sıkça Sorulan Sorular (FAQ)</h2>
+<h3 id="patrona-hediye-almak-zorunlu-mu" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Patrona hediye almak zorunlu mu?</h3>
+<p style="margin-bottom: 1.5rem;">Zorunlu değildir ancak özel günlerde küçük ve düşünceli bir jest, profesyonel ilişkiyi güçlendirir. Önemli olan hediyenin samimi ve abartısız olmasıdır. Eğer ofiste böyle bir gelenek yoksa, tek başınıza başlatmak yerine ekip olarak hareket etmeniz daha uygun olacaktır.</p>
+
+<h3 id="ofiste-hediye-icin-ne-kadar-butce-ayirmaliyim" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Ofiste hediye için ne kadar bütçe ayırmalıyım?</h3>
+<p style="margin-bottom: 1.5rem;">Türkiye'de bireysel ofis hediyeleri için 200–600 TL arası yaygın bir aralıktır. Grup hediyelerinde kişi başı 50–150 TL toplanarak daha değerli bir hediye alınabilir. Sektör ve şirket kültürüne göre bu aralıklar değişkenlik gösterebilir.</p>
+
+<h3 id="grup-hediyesi-organize-ederken-para-toplamak-ayip-mi" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">Grup hediyesi organize ederken para toplamak ayıp mı?</h3>
+<p style="margin-bottom: 1.5rem;">Hayır, iş yerinde grup hediyesi kültürü oldukça yaygındır. Önemli olan gönüllülük esasına dayalı olması ve kimsenin baskı altında hissetmemesidir. Şeffaf bir iletişimle süreci yönetmek yeterlidir.</p>
+
+<h3 id="is-arkadasima-kisisel-hediye-vermek-uygun-mu" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">İş arkadaşıma kişisel hediye vermek uygun mu?</h3>
+<p style="margin-bottom: 1.5rem;">Yakın çalışma arkadaşınıza kişisel bir hediye verebilirsiniz, ancak çok özel veya romantik çağrışım yapabilecek hediyelerden kaçınmanız gerekir. Nötr ama düşünceli seçimler en doğru yaklaşımdır.</p>
+
+<h3 id="isten-ayrilan-birine-ne-hediye-alinir" style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.25rem;">İşten ayrılan birine ne hediye alınır?</h3>
+<p style="margin-bottom: 1.5rem;">Anı değeri taşıyan hediyeler idealdir: kişiye özel bir plaket, fotoğraf albümü veya ekipten mesajlar içeren bir kart en çok tercih edilen seçeneklerdir. Yeni kariyerinde kullanabileceği profesyonel bir aksesuar da düşünülebilir.</p>
+    `;
+
+    return (
+        <div className="animate-fade-in">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+            />
+
+            <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
+                <div className="container">
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                        <ChevronLeft size={18} /> Blog'a Geri Dön
+                    </Link>
+
+                    <div style={{ maxWidth: '850px' }}>
+                        <h1 className="hero-title" style={{ marginBottom: '1.5rem', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#ffffff' }}>
+                            {title}
+                        </h1>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem', marginBottom: '2rem' }}>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={16} /> 5 Haziran 2026</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><User size={16} /> HediyeEşleştir Editör</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={16} /> 6 Dakika Okuma</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section">
+                <div className="container">
+                    <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+                        <img
+                            src={imageUrl}
+                            alt="İş yerinde birlikte çalışan, iş arkadaşına hediye seçimi yapan iş ortakları"
+                            style={{ width: '100%', borderRadius: '24px', marginBottom: '3rem', boxShadow: '0 20px 40px rgba(187, 0, 39, 0.1)' }}
+                        />
+
+                        <div 
+                            className="blog-content" 
+                            style={{ lineHeight: '1.8', fontSize: '1.15rem', color: '#ffffff' }}
+                            dangerouslySetInnerHTML={{ __html: blogContent }}
+                        />
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default IsYerindeHediyelesmeBlog;

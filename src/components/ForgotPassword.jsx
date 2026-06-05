@@ -1,5 +1,6 @@
+"use client";
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { Mail, ArrowRight, Loader2, CheckCircle2, ChevronLeft } from 'lucide-react';
 
@@ -47,7 +48,7 @@ const ForgotPassword = () => {
                         <p style={{ color: 'var(--on-surface-variant)', fontSize: '0.95rem', lineHeight: '1.6' }}>
                             Sıfırlama linkini içeren bir e-posta gönderdik. Lütfen gelen kutunuzu (ve gereksiz kutusunu) kontrol edin.
                         </p>
-                        <Link to="/login" className="btn btn-primary" style={{ marginTop: '2.5rem', width: '100%', height: '3.5rem' }}>
+                        <Link href="/login" className="btn btn-primary" style={{ marginTop: '2.5rem', width: '100%', height: '3.5rem' }}>
                             Giriş Ekranına Dön
                         </Link>
                     </div>
@@ -83,7 +84,7 @@ const ForgotPassword = () => {
                         </form>
 
                         <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-                            <Link to="/login" style={{ color: 'var(--on-surface-variant)', fontSize: '0.9rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: '600' }}>
+                            <Link href="/login" style={{ color: 'var(--on-surface-variant)', fontSize: '0.9rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: '600' }}>
                                 <ChevronLeft size={16} /> Giriş Ekranına Dön
                             </Link>
                         </div>

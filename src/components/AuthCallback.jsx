@@ -1,5 +1,6 @@
+"use client";
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { supabase, db } from '../services/supabase';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -14,14 +15,14 @@ const resolveDestination = async (userId) => {
 
 const AuthCallback = () => {
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const router = useRouter();
 
     useEffect(() => {
         // onAuthStateChange fires when Supabase exchanges the PKCE code for a session
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_IN' && session) {
                 const dest = await resolveDestination(session.user.id);
-                navigate(dest, { replace: true });
+                router.replace(dest);
             }
         });
 
@@ -33,12 +34,12 @@ const AuthCallback = () => {
             }
             if (session) {
                 const dest = await resolveDestination(session.user.id);
-                navigate(dest, { replace: true });
+                router.replace(dest);
             }
         });
 
         return () => subscription.unsubscribe();
-    }, [navigate]);
+    }, [router]);
 
     if (error) {
         return (
@@ -47,7 +48,7 @@ const AuthCallback = () => {
                     <AlertCircle size={40} style={{ color: 'var(--error)', margin: '0 auto 1rem' }} />
                     <h3>Giriş Başarısız</h3>
                     <p style={{ color: 'var(--on-surface-variant)', marginTop: '0.5rem', fontSize: '0.9rem' }}>{error}</p>
-                    <button className="btn btn-primary" style={{ marginTop: '2rem', width: '100%' }} onClick={() => navigate('/login')}>
+                    <button className="btn btn-primary" style={{ marginTop: '2rem', width: '100%' }} onClick={() => router.push('/login')}>
                         Giriş Sayfasına Dön
                     </button>
                 </div>

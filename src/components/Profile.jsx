@@ -1,12 +1,12 @@
+"use client";
 import React, { useState } from 'react';
 import { User, Lock, Trash2, ShieldCheck, ArrowLeft, Save, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
     const { user, updateProfile, updatePassword, checkPassword, deactivateAccount } = useAuth();
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const [fullname, setFullname] = useState(user?.fullname || '');
     const [currentPassword, setCurrentPassword] = useState('');
@@ -79,7 +79,7 @@ const Profile = () => {
         try {
             const { error } = await deactivateAccount();
             if (error) throw error;
-            navigate('/');
+            router.push('/');
         } catch (err) {
             setMessage({ type: 'error', text: err.message || 'Hesap kapatılırken hata oluştu.' });
             setIsLoading(false);
@@ -88,13 +88,10 @@ const Profile = () => {
 
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Profilim</title>
-            </Helmet>
-
+            
             <button
                 className="btn btn-outline"
-                onClick={() => navigate('/yonetim')}
+                onClick={() => router.push('/yonetim')}
                 style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
                 <ArrowLeft size={18} /> Geri Dön

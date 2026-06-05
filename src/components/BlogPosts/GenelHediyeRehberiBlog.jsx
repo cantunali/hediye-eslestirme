@@ -1,7 +1,6 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Calendar, User, Clock, ChevronLeft, CheckCircle2, Target, Brain, Sparkles, Layout, Star, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import AdBanner from '../AdBanner';
 
 const GenelHediyeRehberiBlog = () => {
@@ -26,32 +25,11 @@ const GenelHediyeRehberiBlog = () => {
 
     return (
         <div className="animate-fade-in">
-            <Helmet>
-                <title>{title}</title>
-                <meta name="description" content={description} />
-                <meta name="keywords" content="hediye eşleştirme, hediye listesi, online hediye listesi, hediye rehberi, akıllı hediye, wishlist oluştur, hediye fikirleri, düğün listesi, bebek listesi" />
-                <link rel="canonical" href={`https://hediyeeslestir.com/blog/${slug}`} />
-                
-                {/* Open Graph */}
-                <meta property="og:title" content={title} />
-                <meta property="og:description" content={description} />
-                <meta property="og:image" content={imageUrl} />
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content={`https://hediyeeslestir.com/blog/${slug}`} />
-                
-                {/* Twitter Card */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={title} />
-
-                <script type="application/ld+json">
-                    {JSON.stringify(jsonLd)}
-                </script>
-            </Helmet>
-
+            
             {/* Hero Section */}
             <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
                 <div className="container">
-                    <Link to="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
                         <ChevronLeft size={18} /> Blog'a Geri Dön
                     </Link>
 
@@ -139,7 +117,7 @@ const GenelHediyeRehberiBlog = () => {
                             <div style={{ display: 'grid', gap: '1.5rem', marginBottom: '3rem' }}>
                                 <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
                                     <h4 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.2rem' }}>Düğün ve Nişan</h4>
-                                    <p style={{ margin: 0 }}>En yaygın kullanım alanıdır. Çiftler yeni ev ihtiyaçlarını — küçük ev aletlerinden dekorasyon ürünlerine, elektronik eşyalardan balayı katkı fonuna kadar — listeye ekler. Davetliler bütçelerine uygun bir ürün seçer. Detaylı rehber için: <Link to="/blog/dugun-hediyesi-karmasasina-son-akilli-liste-sistemi" style={{ color: 'var(--primary)' }}>Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi</Link></p>
+                                    <p style={{ margin: 0 }}>En yaygın kullanım alanıdır. Çiftler yeni ev ihtiyaçlarını — küçük ev aletlerinden dekorasyon ürünlerine, elektronik eşyalardan balayı katkı fonuna kadar — listeye ekler. Davetliler bütçelerine uygun bir ürün seçer. Detaylı rehber için: <Link href="/blog/dugun-hediyesi-karmasasina-son-akilli-liste-sistemi" style={{ color: 'var(--primary)' }}>Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi</Link></p>
                                 </div>
                                 <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
                                     <h4 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.2rem' }}>Doğum Günü</h4>
@@ -147,7 +125,7 @@ const GenelHediyeRehberiBlog = () => {
                                 </div>
                                 <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
                                     <h4 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.2rem' }}>Bebek Mevlidi ve Baby Shower</h4>
-                                    <p style={{ margin: 0 }}>Yeni doğan bebek için ihtiyaç listesi oluşturmak hem pratik hem de son derece faydalıdır. Bebek kıyafetleri, bakım ürünleri, mama sandalyesi, bebek arabası katkısı gibi kalemler listelenebilir. Ayrıntılı bilgi için: <Link to="/blog/bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026" style={{ color: 'var(--primary)' }}>Bebek Hediyesi Ne Alınır? Akıllı Liste Rehberi 2026</Link></p>
+                                    <p style={{ margin: 0 }}>Yeni doğan bebek için ihtiyaç listesi oluşturmak hem pratik hem de son derece faydalıdır. Bebek kıyafetleri, bakım ürünleri, mama sandalyesi, bebek arabası katkısı gibi kalemler listelenebilir. Ayrıntılı bilgi için: <Link href="/blog/bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026" style={{ color: 'var(--primary)' }}>Bebek Hediyesi Ne Alınır? Akıllı Liste Rehberi 2026</Link></p>
                                 </div>
                                 <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
                                     <h4 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '1.2rem' }}>Yılbaşı ve Bayramlar</h4>
@@ -322,8 +300,8 @@ const GenelHediyeRehberiBlog = () => {
                                     <li><strong>Tüm etkinlik türleri:</strong> Düğün, doğum günü, bebek mevlidi, yılbaşı, mezuniyet ve daha fazlası.</li>
                                 </ul>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                                    <Link to="/yonetim/olustur" className="btn btn-primary">👉 Hemen Ücretsiz Listenizi Oluşturun</Link>
-                                    <Link to="/ozellikler" className="btn btn-outline">Özellikleri İncele</Link>
+                                    <Link href="/yonetim/olustur" className="btn btn-primary">👉 Hemen Ücretsiz Listenizi Oluşturun</Link>
+                                    <Link href="/ozellikler" className="btn btn-outline">Özellikleri İncele</Link>
                                 </div>
                             </div>
 
@@ -347,7 +325,7 @@ const GenelHediyeRehberiBlog = () => {
                                         <p style={{ margin: 0, fontSize: '1rem', color: 'rgba(255,255,255,0.7)' }}>{faq.a}</p>
                                     </div>
                                 ))}
-                                <Link to="/sss" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold' }}>Tüm Soruları Gör →</Link>
+                                <Link href="/sss" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold' }}>Tüm Soruları Gör →</Link>
                             </div>
 
                             <div style={{ textAlign: 'center', padding: '3rem', background: 'rgba(255,255,255,0.02)', borderRadius: '32px', marginBottom: '4rem' }}>
@@ -355,12 +333,12 @@ const GenelHediyeRehberiBlog = () => {
                                 <p style={{ marginBottom: '1.5rem' }}>Hediye eşleştirme teknolojisi, "ne hediye alsam?" sorusunu tarih yapar. Etkinlik sahipleri gerçek ihtiyaçlarını paylaşır, davetliler doğru hediyeyi seçer ve herkes mutlu ayrılır. Üstelik bu süreç tamamen dijital, ücretsiz ve pratiktir.</p>
                                 <p style={{ marginBottom: '1.5rem' }}>İster düğün planlıyor olun, ister çocuğunuzun doğum gününü organize edin, ister yılbaşı için arkadaş grubunuzla hediye çekilişi yapın — akıllı bir hediye listesi oluşturmak, hediye verme deneyimini herkes için daha anlamlı hale getirir.</p>
                                 <p style={{ marginBottom: '2.5rem' }}>Hediye seçme stresine son verin — listenizi bugün oluşturun.</p>
-                                <Link to="/yonetim/olustur" className="btn btn-primary" style={{ padding: '1rem 2.5rem' }}>👉 HediyeEşleştir ile Hemen Başlayın</Link>
+                                <Link href="/yonetim/olustur" className="btn btn-primary" style={{ padding: '1rem 2.5rem' }}>👉 HediyeEşleştir ile Hemen Başlayın</Link>
                             </div>
                             
                             <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem', marginTop: '4rem' }}>
                                 <h3 style={{ marginBottom: '1.5rem' }}>Hakkımızda</h3>
-                                <p style={{ color: 'rgba(255,255,255,0.8)' }}>Platformumuzun misyonu ve arkasındaki teknolojiyi öğrenmek için <Link to="/hakkimizda" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Hakkımızda</Link> sayfamızı ziyaret edebilirsiniz.</p>
+                                <p style={{ color: 'rgba(255,255,255,0.8)' }}>Platformumuzun misyonu ve arkasındaki teknolojiyi öğrenmek için <Link href="/hakkimizda" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Hakkımızda</Link> sayfamızı ziyaret edebilirsiniz.</p>
                             </div>
                         </div>
                     </div>

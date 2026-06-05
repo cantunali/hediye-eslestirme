@@ -1,15 +1,15 @@
 
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Lock, ShieldCheck, ChevronDown, LayoutDashboard, PlusCircle, ArrowRight, UserPlus, Pencil, Search, X, Calendar, User, Link as LinkIcon, Copy, Check, MessageCircle, Twitter, Share2 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { db } from '../services/supabase';
 import { useAuth } from '../context/AuthContext';
 import { slugify, isEventExpired } from '../utils/helpers';
 
 const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
     const { user } = useAuth();
-    const navigate = useNavigate();
+    const router = useRouter();
     const [userEvents, setUserEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -91,12 +91,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
 
     return (
         <div className="section container animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto', padding: '2rem' }}>
-            <Helmet>
-                <title>HediyeEşleştir - Etkinliklerim</title>
-                <meta name="description" content="Mevcut etkinliklerinizi yönetin veya yeni bir etkinlik oluşturun." />
-                <meta name="robots" content="noindex, nofollow" />
-            </Helmet>
-
+            
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '1rem' }}>Etkinlik Yönetimi</h1>
                 <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>Hesabınıza bağlı tüm etkinlikleri buradan yönetebilirsiniz.</p>
@@ -107,7 +102,7 @@ const ManageEvents = ({ onEventSelected, onGoToCreate }) => {
                 <aside className="card" style={{ padding: '1.5rem', position: 'sticky', top: '2rem' }}>
                     <h3 style={{ marginBottom: '1.5rem', padding: '0 0.5rem' }}>İşlemler</h3>
                     <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={() => navigate('/profil')}>
+                        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={() => router.push('/profil')}>
                             <User size={20} /> Profilim
                         </button>
                         <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'flex-start' }} onClick={onGoToCreate}>

@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, Mail, ArrowRight, Loader2, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 
@@ -18,7 +20,7 @@ const Signup = () => {
     const [marketingConsent, setMarketingConsent] = useState(false);
     const { signUp, recordConsents, signInWithGoogle } = useAuth();
     const [googleLoading, setGoogleLoading] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const handleGoogleSignIn = async () => {
         setError('');
@@ -62,7 +64,7 @@ const Signup = () => {
             }
 
             setSuccess(true);
-            setTimeout(() => navigate('/login'), 2000);
+            setTimeout(() => router.push('/login'), 2000);
         } catch (err) {
             setError('Kayıt başarısız: ' + (err.message || 'Lütfen bilgilerinizi kontrol edin.'));
         } finally {
@@ -215,10 +217,10 @@ const Signup = () => {
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
                             <label htmlFor="termsConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/kullanim-kosullari" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
+                                <Link href="/kullanim-kosullari" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Kullanıcı Sözleşmesini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
-
+ 
                         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                             <input
                                 type="checkbox"
@@ -228,10 +230,10 @@ const Signup = () => {
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
                             <label htmlFor="kvkkConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/kvkk" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
+                                <Link href="/kvkk" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>KVKK Aydınlatma Metnini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
-
+ 
                         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                             <input
                                 type="checkbox"
@@ -241,7 +243,7 @@ const Signup = () => {
                                 style={{ marginTop: '0.25rem', accentColor: 'var(--primary)', cursor: 'pointer' }}
                             />
                             <label htmlFor="marketingConsent" style={{ fontSize: '0.8rem', color: 'var(--on-surface-variant)', lineHeight: '1.4', cursor: 'pointer' }}>
-                                <Link to="/pazarlama-izni" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
+                                <Link href="/pazarlama-izni" target="_blank" style={{ color: 'var(--on-surface)', fontWeight: '600' }}>Pazarlama İzni Metnini</Link> okudum ve kabul ediyorum.
                             </label>
                         </div>
                     </div>
@@ -259,7 +261,7 @@ const Signup = () => {
                 </form>
 
                 <div style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.9rem', color: 'var(--on-surface-variant)' }}>
-                    Zaten bir hesabınız var mı? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Giriş Yap</Link>
+                    Zaten bir hesabınız var mı? <Link href="/login" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Giriş Yap</Link>
                 </div>
             </div>
         </div>

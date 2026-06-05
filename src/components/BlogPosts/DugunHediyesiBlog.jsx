@@ -1,7 +1,6 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Calendar, User, Clock, ChevronLeft, CheckCircle2, Heart, Sparkles, Gift, MapPin, Globe, UserCircle, ListChecks, Info, AlertCircle, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import AdBanner from '../AdBanner';
 
 const DugunHediyesiBlog = () => {
@@ -26,32 +25,11 @@ const DugunHediyesiBlog = () => {
 
     return (
         <div className="animate-fade-in">
-            <Helmet>
-                <title>Düğün Hediyesi Karmaşasına Son: Akıllı Online Hediye Listesi Sistemi (2026)</title>
-                <meta name="description" content="Düğün hediye listesi nasıl oluşturulur? Mükerrer hediyelere son verin. Online düğün listesi ile davetliler bütçeye uygun hediye seçer, çiftler gerçek ihtiyaçlarını karşılar. Ücretsiz rehber." />
-                <meta name="keywords" content="düğün hediye listesi, düğün hediyesi ne alınır, online düğün listesi, hediye eşleştirme, düğün planlama, yeni evlilere hediye, düğün hediye uygulaması, akıllı hediye listesi" />
-                <link rel="canonical" href="https://hediyeeslestir.com/blog/dugun-hediyesi-karmasasina-son-akilli-liste-sistemi" />
-                
-                {/* Open Graph */}
-                <meta property="og:title" content="Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi" />
-                <meta property="og:description" content="Mükerrer hediyeler, gereksiz harcamalar ve stres tarih olsun. Online düğün hediye listesi ile akıllı planlama rehberi." />
-                <meta property="og:image" content="https://hediyeeslestir.com/images/dugun-hediye-listesi-og.jpg" />
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://hediyeeslestir.com/blog/dugun-hediyesi-karmasasina-son-akilli-liste-sistemi" />
-                
-                {/* Twitter Card */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Düğün Hediyesi Karmaşasına Son: Akıllı Liste Sistemi" />
-                
-                <script type="application/ld+json">
-                    {JSON.stringify(jsonLd)}
-                </script>
-            </Helmet>
-
+            
             {/* Hero Section */}
             <section className="section" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
                 <div className="container">
-                    <Link to="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
+                    <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', textDecoration: 'none', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: '700' }}>
                         <ChevronLeft size={18} /> Blog'a Geri Dön
                     </Link>
 
@@ -272,7 +250,7 @@ const DugunHediyesiBlog = () => {
                                     <li><strong>Tamamen ücretsiz:</strong> Kayıt ücreti veya gizli maliyet yoktur.</li>
                                 </ul>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                                    <Link to="/yonetim/olustur" className="btn btn-primary">👉 Hemen Ücretsiz Listenizi Oluşturun</Link>
+                                    <Link href="/yonetim/olustur" className="btn btn-primary">👉 Hemen Ücretsiz Listenizi Oluşturun</Link>
                                 </div>
                             </div>
 
@@ -292,28 +270,28 @@ const DugunHediyesiBlog = () => {
                                         <p style={{ margin: 0, fontSize: '1rem', color: 'rgba(255,255,255,0.7)' }}>{faq.a}</p>
                                     </div>
                                 ))}
-                                <Link to="/sss" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold' }}>Tüm Soruları Gör →</Link>
+                                <Link href="/sss" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold' }}>Tüm Soruları Gör →</Link>
                             </div>
 
                             <div style={{ textAlign: 'center', padding: '3rem', background: 'rgba(255,255,255,0.02)', borderRadius: '32px', marginBottom: '4rem' }}>
                                 <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem' }}>Sonuç: Akıllı Planlama, Mutlu Başlangıç</h2>
                                 <p style={{ marginBottom: '1.5rem' }}>Düğün hediyesi almak da vermek de mutluluk verici bir deneyim olmalıdır. Online düğün hediye listesi sayesinde çiftler gerçek ihtiyaçlarını karşılar, davetliler doğru hediyeyi seçer ve herkes bu özel günden memnun ayrılır.</p>
                                 <p style={{ marginBottom: '2.5rem' }}>Düğün planınıza akıllı bir adım ekleyin — hediye listenizi bugün oluşturun.</p>
-                                <Link to="/yonetim/olustur" className="btn btn-primary" style={{ padding: '1rem 2.5rem' }}>👉 HediyeEşleştir ile Hemen Başlayın</Link>
+                                <Link href="/yonetim/olustur" className="btn btn-primary" style={{ padding: '1rem 2.5rem' }}>👉 HediyeEşleştir ile Hemen Başlayın</Link>
                             </div>
 
                             <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem' }}>
                                 <h3 style={{ marginBottom: '1.5rem' }}>İlginizi Çekebilir</h3>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-                                    <Link to="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <Link href="/blog/hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
                                         <h4 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Akıllı Hediye Listesi Rehberi</h4>
                                         <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Okumaya Devam Et →</span>
                                     </Link>
-                                    <Link to="/blog/bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <Link href="/blog/bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
                                         <h4 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Bebek Hediyesi Rehberi 2026</h4>
                                         <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Okumaya Devam Et →</span>
                                     </Link>
-                                    <Link to="/hakkimizda" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <Link href="/hakkimizda" style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', textDecoration: 'none', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
                                         <h4 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Hakkımızda</h4>
                                         <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Bizi Tanıyın →</span>
                                     </Link>
