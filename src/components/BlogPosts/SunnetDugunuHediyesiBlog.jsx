@@ -6,7 +6,7 @@ const SunnetDugunuHediyesiBlog = () => {
     const slug = "sunnet-dugunu-hediyesi-rehberi-altin-mi-oyuncak-mi-teknoloji-mi";
     const title = "Sünnet Düğünü Hediyesi Rehberi: Altın mı, Oyuncak mı, Teknoloji mi?";
     const description = "Yaş grubuna göre sünnet hediyesi önerileri, altın-oyuncak-teknoloji karşılaştırması ve 2026 güncel bütçe rehberi. Hediyeeslestir.com";
-    const imageUrl = "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/sunnet-dugunu-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

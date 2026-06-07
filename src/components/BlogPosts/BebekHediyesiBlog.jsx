@@ -7,7 +7,7 @@ const BebekHediyesiBlog = () => {
     const slug = "bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026";
     const title = "Bebek Hediyesi Ne Alınır? Bütçeye Göre Akıllı Liste Rehberi [2026]";
     const description = "Bebek hediyesi ne alınır? Bütçeye göre 30+ hediye önerisi, sık yapılan hatalar ve online hediye listesi ile aynı ürün alma riskini sıfırlayın. 2026 güncel rehber.";
-    const imageUrl = "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/bebek-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

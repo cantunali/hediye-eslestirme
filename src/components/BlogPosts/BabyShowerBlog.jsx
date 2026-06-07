@@ -6,7 +6,7 @@ const BabyShowerBlog = () => {
     const slug = "baby-shower-hediye-listesi-ve-bebek-alisverisi";
     const title = "Baby Shower Hediye Listesi ve Anne Adayı İhtiyaçları";
     const description = "Eksiksiz bir baby shower hediye listesi hazırlayarak anne adayının gerçek ihtiyaçlarını karşılayın. Akıllı listeyle mükerrer hediyeleri önleyin.";
-    const imageUrl = "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/baby-shower.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

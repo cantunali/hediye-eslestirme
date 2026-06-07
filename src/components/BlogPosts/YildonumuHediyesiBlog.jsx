@@ -6,7 +6,7 @@ const YildonumuHediyesiBlog = () => {
     const slug = "evlilik-yildonumu-hediyesi-secme-rehberi-akilli-liste";
     const title = "Evlilik Yıldönümü Hediyesi Seçme Rehberi ve Öneriler";
     const description = "Evlilik yıldönümü hediyesi seçerken kararsız kalmayın. Eşinize en anlamlı sürprizi yapmak için yaratıcı yıldönümü hediyesi önerilerini inceleyin.";
-    const imageUrl = "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/nisan-yildonumu-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

@@ -6,7 +6,7 @@ const CeyizAlisverisiBlog = () => {
     const slug = "ceyiz-alisverisi-rehberi-ve-akilli-ceyiz-listesi";
     const title = "Akıllı Çeyiz Listesi ve Çeyiz Alışverişi Rehberi";
     const description = "Eksiksiz bir çeyiz listesi hazırlamak ve çeyiz alışverişi maliyetlerini yönetmek artık çok kolay. Akıllı çeyiz listesi oluşturarak bütçenizi koruyun.";
-    const imageUrl = "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/ceyiz-alisverisi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

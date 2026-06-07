@@ -24,7 +24,7 @@ export const blogPosts = [
         category: "Kurumsal",
         readingTime: "6 dk",
         slug: "is-yerinde-hediyelesme-rehberi-patrona-calisana-ne-alinir",
-        image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/is-yerinde-hediyelesme.jpg",
         component: IsYerindeHediyelesmeBlog
     },
     {
@@ -37,7 +37,7 @@ export const blogPosts = [
         category: "Sünnet",
         readingTime: "5 dk",
         slug: "sunnet-dugunu-hediyesi-rehberi-altin-mi-oyuncak-mi-teknoloji-mi",
-        image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/sunnet-dugunu-hediyesi.jpg",
         component: SunnetDugunuHediyesiBlog
     },
     {
@@ -50,7 +50,7 @@ export const blogPosts = [
         category: "Mezuniyet",
         readingTime: "6 dk",
         slug: "mezuniyet-hediyesi-ne-alinir-2026-anlamli-secenekler",
-        image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/mezuniyet-hediyesi.jpg",
         component: MezuniyetHediyesiBlog
     },
     {
@@ -63,7 +63,7 @@ export const blogPosts = [
         category: "Çeyiz Alışverişi",
         readingTime: "6 dk",
         slug: "ceyiz-alisverisi-rehberi-ve-akilli-ceyiz-listesi",
-        image: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/ceyiz-alisverisi.jpg",
         component: CeyizAlisverisiBlog
     },
     {
@@ -76,7 +76,7 @@ export const blogPosts = [
         category: "Baby Shower",
         readingTime: "6 dk",
         slug: "baby-shower-hediye-listesi-ve-bebek-alisverisi",
-        image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/baby-shower.jpg",
         component: BabyShowerBlog
     },
     {
@@ -89,7 +89,7 @@ export const blogPosts = [
         category: "Yıldönümü",
         readingTime: "6 dk",
         slug: "evlilik-yildonumu-hediyesi-secme-rehberi-akilli-liste",
-        image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/nisan-yildonumu-hediyesi.jpg",
         component: YildonumuHediyesiBlog
     },
     {
@@ -102,7 +102,7 @@ export const blogPosts = [
         category: "Düğün",
         readingTime: "6 dk",
         slug: "dugun-hediyesi-ne-alinir-2026-trendleri",
-        image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/dugun-hediyesi.jpg",
         component: DugunHediyesiNeAlinirBlog
     },
     {
@@ -115,7 +115,7 @@ export const blogPosts = [
         category: "Ev Hediyesi",
         readingTime: "6 dk",
         slug: "yeni-eve-tasinanlara-ne-hediye-alinir-ev-hediye-listesi-rehberi",
-        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/ev-tasinma-hediyesi.jpg",
         component: EvTasinmaHediyesiBlog
     },
     {
@@ -128,7 +128,7 @@ export const blogPosts = [
         category: "Yılbaşı",
         readingTime: "5 dk",
         slug: "yilbasi-hediye-degisimi-cekilis-yerine-akilli-liste",
-        image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/yilbasi-hediye-degisimi.jpg",
         component: YilbasiHediyeDegisimiBlog
     },
     {
@@ -141,7 +141,7 @@ export const blogPosts = [
         category: "Nişan & Düğün",
         readingTime: "4 dk",
         slug: "nisan-hediyesi-ne-alinir-ciftlerin-gercekten-ihtiyaci-olan-hediyeler",
-        image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/nisan-yildonumu-hediyesi.jpg",
         component: NisanHediyesiBlog
     },
     {
@@ -154,7 +154,7 @@ export const blogPosts = [
         category: "Doğum Günü",
         readingTime: "4 dk",
         slug: "dogum-gunu-hediyesi-secmek-neden-bu-kadar-zor-akilli-liste-ile-cozum",
-        image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/dogum-gunu-hediyesi.jpg",
         component: DogumGunuHediyesiBlog
     },
     {
@@ -167,7 +167,7 @@ export const blogPosts = [
         category: "Bebek",
         readingTime: "8 dk",
         slug: "bebek-hediyesi-ne-alinir-akilli-liste-rehberi-2026",
-        image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/bebek-hediyesi.jpg",
         component: BebekHediyesiBlog
     },
     {
@@ -180,7 +180,7 @@ export const blogPosts = [
         category: "Uygulama Rehberi",
         readingTime: "14 dk",
         slug: "hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi",
-        image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/genel-hediye-rehberi.jpg",
         component: GenelHediyeRehberiBlog
     },
     {
@@ -193,7 +193,7 @@ export const blogPosts = [
         category: "Düğün",
         readingTime: "12 dk",
         slug: "dugun-hediyesi-karmasasina-son-akilli-liste-sistemi",
-        image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+        image: "/blog-images/dugun-hediyesi.jpg",
         component: DugunHediyesiBlog
     }
 ];

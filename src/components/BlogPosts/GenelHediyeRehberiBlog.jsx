@@ -7,7 +7,7 @@ const GenelHediyeRehberiBlog = () => {
     const slug = "hediye-eslestirme-uygulamasi-akilli-hediye-listesi-rehberi";
     const title = "Hediye Eşleştirme Uygulaması: Akıllı Hediye Listesi Rehberi (2026)";
     const description = "Hediye seçme stresine son! HediyeEşleştir ile tüm etkinlikleriniz için akıllı listeler oluşturun, sevdiklerinizin gerçek ihtiyaçlarını kolayca karşılayın.";
-    const imageUrl = "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/genel-hediye-rehberi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

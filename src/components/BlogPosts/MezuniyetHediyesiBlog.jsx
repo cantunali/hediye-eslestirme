@@ -7,7 +7,7 @@ const MezuniyetHediyesiBlog = () => {
     const slug = "mezuniyet-hediyesi-ne-alinir-2026-anlamli-secenekler";
     const title = "Mezuniyet Hediyesi Ne Alınır? 2026 Anlamlı Seçenekler";
     const description = "Mezuniyet hediyesi ne alınır? Üniversite, lise ve ilkokul mezunları için bütçeye göre en anlamlı 2026 hediye önerileri ve trendleri bu rehberde.";
-    const imageUrl = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/mezuniyet-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

@@ -7,7 +7,7 @@ const YilbasiHediyeDegisimiBlog = () => {
     const slug = "yilbasi-hediye-degisimi-cekilis-yerine-akilli-liste";
     const title = "Yılbaşı Hediye Değişimi: Çekiliş Yerine Akıllı Liste ile Hediyeleşin";
     const description = "Yılbaşı hediye değişiminde herkesin mutlu olacağı modern bir sistem kurun. Akıllı hediye listesi ile bütçenizi koruyun ve sürprizleri garantileyin.";
-    const imageUrl = "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/yilbasi-hediye-degisimi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

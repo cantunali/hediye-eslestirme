@@ -7,7 +7,7 @@ const DogumGunuHediyesiBlog = () => {
     const slug = "dogum-gunu-hediyesi-secmek-neden-bu-kadar-zor-akilli-liste-ile-cozum";
     const title = "Doğum Günü Hediyesi Seçmek Neden Bu Kadar Zor? Akıllı Liste ile Çözüm!";
     const description = "Doğum günü hediyesi seçerken herkes zorlanır. Akıllı hediye listesi ile sevdiklerinizin gerçekten istediği hediyeyi verin, boşa harcamayı önleyin.";
-    const imageUrl = "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/dogum-gunu-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

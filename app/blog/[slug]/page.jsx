@@ -1,6 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { blogPosts } from '../../../src/data/blogPosts';
+import { blogPostsMeta } from '../../../src/data/blogPostsMeta';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -46,12 +47,51 @@ export default async function BlogPostPage({ params }) {
   }
 
   const post = blogPosts[postIndex];
+  const meta = blogPostsMeta.find((m) => m.slug === slug);
   const nextPost = blogPosts[postIndex + 1];
   const prevPost = blogPosts[postIndex - 1];
   const PostComponent = post.component;
 
+  const jsonLd = meta
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: meta.title,
+        description: meta.excerpt,
+        image: meta.image,
+        datePublished: meta.dateIso,
+        dateModified: meta.dateIso,
+        author: {
+          '@type': 'Person',
+          name: meta.author,
+          url: 'https://hediyeeslestir.com/hakkimizda',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'HediyeEşleştir',
+          url: 'https://hediyeeslestir.com',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://hediyeeslestir.com/logo.png',
+          },
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://hediyeeslestir.com/blog/${slug}`,
+        },
+        url: `https://hediyeeslestir.com/blog/${slug}`,
+        inLanguage: 'tr-TR',
+      }
+    : null;
+
   return (
     <div className="blog-post-wrapper">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <PostComponent />
       
       {/* Post Navigation */}

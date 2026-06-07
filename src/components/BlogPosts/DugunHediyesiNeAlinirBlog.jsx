@@ -6,7 +6,7 @@ const DugunHediyesiNeAlinirBlog = () => {
     const slug = "dugun-hediyesi-ne-alinir-2026-trendleri";
     const title = "Düğün Hediyesi Ne Alınır? 2026'nın En Trend Seçenekleri";
     const description = "Yeni evlenen çifte ne alınır? 2026 düğün hediyesi trendleri, bütçe dostu ev hediyesi fikirleri ve şık nikah hediyelikleri bu rehberde.";
-    const imageUrl = "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/dugun-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

@@ -7,7 +7,7 @@ const EvTasinmaHediyesiBlog = () => {
     const slug = "yeni-eve-tasinanlara-ne-hediye-alinir-ev-hediye-listesi-rehberi";
     const title = "Yeni Eve Taşınanlara Ne Hediye Alınır? 2026 Trend Rehberi";
     const description = "Yeni eve taşınan sevdiklerinize en uygun hediye ne alınır? 2026 ev hediyesi trendleri, bütçe dostu fikirler ve akıllı hediye listesi rehberimizde.";
-    const imageUrl = "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/ev-tasinma-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

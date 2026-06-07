@@ -7,7 +7,7 @@ const NisanHediyesiBlog = () => {
     const slug = "nisan-hediyesi-ne-alinir-ciftlerin-gercekten-ihtiyaci-olan-hediyeler";
     const title = "Nişan Hediyesi Ne Alınır? Çiftlerin Gerçekten İhtiyacı Olan Hediyeler";
     const description = "Nişan hediyesi seçerken klasik seçeneklere takılıp kalmayın. Akıllı hediye listesi ile çiftin gerçek ihtiyaçlarını karşılayın, tekrar eden hediyelere son verin.";
-    const imageUrl = "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/nisan-yildonumu-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

@@ -102,7 +102,7 @@ const Navbar = () => {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <Link
                   href="/yonetim"
-                  className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
+                  className={`btn ${(currentPath || '').startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
                 >
                   <Settings size={18} /> Panelim
                 </Link>
@@ -162,7 +162,7 @@ const Navbar = () => {
           <>
             <Link
               href="/yonetim"
-              className={`btn ${currentPath.startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
+              className={`btn ${(currentPath || '').startsWith('/yonetim') ? 'btn-primary' : 'btn-outline'}`}
               style={{ fontSize: '1.1rem', padding: '1.25rem' }}
             >
               <Settings size={20} /> Panelim

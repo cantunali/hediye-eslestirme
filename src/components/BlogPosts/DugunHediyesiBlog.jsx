@@ -7,7 +7,7 @@ const DugunHediyesiBlog = () => {
     const slug = "dugun-hediyesi-karmasasina-son-akilli-liste-sistemi";
     const title = "Düğün Hediyesi Karmaşasına Son: Akıllı Online Hediye Listesi Sistemi (2026 Rehberi)";
     const description = "Yeni ev kurarken gereksiz hediyelerle uğraşmayın. Düğün hediye listesi oluşturun, ihtiyaçlarınız doğru karşılansın.";
-    const imageUrl = "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/dugun-hediyesi.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",

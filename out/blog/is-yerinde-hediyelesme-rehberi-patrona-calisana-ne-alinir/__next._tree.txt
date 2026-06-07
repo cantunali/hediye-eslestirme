@@ -1,3 +1,3 @@
 :HL["/_next/static/chunks/0skuo6j.26qff.css","style"]
-:HL["https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"blog","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"is-yerinde-hediyelesme-rehberi-patrona-calisana-ne-alinir","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"8MyZdK1I264Rg7FWQKJSV"}
+:HL["/blog-images/is-yerinde-hediyelesme.jpg","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"blog","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"is-yerinde-hediyelesme-rehberi-patrona-calisana-ne-alinir","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"R2d6sM0R60IxQrON3zlwq"}

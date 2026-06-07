@@ -6,7 +6,7 @@ const IsYerindeHediyelesmeBlog = () => {
     const slug = "is-yerinde-hediyelesme-rehberi-patrona-calisana-ne-alinir";
     const title = "İş Yerinde Hediyeleşme Rehberi: Patrona, Çalışana Ne Alınır?";
     const description = "İş yerinde hediyeleşme rehberi: Patrona, çalışana ve takım arkadaşına ne alınır? Bütçe, etiket ve grup hediyesi ipuçları.";
-    const imageUrl = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200";
+    const imageUrl = "/blog-images/is-yerinde-hediyelesme.jpg";
 
     const jsonLd = {
         "@context": "https://schema.org",
